@@ -1,0 +1,485 @@
+﻿<style>
+    #PMRiskAsmt {
+        height: calc(100vh - 285px);
+    }
+</style>
+<div class="form-row py-1">
+    <div class="col-lg-7">
+
+    </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            <button type="button" class="btn btn-primary  pointer" id="AddRiskAssessment" style="" onclick="AddRiskAssessment()">Add Risk Assessment</button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex pro-list-table" id="PMRiskAsmt">
+    <table class="table table-borderless mb-0 PMRiskAssessment" id="PMRiskAssessment">
+        <thead>
+            <tr>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="TD" style="width:4%">ID</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Risk Description">Risk Description</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Risk management">Risk management</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Probability">Probability</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Consequence">Consequence</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Risk class">Risk Class</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Risk Owner">Risk Owner</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Area">Area</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Action">Action</td>
+            </tr>
+        </thead>
+        <tbody class="bg-white">
+            <tr class="colspan">
+                <td colspan="9" style="text-align:center">
+                    No Records Found
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- START POPUP-->
+<div id="addRiskAssessment" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addRisk">Add Risk Assessment</h4>
+                <h4 class="modal-title text-center w-100 semibold" id="h4UpdateRisk" style="display:none">Update Risk Assessment</h4>
+                <button type="button" class="close Riskcancel" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 70vh;overflow-y: auto;">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="text" class="form-control" id="txtPMRiskAssessmentID" hidden />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Risk Description</label>
+                                            <input type="text" class="form-control" id="txtRiskDescription" aria-describedby="">
+                                            <span class="" id="lblRiskDescription" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Risk Management</label>
+                                            <input type="text" class="form-control" id="txtRiskManagement" aria-describedby="">
+                                            <span class="" id="lblRiskManagement" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Probability<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpProbability" name="">
+                                                <option value="0">--Select--</option>
+                                                @foreach (var item in ViewBag.RAProbability)
+                                                {
+                                                    <option value="@item.Id">@item.Probability</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblProbability" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Risk Class<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpRiskclass" name="">
+                                                <option value="0">--Select--</option>
+                                                @foreach (var item in ViewBag.RARiskClass)
+                                                {
+                                                    <option value="@item.Id">@item.RiskClass</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblRiskclass" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Risk Owner<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpRiskOwner" name="">
+                                                <option value="0">--Select--</option>
+                                                @foreach (var item in ViewBag.RARiskOwner)
+                                                {
+                                                    <option value="@item.Id">@item.RiskOwner</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblRiskOwner" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Area<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="txtArea" aria-describedby="">
+                                            <span class="" id="lblArea" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnRiskCreate">Save</button>
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnRiskUpdate" style="display:none">Update</button>
+                    <button type="button" class="btn btn-secondary pointer Riskcancel" id="Riskcancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END POPUP-->
+
+<script>
+
+    $(document).ready(function () {
+        var PrjId = $("#drpProject").val();
+        
+        if (PrjId ==0) {
+            var msg = "Kindly select Project..!";
+            Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+        }
+    });
+   
+    $("#drpProject").on("change", function () {
+        
+        var a = $('#Tab_PMRiskAssessment').prop("class");
+        var prjt = $("#drpProject").val();
+        if (a.includes("active") && prjt!=0) {
+            LoadRiskAssessmentTable();
+            $("#AddRiskAssessment").show();
+        }
+        else {
+            $("#AddRiskAssessment").hide();
+            $('.PMRiskAssessment tbody').remove();
+            var tbody = '<tbody><tr><tr><td colspan="8" class="text-center"><strong>No Record Found</strong></td></tr></tr></tbody>';
+            $('.PMRiskAssessment').append(tbody);
+        }
+        
+    });
+
+        
+    //$('#txtConsequence').keypress(function (e) {
+    //    var charCode = (e.which) ? e.which : event.keyCode
+    //    if (String.fromCharCode(charCode).match(/[^1-5]/g))
+    //        return false;
+    //});
+
+    function LoadRiskAssessmentTable() {
+        var ProjectId = $("#drpProject").val();
+
+        $.ajax({
+            url: '@Url.Action("LoadRiskAssessmentTable","PM")',
+            async: false,
+            data: { ProjectId: ProjectId },
+            success: function (response) {
+                $('.PMRiskAssessment tbody').remove();
+
+                var tbody = '<tbody>';
+                var tr = '<tr>';
+                if (response.length > 0) {
+                    $.each(response, function (key, val) {
+                        var tr2 = '<tr class="tr_Effect" id="' + val.Id + '">';
+                        var a = '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.RiskId_ + '">' + val.RiskId_ + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.RiskDescription + '">' + val.RiskDescription + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.RiskManagement + '">' + val.RiskManagement + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Probability + '">' + val.Probability + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Consequence + '">' + val.Consequence + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.RiskClass + '">' + val.RiskClass + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.RiskOwner + '">' + val.RiskOwner + '</td>';
+                        a += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Area + '">' + val.Area + '</td>';
+                        a += '<td><i class="fa fa-pencil edit_' + val.Id + '" id="EditRiskAssessment" style="cursor:pointer"></td>';
+                        tr = tr + tr2 + a + '</tr>' + '</tr>';
+                    });
+                }
+                else {
+                    var tr2 = '<tr class="tr_Effect">';
+                    a='<td colspan="9" class="text-center">' + "<strong>No Record Found</strong>"
+                     tr = tr + tr2 + a + '</tr>' + '</tr>';
+                }
+
+                tbody = tbody + tr + '</tbody>';
+                $('.PMRiskAssessment').append(tbody);
+            }
+        });
+    }
+
+    function AddRiskAssessment() {
+        $('#addRiskAssessment').modal('show');
+
+        @*$.ajax({
+            type: "GET",
+            url: '@Url.Action("GetRA_Probability")',
+            success: function (data) {
+                var TaskMaster = $("#drpProbability");
+                TaskMaster.empty();
+                TaskMaster.append($('<option/>', {
+                    value: 0,
+                    text: "---Select---"
+                }));
+                $.each(data, function (index, item) {
+                    TaskMaster.append($('<option/>', {
+                        value: item.Id,
+                        text: item.Probability
+                    }));
+                });
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetRA_RiskClass")',
+            success: function (data) {
+                var TaskMaster = $("#drpRiskclass");
+                TaskMaster.empty();
+                TaskMaster.append($('<option/>', {
+                    value: 0,
+                    text: "---Select---"
+                }));
+                $.each(data, function (index, item) {
+                    TaskMaster.append($('<option/>', {
+                        value: item.Id,
+                        text: item.RiskClass
+                    }));
+                });
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetRA_RiskOwner")',
+            success: function (data) {
+                var TaskMaster = $("#drpRiskOwner");
+                TaskMaster.empty();
+                TaskMaster.append($('<option/>', {
+                    value: 0,
+                    text: "---Select---"
+                }));
+                $.each(data, function (index, item) {
+                    TaskMaster.append($('<option/>', {
+                        value: item.Id,
+                        text: item.RiskOwner
+                    }));
+                });
+            }
+        });*@
+
+    }
+
+    $("#btnRiskCreate").on("click", function () {
+        var RiskDescription = $("#txtRiskDescription").val();
+        var RiskManagement = $("#txtRiskManagement").val();
+        var Probability = $("#drpProbability").val();
+        //var Consequence = $("#txtConsequence").val();
+        var Riskclass = $("#drpRiskclass").val();
+        var RiskOwner = $("#drpRiskOwner").val();
+        var Area = $("#txtArea").val();
+        var ProjectId = $("#drpProject").val();
+        
+        var model = {
+            RiskDescription: RiskDescription,
+            RiskManagement: RiskManagement,
+            Probability_Id: Probability,
+            //Consequence: Consequence,
+            Riskclass_Id: Riskclass,
+            RiskOwner_Id: RiskOwner,
+            Area: Area,
+            Project_Id: ProjectId
+        }
+        var Probability_ = Riskclass_ = RiskOwner_ = Area_ = false; //Consequence_ = 
+
+        if (Probability == 0) {
+            Probability_ = true;
+            $("#lblProbability").html("Please select the Probability").show();
+        }
+        else {
+            $("#lblProbability").html("").show();
+        }
+        //if (Consequence == "") {
+        //    Consequence_ = true;
+        //    $("#lblConsequence").html("Please enter the Consequence").show();
+        //}
+        //else if (Consequence.length > 1) {
+        //    $("#lblConsequence").html("Please enter the Consequence in between 1-5").show();
+        //}
+        //else {
+        //    $("#lblConsequence").html("").show();
+        //}
+        if (Riskclass == 0) {
+            Riskclass_ = true;
+            $("#lblRiskclass").html("Please select the Risk class").show();
+        }
+        else {
+            $("#lblRiskclass").html("").show();
+        }
+        if (RiskOwner == 0) {
+            RiskOwner_ = true;
+            $("#lblRiskOwner").html("Please select the Risk Owner").show();
+        }
+        else {
+            $("#lblRiskOwner").html("").show();
+        }
+        if (Area == "") {
+            Area_ = true;
+            $("#lblArea").html("Please select the Area").show();
+        }
+        else {
+            $("#lblArea").html("").show();
+        }
+
+        if (Probability_ == false && Riskclass_ == false && RiskOwner_ == false && Area_ == false) { //Consequence_ == false && 
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SubmitRiskAssessment", "PM")',
+                data: { riskAssessment: model },
+                success: function (response) {
+                    if (response == true) {
+                        Notiflix.Notify.Success('Risk Assessment Saved Successfully', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        ResetRiskAssessment();
+                        $('#addRiskAssessment').modal('hide');
+                        LoadRiskAssessmentTable();
+                    }
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '#EditRiskAssessment', function () {
+        
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+        $.ajax({
+            url: '@Url.Action("GetRiskAssessmentById","PM")',
+            type: "GET",
+            data: { id: tr_Id },
+            async: false,
+            success: function (result) {
+                //debugger
+                $('#addRiskAssessment').modal('show');
+
+                $("#h4addRisk").hide();
+                $("#h4UpdateRisk").show();
+
+                $("#btnRiskCreate").hide();
+                $("#btnRiskUpdate").show();
+                               
+                $("#txtPMRiskAssessmentID").val(result.Id);
+                $("#txtRiskDescription").val(result.RiskDescription);
+                $("#txtRiskManagement").val(result.RiskManagement);
+                $("#drpProbability").val(result.Probability);
+                $("#drpRiskclass").val(result.RiskClass);
+                $("#drpRiskOwner").val(result.RiskOwner);
+                $("#txtArea").val(result.Area);                
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    });
+
+    $("#btnRiskUpdate").on("click", function () {
+
+        var PMRiskAssessmentID = $("#txtPMRiskAssessmentID").val();
+        var RiskDescription = $("#txtRiskDescription").val();
+        var RiskManagement = $("#txtRiskManagement").val();
+        var Probability = $("#drpProbability").val();
+        var Riskclass = $("#drpRiskclass").val();
+        var RiskOwner = $("#drpRiskOwner").val();
+        var Area = $("#txtArea").val();
+        var ProjectId = $("#drpProject").val();
+        
+        var model = {
+            Id:PMRiskAssessmentID,
+            RiskDescription: RiskDescription,
+            RiskManagement: RiskManagement,
+            Probability_Id: Probability,
+            Riskclass_Id: Riskclass,
+            RiskOwner_Id: RiskOwner,
+            Area: Area,
+            Project_Id: ProjectId
+        }
+
+         var Probability_ = Riskclass_ = RiskOwner_ = Area_ = false; //Consequence_ = 
+
+        if (Probability == 0) {
+            Probability_ = true;
+            $("#lblProbability").html("Please select the Probability").show();
+        }
+        else {
+            $("#lblProbability").html("").show();
+        }
+        if (Riskclass == 0) {
+            Riskclass_ = true;
+            $("#lblRiskclass").html("Please select the Risk class").show();
+        }
+        else {
+            $("#lblRiskclass").html("").show();
+        }
+        if (RiskOwner == 0) {
+            RiskOwner_ = true;
+            $("#lblRiskOwner").html("Please select the Risk Owner").show();
+        }
+        else {
+            $("#lblRiskOwner").html("").show();
+        }
+        if (Area == "") {
+            Area_ = true;
+            $("#lblArea").html("Please select the Area").show();
+        }
+        else {
+            $("#lblArea").html("").show();
+        }
+
+        if (Probability_ == false && Riskclass_ == false && RiskOwner_ == false && Area_ == false) { //Consequence_ == false && 
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateRiskAssessment", "PM")',
+                data: { riskAssessment: model },
+                success: function (response) {
+                    if (response == true) {
+                        Notiflix.Notify.Success('Risk Assessment Updated Successfully', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        ResetRiskAssessment();
+                        $('#addRiskAssessment').modal('hide');
+                        LoadRiskAssessmentTable();
+
+                      
+                    }
+                }
+            });
+        }
+
+
+    });
+
+    $(".Riskcancel").on('click', function () {
+        ResetRiskAssessment();
+        $('#addRiskAssessment').modal('hide');
+    });
+
+    function ResetRiskAssessment() {
+        $("#txtRiskDescription").val('');
+        $("#txtRiskManagement").val('');
+        $("#drpProbability").val(0);
+        //$("#txtConsequence").val('');
+        $("#drpRiskclass").val(0);
+        $("#drpRiskOwner").val(0);
+        $("#txtArea").val('');
+
+        $("#lblProbability").html("").show();
+        $("#lblConsequence").html("").show();
+        $("#lblRiskclass").html("").show();
+        $("#lblRiskOwner").html("").show();
+        $("#lblArea").html("").show();
+
+        $("#h4addRisk").show();
+        $("#h4UpdateRisk").hide();
+
+        $("#btnRiskCreate").show();
+        $("#btnRiskUpdate").hide();
+    }
+
+
+    $("#searchPMTask").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#PMRiskAssessment tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+</script>

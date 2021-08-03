@@ -1,0 +1,60 @@
+﻿
+<style>
+    #ViewCustomerDetail, #contentManage {
+        width: 1123px;
+        left: -9%;
+        border-radius: 5px;
+        top: 9%;
+    }
+</style>
+
+<div class="modal-dialog" id="ViewCustomerDetail">
+    <div class="modal-content" id="contentManage">
+        <div class="modal-header">
+            <h4 class="modal-title text-center w-100 semibold">Customer List</h4>
+            <button type="button" class="close ProCancel" data-dismiss="modal" aria-label="Close" id="closePr2">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row bg-white px-5">
+                <div class="d-flex pro-list-table">
+                    <table class="fixed table table-borderless bg-mediumgray mb-0">
+                        <thead>
+                            <tr>
+                                <td scope="col" width="15%" >Customer Name</td>
+                                <td scope="col" width="30%" >Industry Sector</td>
+                                <td scope="col" width="15%" >Contact Person</td>
+                                <td scope="col" width="25%" >Phone</td>
+                                <td scope="col" width="20%" >E-mail</td>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.DashTop)
+                            {
+                            <tr>
+                                <td><span class="card-title text-capitalize text-center" data-toggle="tooltip" title="@item.Company_Name">@item.Company_Name</span></td>
+                                <td><span class="card-title text-capitalize text-center" data-toggle="tooltip" title="@item.IndustrySector">@item.IndustrySector</span></td>
+                                <td><span class="card-title text-capitalize text-center" data-toggle="tooltip" title="@item.Contact">@item.Contact</span></td>
+                                @*<td><span class="card-title text-capitalize text-center" data-toggle="tooltip" title="@item.Phone">@item.Phone</span></td>*@
+                                <td>
+                                    @if (item.DialCode != null)
+                                    {
+                                    <span class="text-capitalize" data-toggle="tooltip" title="@item.DialCode @item.Phone">@item.DialCode @item.Phone</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span>
+                                    }
+                                </td>
+                                <td><span class="card-title text-capitalize text-center" data-toggle="tooltip" title="@item.Email">@item.Email</span></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+

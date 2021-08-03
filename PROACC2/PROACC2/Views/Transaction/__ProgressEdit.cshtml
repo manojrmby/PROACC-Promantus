@@ -1,0 +1,964 @@
+﻿
+<script src="~/assets/js/Chart/Chart.bundle.min.js"></script>
+<script src="~/assets/js/HomeScript.js"></script>
+
+<style>
+    .col-md-4.mb-3, .col-md-6.mb-3 {
+        height: 55px;
+    }
+
+    span#lblEstdHours {
+        position: relative;
+        top: -20px;
+    }
+
+    .section-lt {
+        border-radius: 10px;
+    }
+
+    .calendar {
+        position: absolute;
+        top: 70%;
+        left: 85%;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
+
+    .datepicker {
+        width: 220px;
+        height: 210px;
+    }
+
+    .table-condensed {
+        width: 209px;
+        height: 206px;
+    }
+    /********** Progress Monitor Modal setup************/
+    #Pmdialogmodal #contentManage {
+        width: 1123px;
+        left: -30%;
+        border-radius: 5px;
+    }
+
+    .py-0 {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        position: relative;
+        margin-top: -5%;
+    }
+    /********** Progress Monitor Modal Setup End************/
+
+</style>
+<style>
+    /*.container img {
+        float: left;
+        max-width: 35px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 50%;
+        margin-top: 0.5em;
+    }*/
+    .chatbox {
+        height: calc(10vh - -120px);
+        overflow-y: scroll;
+    }
+
+        .chatbox::-webkit-scrollbar {
+            display: none;
+        }
+
+    .chatbox {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .scrollGradient {
+        background: linear-gradient(#efeef2 33%, rgba(239,238,242, 0)), linear-gradient(rgba(239,238,242, 0), #efeef2 66%) 0 100%, radial-gradient(farthest-side at 50% 0, rgba(97,86,108, 0.5), rgba(0,0,0,0)), radial-gradient(farthest-side at 50% 100%, rgba(97,86,108, 0.5), rgba(0,0,0,0)) 0 100%;
+        background-repeat: no-repeat;
+        background-attachment: local, local, scroll, scroll;
+        background-size: 100% 42px, 100% 42px, 100% 14px, 100% 14px;
+    }
+
+    .modal-content {
+        width: calc(100vh - -400px);
+    }
+</style>
+
+<input type="hidden" value="@ViewBag.TS" id="txtTimeStamp1" />
+<div class="modal-dialog" id="Pmdialogmodal">
+    <div class="modal-content" id="contentManage">
+        <div class="modal-header">
+            <h4 class="modal-title text-center w-100 semibold">Progress Monitor Edit</h4>
+            <button type="button" class="close ProCancel" data-dismiss="modal" aria-label="Close" id="closePr2">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row bg-white">
+                <div class="ibox w-100">
+                    <div class="ibox-body">
+                        <div class="page-content fade-in-up">
+                            <div class="bg-white section-lt">
+                                <div class="form-row py-0">
+                                    <div class="col-lg-12">
+                                        <div class="ibox task-detail ">
+                                            <div class="ibox-body m-0 p-0 pm">
+                                                <table class="table table-borderless mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <td scope="col" width="40%">TASK</td>
+                                                            <td scope="col" width="15%">STATUS</td>
+                                                            @*<td scope="col" width="20%">Date</td>*@
+                                                            <td scope="col" width="20%">OWNER</td>
+                                                        </tr>
+
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in ViewBag.GetPM)
+                                                        {
+                                                            <tr>
+                                                                <td hidden><input type="hidden" value="@item.Id" id="Pmid" /></td>
+                                                                <td scope="row" data-toggle="tooltip" title="@item.Task">@item.Task</td>
+                                                                <td scope="row" data-toggle="tooltip" title="@item.Status">@item.Status</td>
+                                                                @*<td data-toggle="tooltip" title="@item.CreatedDate"><i class="fa fa-circle schedule" aria-hidden="true"></i>&nbsp; @item.CreatedDate</td>*@
+                                                                <td data-toggle="tooltip" title="@item.Owner">@item.Owner</td>
+
+                                                                @*<td><button type="button" class="btn btn-primary order-1 ml-2 pointer opacity2"><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;Mark as complete</button></td>*@
+
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row py-1 ">
+                                    <div class="col-lg-12">
+                                        <ul class="m-0 p-0 sec-project">
+                                            <li class="resource-planning">
+                                                <div class="i-box">
+                                                    <div class="ibox-body">
+                                                        <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link  title-project active" data-toggle="tab" href="#details" role="tab" aria-controls="details" id="tab_PMdetails">Details</a>
+                                                            </li>
+                                                            @foreach (var item in ViewBag.GetPM)
+                                                            {
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link title-project comments-bdg" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" id="comments-bdg">Comments<sup class="badge badge-primary table-badge">@item.Comments_Count</sup></a>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bottom-line"></div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="tab-content w-100">
+                                        <div class="tab-pane active" id="details" role="tabpanel">
+                                            <div class="d-flex details-tabel">
+                                                <div class="col-lg-9 form-details">
+                                                    <form class="needs-validation" novalidate>
+                                                        @foreach (var item2 in ViewBag.GetPM)
+                                                        {
+                                                            <div class="row">
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="">BUILDING BLOCK</label>
+                                                                    <h6><strong>@item2.BuildingBlock</strong></h6>
+                                                                </div>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="">ROLE</label>
+                                                                    <h6><strong>@item2.Role</strong></h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row" id="Planned">
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">PLANNED START DATE</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <span><input type="text" class="form-control p-2 _Date" id="Planned_StartDate" value="@item2.PlanedDate"><i class="fa fa-calendar calendar Planned_St_date"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">PLANNED END DATE</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <span><input type="text" class="form-control p-2 _Date" id="Planned_EndDate" value="@item2.PlanedEn_Date"><i class="fa fa-calendar calendar Planned_En_date"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">ESTIMATED HOURS HH:MM</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <input type="text" class="form-control" id="EstHours" value="@item2.EST_hrs">
+                                                                        <span id="lblEstimated1" style="color:red;display:none"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br/>
+                                                            <div class="row" id="Actual">
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">ACTUAL START DATE</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <span><input type="text" class="form-control p-2 _Date" id="Actual_StartDate" value="@item2.ActualDate"><i class="fa fa-calendar calendar Actual_St_date"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">ACTUAL END DATE</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <span><input type="text" class="form-control p-2 _Date" id="Actual_EndDate" value="@item2.ActualEn_Date"><i class="fa fa-calendar calendar Actual_En_date"></i></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">ACTUAL HOURS HH:MM</label>
+                                                                    <div class="form-group mb-4">
+                                                                        <input type="text" class="form-control" id="ActHours" value="@item2.Actual_St_hrs">
+                                                                        <span id="lblActual" style="color:red;display:none"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <div class="row">
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="">Status</label>
+                                                                    <div class="form-group mb-4 ">
+                                                                        <select id="drpStatus" class="form-control drpTextHeight">
+                                                                            @foreach (var item1 in ViewBag.GetStatus)
+                                                                            {
+                                                                                if (item2.Status == item1.StatusName)
+                                                                                {
+                                                                                    <option value="@item1.Id" selected>@item1.StatusName</option>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <option value="@item1.Id">@item1.StatusName</option>
+                                                                                }
+                                                                            }
+                                                                        </select>
+                                                                        <span class="" id="lblStatus" style="color:red;display:none">&nbsp;</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-row submit d-flex justify-content-left w-100">
+
+                                                                    <button type="button" class="btn btn-outline-secondary ml-2  mr-2 pointer ProCancel" id="ProCancel">Cancel</button>
+                                                                    <button type="button" class="btn btn-primary  pointer opacity" id="btnSavePm">Save</button>
+                                                                </div>
+                                                            </div>
+
+                                                        }
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="comments" role="tabpanel">
+                                            <div class="chatbox scrollGradient" id="Chatbox_Id">
+                                            </div>
+                                            <div class="dropdown-divider col-md-6"></div>
+                                            <div class="col-md-6">
+                                                <form class="needs-validation" novalidate>
+                                                    <label for="comment">Add Comments:</label>
+                                                    <textarea class="form-control" rows="3" id="Comments"></textarea>
+                                                    <span class="" id="lblComments" style="color:red;display:none">&nbsp;</span>
+                                                    <div class="row">
+                                                        <div class="form-row submit d-flex justify-content-left w-100 py-2">
+                                                            @*<button type="button" class="btn btn-outline-secondary pointer ml-4 mr-2 py-2" id="Comment_Cancel">Cancel</button>*@
+                                                            <button type="button" class="btn btn-primary" id="btnComments">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#comments").change(Scroll());
+        LoadComments();
+
+        $("._Date").keypress(function (e) {
+            e.preventDefault();
+        });
+        
+    });
+
+    var User = '@Session["UserType"]';
+    if (User != 'Project Manager') {
+        $('#Planned').addClass('opacity2');
+        $('#Actual').addClass('');
+
+        $('.Actual_St_date').click(function () {
+            $("#Actual_StartDate").focus();
+        });
+        $('.Actual_En_date').click(function () {
+            $("#Actual_EndDate").focus();
+        });
+    }
+    else {
+        $('#Planned').addClass('');
+        $('#Actual').addClass('opacity2');
+
+        $('.Planned_St_date').click(function () {
+            $("#Planned_StartDate").focus();
+        });
+        $('.Planned_En_date').click(function () {
+            $("#Planned_EndDate").focus();
+        });
+    }
+    $('.Actual_St_date').click(function () {
+        $("#Actual_StartDate").focus();
+    });
+
+    $("#Planned_StartDate").on('click', function () {
+        var a = $("#Planned").attr('class');
+        if (!a.includes('opacity2')) {
+            $("#Planned_StartDate").datepicker({
+                dateFormat: 'dd M yy',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-0:+1',
+                onSelect: function (selected) {
+                    //var dt = new Date(selected);
+                    //dt.setDate(dt.getDate() + 1);
+                    $("#Planned_EndDate").datepicker("option", "minDate", selected);
+
+                    var date = new Date(selected);
+                    date.setDate(date.getDate() + 15);
+                    $("#Planned_EndDate").datepicker("option", "maxDate", date);
+
+                    $("#Actual_StartDate").val(selected);
+                    $("#Actual_StartDate").datepicker("option", "minDate", selected);
+                    $("#Actual_EndDate").datepicker("option", "minDate", selected);
+
+                    var StartDate = $("#Planned_StartDate").val();
+                    var EndDate = $("#Planned_EndDate").val();
+                    var Hrs = $('#EstHours').val().split(':');
+                    DateHours(StartDate, EndDate, Hrs);
+                }
+            });
+        }
+    });
+    
+    $("#Planned_EndDate").on('click', function () {
+         var a = $("#Planned").attr('class');
+        if (!a.includes('opacity2')) {
+            $('#Planned_EndDate').datepicker({
+                dateFormat: 'dd M yy',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-0:+1',
+                beforeShow: customEndDate,
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate() - 1);
+                    //$("#Planned_StartDate").datepicker("option", "maxDate", dt);
+
+                    var StartDate = $("#Planned_StartDate").val();
+                    var EndDate = $("#Planned_EndDate").val();
+                    var Hrs = $('#EstHours').val().split(':');
+                    DateHours(StartDate, EndDate, Hrs);
+                }
+            });
+        }
+    });    
+
+    $("#Actual_StartDate").on('click', function () {
+
+        var a = $("#Actual").attr('class');
+        if (!a.includes('opacity2')) {
+             $("#Actual_StartDate").datepicker({
+                dateFormat: 'dd M yy',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-0:+1',
+
+                beforeShow: customEndDate,
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate() + 1);
+                    $("#Actual_EndDate").datepicker("option", "minDate", dt);
+
+                    $("#Actual_EndDate").datepicker("option", "minDate", selected);
+                    var date = new Date(selected);
+                    date.setDate(date.getDate() + 15);
+                    $("#Actual_EndDate").datepicker("option", "maxDate", date);
+
+                    var StartDate = $("#Actual_StartDate").val();
+                    var EndDate = $("#Actual_EndDate").val();
+                    var Hrs = $('#ActHours').val().split(':');
+                    DateActualHours(StartDate, EndDate, Hrs);
+                }
+            });
+        } 
+    });
+   
+    $("#Actual_EndDate").on('click', function () {
+        var a = $("#Actual").attr('class');
+        if (!a.includes('opacity2')) {
+            $('#Actual_EndDate').datepicker({
+                dateFormat: 'dd M yy',
+                changeYear: true,
+                changeMonth: true,
+                yearRange: '-0:+1',
+                beforeShow: customActualDate,
+                onSelect: function (selected) {
+                    var dt = new Date(selected);
+                    dt.setDate(dt.getDate() - 1);
+                    //$("#Actual_StartDate").datepicker("option", "maxDate", dt);
+
+                    var StartDate = $("#Actual_StartDate").val();
+                    var EndDate = $("#Actual_EndDate").val();
+                    var Hrs = $('#ActHours').val().split(':');
+                    DateActualHours(StartDate, EndDate, Hrs);
+                }
+            });
+        }
+    });
+    
+
+    function customEndDate()
+    {
+        var x = $("#Planned_StartDate").datepicker("getDate");
+        $("#Planned_EndDate").datepicker("option", "minDate", x);
+        $("#Actual_StartDate").datepicker("option", "minDate", x);
+        $("#Actual_EndDate").datepicker("option", "minDate", x);
+    }
+
+    function customActualDate() {
+        var x = $("#Actual_StartDate").datepicker("getDate");
+        $("#Actual_EndDate").datepicker("option", "minDate", x);
+    }
+
+    function DateHours(StartDate, EndDate, Hrs) {
+
+        // c is weekdays, e is weekends
+        for (var c = 0, e = 0, d = new Date(StartDate), a = (new Date(EndDate) - d) / 864E5; 0 <= a; a--) {
+            var b = new Date(d);
+            b.setDate(b.getDate() + a);
+            1 == Math.ceil(b.getDay() % 6 / 6) ? c++ : e++
+        }
+        //alert(c);
+        var a = (c - 1) * 8;
+        var b = c * 8;
+        debugger
+        // a = a * 60;
+        //Hrs[0] = Hrs[0] * 60
+
+        if (Hrs[0] >= a && b >= 99) {
+
+        }
+        else {
+            $('#EstHours').val(b + ':00');
+        }
+    }
+
+    function DateActualHours(StartDate, EndDate, Hrs) {
+        // c is weekdays, e is weekends
+        for (var c = 0, e = 0, d = new Date(StartDate), a = (new Date(EndDate) - d) / 864E5; 0 <= a; a--) {
+            var b = new Date(d);
+            b.setDate(b.getDate() + a);
+            1 == Math.ceil(b.getDay() % 6 / 6) ? c++ : e++
+        }
+        //alert(c);
+        var a = (c - 1) * 8;
+        var b = c * 8;
+        //debugger
+        //if (Hrs[0] >= a && Hrs[0] <= b) {
+        if (Hrs[0] >= a && b>=99) {
+           
+        }
+        else {
+            $('#ActHours').val(b + ':00');
+        }
+    }
+
+    //$(".ProCancel").on("click", function () {
+        
+    //    $("#EditProgressMonitor").modal('hide');
+    //    $('.modal-backdrop').remove();
+    //     RefreshProjectMonitor();
+    //    //Reload_After_Popup();
+    //});
+    var proHandler = function (e) {
+        $("#EditProgressMonitor").modal('hide');
+        $('.modal-backdrop').remove();
+        RefreshProjectMonitor();
+
+        var PhaseId = $("#drpPhase").val();
+        var ProjInstance = $("#ProjInstance").val();
+        var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+        Taskcount(PhaseId, ProjInstance, GetTaskCountUrl);
+    }
+
+    $(".ProCancel").one('click', proHandler);
+   
+
+    $('#EstHours,#ActHours').on('keypress', function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 58)) {
+            event.preventDefault();
+            //$("#lblEstdHours").html("Time Only").show().fadeOut(5000);
+        }
+    });
+
+
+    $('#EstHours,#ActHours').keyup(function (event) {
+        this.value = this.value
+            .replace(/[^\d:]/g, '')             // numbers and decimals only
+            .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at the beginning
+            .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+            //.replace(/(\:[\d]{2})./g, '$1');    // not more than 4 digits after decimal
+            .replace(/(\:[0-5][0-9]{1})./g, '$1');
+
+    });
+
+    function HourscheckByDays(StartDate, EndDate, Hrs) {
+        var status = true;
+        for (var c = 0, e = 0, d = new Date(StartDate), a = (new Date(EndDate) - d) / 864E5; 0 <= a; a--) {
+            var b = new Date(d);
+            b.setDate(b.getDate() + a);
+            1 == Math.ceil(b.getDay() % 6 / 6) ? c++ : e++
+        }
+        var a = (c - 1) * 8;
+        var b = c * 8;
+        //debugger
+
+        // Working with Minutes
+        a = a * 60;
+        b = b * 60;
+        Hrs[0] = Hrs[0] * 60
+        Hrs[0] = parseInt(Hrs[0]) + parseInt(Hrs[1]);
+
+        if (Hrs[0] > a && Hrs[0] <= b) {
+
+        }
+        else {
+            status = false;
+        }
+        return status;
+    }
+
+    $("#btnSavePm").on("click", function () {
+        
+        var id = $("#Pmid").val();
+        var status = $("#drpStatus").val();;
+        var Estimated = $("#EstHours").val();
+        Estimated = Estimated.replace(/:/g, ".");
+        var ActHours = $("#ActHours").val();
+        ActHours = ActHours.replace(/:/g, ".");
+
+        var PlannedStDate = $("#Planned_StartDate").val();
+        var PlannedEnDate = $("#Planned_EndDate").val();
+        var ActStDt = $("#Actual_StartDate").val();
+        var ActEnDt = $("#Actual_EndDate").val();
+
+        var PhaseId = $("#drpPhase").val();
+        var ProjInstance = $("#ProjInstance").val();
+
+        var ts = $("#txtTimeStamp1").val();
+
+        var UserType = "@Session["UserType"].ToString()";
+
+        var model = {
+            Id:id,
+            StatusId:status,
+            EST_hours:Estimated,
+            Actual_St_hours:ActHours,
+            PlanedDate:PlannedStDate,
+            PlanedEn_Date:PlannedEnDate,
+            ActualDate:ActStDt,
+            ActualEn_Date: ActEnDt,
+            PhaseId: PhaseId,
+            Instance:ProjInstance
+        }
+        var status_ = EST_hours_ = ActHours_ =PlannedStDate_ = PlannedEnDate_ = ActStDt_ = ActEnDt_ = false;
+
+        if (status == 0) {
+            status_ = true;
+            $("#lblStatus").html("Please Select the Status").show();
+        } else {
+            $("#lblStatus").html("").show();
+        }
+
+        if (UserType == 'Project Manager') {
+            
+            if (Estimated == "") {
+                EST_hours_ = true;
+                $("#lblEstimated1").html("Please enter Est hours").show();
+            }
+            else if (TaskEstHrs(Estimated) == false) {
+                EST_hours_ = true;
+                $("#lblEstimated1").html("Invalid Est hrs").show();
+            }
+            else if (HourscheckByDays(PlannedStDate, PlannedEnDate, Estimated.split('.')) == false) {
+                EST_hours_ = true;
+                $("#lblEstimated1").html("Invalid Est hrs").show();
+                Notiflix.Notify.Info('Est Hours not matching with selected Planned date', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+            else {
+                $("#lblEstimated1").html("").show();
+            }
+
+            if (PlannedStDate == "") {
+                PlannedStDate_ = true;
+                $("#lblPlannedStDate").html("Please Enter the Planned Start Date").show();
+            }
+            else {
+                $("#lblPlannedStDate").html("").show();
+            }
+
+            if (PlannedEnDate == "") {
+                PlannedEnDate_ = true;
+                $("#lblPlannedEnDate").html("Please Enter the Planned End Date").show();
+            }
+            else {
+                $("#lblPlannedEnDate").html("").show();
+            }
+        }
+        else {
+            if (ActHours == "") {
+                ActHours_ = true;
+                $("#lblActual").html("Please enter Actual hours").show();
+            }
+            else if (TaskEstHrs(ActHours) == false) {
+                ActHours_ = true;
+                $("#lblActual").html("Invalid Actual hrs").show();
+            }
+            else if (HourscheckByDays(ActStDt, ActEnDt, ActHours.split('.')) == false) {
+                ActHours_ = true;
+                $("#lblActual").html("Invalid Actual hrs").show();
+                Notiflix.Notify.Info('Actual Hours not matching with selected Actual date', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+            else {
+                $("#lblActual").html("").show();
+            }
+
+            if (ActStDt == "") {
+                ActStDt_ = true;
+                $("#lblActStDt").html("Please Enter the Actual Start Date").show();
+            }
+            else {
+                $("#lblActStDt").html("").show();
+            }
+
+            if (ActEnDt == "") {
+                ActEnDt = true;
+                $("#lblActEnDt").html("Please Enter the Actual End Date").show();
+            }
+            else {
+                $("#lblActEnDt").html("").show();
+            }
+        }
+
+        if (status_ == false && EST_hours_ == false && ActHours_==false&& PlannedStDate_ ==false && PlannedEnDate_ ==false && ActStDt_ ==false && ActEnDt_ == false) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SubmitProgressMonitor","Transaction")',
+                async: false,
+                data: { projectMonitor:model,TS:ts },
+                success: function (response) {
+                    if (response == true) {
+                        //$('.modal-backdrop').remove();
+                        //$("#EditProgressMonitor").modal('hide');
+                        //Refreshtab();
+                        //RefreshResourceAllocation();
+                        Notiflix.Notify.Success('Saved successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        $('#comments-bdg').prop('disabled', false);
+                        $('#comments-bdg').click();
+                        $('#tab_PMdetails').prop('disabled', true);
+                        // $("#EditProgressMonitor").modal('hide');
+                        //$('.modal-backdrop').remove();
+                        //RefreshProjectMonitor();
+
+                    }
+                    else {
+                        Notiflix.Notify.Failure('Not Saved!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        $("#EditProgressMonitor").modal('hide');
+                        $('.modal-backdrop').remove();
+                        Reload_After_Popup();
+                    }
+                    var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+                    Taskcount(PhaseId, ProjInstance, GetTaskCountUrl);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+    $("#btnComments").on("click", function () {
+        
+        var id = $("#Pmid").val();
+        var Comments = $("#Comments").val().trim();
+
+        var PhaseId = $("#drpPhase").val();
+        var ProjInstance = $("#ProjInstance").val();
+
+        var Comments_ = false;
+        if (Comments == "") {
+            Comments_ = true;
+            $("#lblComments").html("Please Enter the Comments").show();
+        }
+        else {
+            $("#lblComments").html("").show();
+        }
+        if (Comments_ == false) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SubmitComments","Transaction")',
+                async: false,
+                data: { Comments: Comments, id: id },
+                success: function (response) {
+                    if (response == true) {
+                        //LoadComments();
+
+                        //RefreshProjectMonitor();
+                        $("#EditProgressMonitor").modal('hide');
+                        $('.modal-backdrop').remove();
+                        Reload_After_Popup();
+                        Notiflix.Notify.Success('Comments Added Successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        //$("#Comments").val("");
+                    }
+                    else {
+                        $("#EditProgressMonitor").modal('hide');
+                        $('.modal-backdrop').remove();
+                        Reload_After_Popup();
+                        Notiflix.Notify.failure('Not Saved!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                    }
+                    var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+                    Taskcount(PhaseId, ProjInstance, GetTaskCountUrl);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        
+
+    });
+    $("#Comment_Cancel").click(function () {
+        $("#EditProgressMonitor").modal('hide');
+        $('.modal-backdrop').remove();
+        Reload_After_Popup();
+
+        var PhaseId = $("#drpPhase").val();
+        var ProjInstance = $("#ProjInstance").val();
+        var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+        Taskcount(PhaseId, ProjInstance, GetTaskCountUrl);
+    });
+
+    function Reload_After_Popup() {
+
+       // debugger;
+        $("#Comments").val("");        
+       
+        //Refreshtab();
+        $("#Pmid").val("");
+        $("#drpStatus").val(0);
+        $("#EstHours").val("");
+        $("#PlannedStDate").val("");
+        $("#PlannedEnDate").val("");
+        $("#ActStDt").val("");
+        $("#ActEnDt").val("");
+
+        $("#lblStatus").html("").show();
+        $("#lblEstimated1").html("").show();
+        $("#lblPlannedStDate").html("").show();
+        $("#lblPlannedEnDate").html("").show();
+        $("#lblActual").html("").show();
+        $("#lblActStDt").html("").show();
+        $("#lblActEnDt").html("").show();
+
+        RefreshProjectMonitor();
+        //RefreshResourceAllocation();
+        //LoadComments();
+    }
+
+    function Get_Status(){
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetStatus","Transaction")',
+            success: function (response) {
+                var status = $("#drpStatus");
+                status.empty();
+                status.append($('<option/>', {
+                    value: 0,
+                    text: '--Select Status--'
+                }));
+                $.each(response, function (index, val) {
+                    status.append($('<option/>', {
+                        value: val.Id,
+                        text: val.StatusName
+                    }));
+                });
+
+            }
+        });
+    }
+
+    function TaskEstHrs(Estimated) {
+
+        var Status = true;
+        var filter = /^([0-9]{1,2}).[0-5][0-9]$/
+        var filter1 = /^(00.[0-5][1-9]|0.[0-5][1-9]|00.[1-5][0-9]|0.[1-5][0-9]|0[1-9]+[.][0-5][0-9]|[1-9]+[.][0-5][0-9]|[1-9][0-9]+[.][0-5][0-9])$/
+        if (!filter.test(Estimated)) {
+            Status = false;
+        }
+        else if (!filter1.test(Estimated)) {
+           Status = false;
+        }
+        return Status;
+    }
+    //function ActualHrsCheck(Actual) {
+
+    //    var Status = true;
+    //    var filter = /^([0-9]{1,2}).[0-5][0-9]$/
+    //    var filter1 = /^(00.[0-5][1-9]|0.[0-5][1-9]|00.[1-5][0-9]|0.[1-5][0-9]|0[1-9]+[.][0-5][0-9]|[1-9]+[.][0-5][0-9])$/
+    //    if (!filter.test(Actual)) {
+    //        Status = false;
+    //    }
+    //    else if (!filter1.test(Estimated)) {
+    //       Status = false;
+    //    }
+    //    return Status;
+    //}
+    function LoadComments() {
+        
+        var id = $("#Pmid").val();
+        var Result = '';
+         var d = new Date();
+        var timezoneOffset = d.getTimezoneOffset();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetComments", "Transaction")",
+            async: false,
+            data: { id: id,timezoneOffset:timezoneOffset },
+            success: function (response) {
+                var res = response;
+                var Local = '';
+                var content = '<div class="clients-src">';
+                content = content + '&nbsp;&nbsp;&nbsp;Profile__ ';
+                content = content + '&nbsp;&nbsp;&nbsp;<span class="justify-content-left card-title text-uppercase">FullName</span>';
+                content = content + '<a class="col-md-1"></a>';
+                content = content + '<span class="text-left font-9 color-gray">Date</span>';
+                content = content + '<p class="ml-5">comments</p>';
+                content = content + '</div> <hr />';
+                for (var i = 0; i < res.length; i++) {
+                    Local = '';
+                    Local = content;
+                    var Design_ = '<a href="javascript:;">';
+                    var ImageId = res[i].Image;
+                    ImageId = ImageId.replace(",", "");
+                    if (ImageId != undefined) {
+                        if (ImageId.toString().trim() != "") {
+                            Design_ = Design_ + '<span class="" data-toggle="tooltip" title="_title" id=' + ImageId.toString().trim() + '><img src="../assets/PhotoUpload/' + ImageId.toString().trim() + '.jpg" class="profileImage" style="padding:0px !important"></span>';
+                        } else {
+                            Design_ = Design_ + '<span class="profileImage _cla" data-toggle="tooltip" title="_title" id=_id>_Data</span>';
+                        }
+                    }
+                    else {
+                        Design_ = Design_ + '<span class="profileImage _cla" data-toggle="tooltip" title="_title" id=_id>_Data</span>';
+                    }
+                    Design_ = Design_ + '</a>';
+
+                    Local = Local.replace("Profile__", Design_)
+                    Local = Local.replace('_id', res[i].UserID);
+                    Local = Local.replace("_cla", getSColor(random(1, 7)));
+                    Local = Local.replace('_Data', GetTwoLetters(res[i].Name.trim()));
+                    Local = Local.replace('_title', res[i].Name.trim());
+
+                    //let DateDt = res[i].Cre_on;
+
+                    //var d = DateDt.replace("/Date(", "").replace(")/", "");
+                    //console.log(d);
+                    //d = parseInt(d, 10);
+                    //console.log(">>" + d);
+                    //let tempDate = new Date(d); 
+                    //debugger;
+                    //DateDt = new Date(Date.UTC(
+                    //    tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate()
+                    //    , tempDate.getHours(), tempDate.getMinutes(), tempDate.getSeconds()
+                    //)); 
+
+                    //debugger;
+                    //console.log(DateDt);
+                    Local = Local.replace("FullName", res[i].Name);
+                    
+                    Local = Local.replace("Date", res[i].Cre_on_str);
+                    //Local = Local.replace("Date", UTC_To_Local(res[i].Cre_on_str));
+                    Local = Local.replace("comments", res[i].Comments);
+                    Result = Result + Local;
+                }
+            }
+        });
+        $("#Chatbox_Id").html("");
+        $("#Chatbox_Id").html(Result);
+        Scroll();
+    }
+
+    function Scroll() {
+        $("#Chatbox_Id").animate({
+            scrollTop: $('#Chatbox_Id')[0].scrollHeight - $('#Chatbox_Id')[0].clientHeight
+        }, 1000);
+    }
+
+    //function Refreshtab() {
+
+    //     $("#Pmid").val("");
+    //    $("#drpStatus").val(0);
+    //    $("#EstHours").val("");
+    //    $("#PlannedStDate").val("");
+    //    $("#PlannedEnDate").val("");
+    //    $("#ActStDt").val("");
+    //    $("#ActEnDt").val("");
+
+    //}
+    //function UTC_To_Local(utcTime) {
+    //    debugger;
+    //    console.log("Res>>"+moment.utc(utcTime).tz(moment.tz.guess()).format('DD MMM YYYY HH:MM:SS A'));
+    //    console.log(moment.utc(utcTime).format('DD MMM YYYY HH:MM:SS A'));
+        
+         
+    //    var local_date = moment.utc(utcTime).local();
+    //    console.log(local_date);
+    //    Return = local_date.format('DD MMM YYYY HH:MM:SS A');
+
+    //    console.log(new Date().getTimezoneOffset());
+    //    console.log(moment.tz.guess());
+
+    //    //var dt = moment.utc().format();
+    //    //let Test = moment.utc(dt).format();
+    //    //console.log(dt);
+    //    //console.log(Test);
+
+    //    //console.log("0st>>" + local_date.format('YYYY-MM-DD HH:mm:ss'));
+    //    //console.log("1st>>" + local_date.format('DD-MM-YYYY HH:MM:SS'));
+    //    //console.log("2st>>" + local_date.format('DD-MMM-YYYY HH:MM:SS'));
+    //    //console.log("3st>>" + local_date.format('DD MMM YYYY HH:MM:SS A'));
+    //    //var ts = moment.utc(myDate);
+    //    //var Res = ts.local().format('DD-MM-YY, h:mm:ss a')
+    //    console.log(Return);
+    //    return Return;
+    //}
+
+</script>

@@ -1,0 +1,274 @@
+﻿@Scripts.Render("~/bundles/Scripts/DatePicker")
+@Styles.Render("~/Content/css/DatePicker")
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <style>
+        .show_ins, .show_prj {
+            display: none;
+        }
+
+        .show_data {
+            display: block;
+        }
+    </style>
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row">
+        <div class="col-lg-7">
+            <ul class="nav navbar-toolbar sec-left-resource">
+                <li>
+                    <i class="fa fa-clone" aria-hidden="true"></i>&nbsp;&nbsp;<strong>Projects</strong>
+                </li>
+                <li>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li>
+                    <div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0 text-capitalize" id="drpProject">
+                            <option value="0">Select Project</option>
+                            @foreach (var item in ViewBag.Projects)
+                            {
+                                <option class="text-capitalize" value="@item.ProjectId">@item.ProjectName</option>
+                            }
+                        </select>
+                    </div>
+                </li>
+                <li class="show_ins">
+                    <i class="fa fa-angle-right " aria-hidden="true"></i>
+                </li>
+                <li class="show_ins">
+                    <div class="ibox dropdown-resources mb-0 ">
+                        <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                            <option value="0">Select Instance</option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+
+    </div>
+    <div class="row py-1 ">
+        <div class="col-lg-6">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="nav-item" data-ref="@Url.Action("_PMMonitor", "PM")">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#PMMonitor" role="tab" aria-controls="PMMonitor" id="Tab_PMMonitor">PM Task Monitor</a>
+                                </li>
+
+                                <li class="nav-item" data-ref="@Url.Action("_PMFileUpload","PM")">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#PMFileUpload" role="tab" aria-controls="PMFileUpload" id="Tab_PMFileUpload">PM File Upload</a>
+                                </li>
+                                
+                                <li class="nav-item" data-ref="@Url.Action("_PMRiskAssessment","PM")">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#PMRiskAssessment" role="tab" aria-controls="PMRiskAssessment" id="Tab_PMRiskAssessment">Risk Assessment</a>
+                                </li>
+
+
+                            </ul>
+                            <!-- <span class="title-project active">Resource Planning<span> -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="form-row phase-label justify-content-end">
+                <div class="projects-dropdown w-40">
+
+                </div>
+                <div class="search-field pl-2 w-40">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <form class="navbar-search" action="javascript:;" id="PM_Sec">
+                                <div class="rel">
+                                    <span class="search-icon"><i class="fa fa-search"></i></span>
+                                    <input class="form-control" id="searchPMTask" placeholder="Search">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-line"></div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade-in-up" id="PMMonitor" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="PMFileUpload" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="PMRiskAssessment" role="tabpanel">
+        </div>
+
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+
+<script>
+    $(document).ready(function () {
+
+        var UserType = "@Session["UserType"].ToString()";
+        var PrjId = sessionStorage.getItem("Proj");
+
+        if (PrjId == null && UserType == 'Project Manager') {
+            $('#Tab_PMMonitor').click();
+            var msg = "Kindly select Project..!";
+            Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+        }
+        else {
+            $('#Tab_PMMonitor').click();
+
+        }
+    });
+
+    $(".nav-tabs li").click(function () {
+
+        var url = $(this).data('ref');
+
+        var PrjId = sessionStorage.getItem("Proj");
+        var InsId = sessionStorage.getItem("Ins");
+        var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+        var url2 = '@Url.Action("PMReportData", "PM")';
+
+        $.ajax({
+            url: url,
+            // async: false,
+            //data: { pageId: pageId },
+            success: function (response) {
+                
+                $("#PMMonitor").html("")
+                $("#PMFileUpload").html("");
+                $("#searchPMTask").val("");
+                //$("#ProjectDetailView").html("");
+                if (url.includes("_PMMonitor")) {
+                    $(this).addClass("active")
+                    $("#PMMonitor").html(response);
+                    var UserType = "@Session["UserType"].ToString()";
+
+                    if (PrjId != null && PrjId != 0 && UserType == 'Project Manager') {
+                        $('#drpProject').val(PrjId);
+                        PMMonitorData(PrjId);
+                        $('#PM_Sec').show();
+                    }
+                    else {
+                        $('#drpProject').val(0);
+                        $('#PM_Sec').show();
+                    }
+                    $('.show_data').addClass('show_ins').removeClass('show_data');
+                }
+                else if (url.includes("_PMFileUpload")) {
+
+                    $(this).addClass("active")
+                    $("#PMFileUpload").html(response);
+
+                    if (PrjId != '' && InsId != '' && PrjId != null && InsId != null) {
+
+                        $('#drpProject').val(PrjId);
+                        GlobalBindInstance(PrjId, InsTranurl);
+
+                        $("#ProjInstance").val(InsId);
+                        LoadDataPM(InsId, url2);
+                        $('#PM_Sec').hide();
+                    }
+                    else {
+                        $("#PMFileUpload").html(response);
+                        $('#drpProject').val(0);
+                        $("#ProjInstance").val(0);
+                        $('#PM_Sec').hide();
+                    }
+                }
+                else if (url.includes("_PMRiskAssessment")) {
+                    
+                    $('.show_data').addClass('show_ins').removeClass('show_data');
+                    $('#drpProject').val(0);
+                    $("#PMRiskAssessment").html(response);
+                    if ($('#drpProject').val() != 0 && $('#drpProject').val() != null) {
+                        LoadRiskAssessmentTable();
+                        $("#AddRiskAssessment").show();
+                    }
+                    else {
+                        $("#AddRiskAssessment").hide();
+                    }
+                }
+                //else if (url.includes("_ProjectDetailView")) {
+                //    $(this).addClass("active")
+                //    $("#ProjectDetailView").html(response);
+                //    $('#PM_Sec').hide();
+                //}
+
+            }
+        });
+    });
+
+     $("#searchPMTask").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#PMTaskMonitor tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+     });
+
+    function RefreshPMMonitor() {
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "PM", new { name = "_PMMonitor" })',
+            success: function (data) {
+                $("#PMMonitor").html(data);
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+
+    function LoadDataPM(IDInstance, InsUrl) {
+        //var IDInstance = $('#ProjInstance').val();
+        if (IDInstance != "0") {
+            $.ajax({
+                type: "POST",
+                url: InsUrl,
+                data: { 'IDInstance': IDInstance },
+                async: false,
+                success: function (data) {
+                    data = data.data;
+                    if (data.length > 0) {
+                        $.each(data, function (index, itemData) {
+                            if (itemData.FileType == 9) {
+                                $('#FileUpload1_View').removeClass('invisible').addClass('visible');
+                                FileUpload1_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 10) {
+                                $('#FileUpload2_View').removeClass('invisible').addClass('visible');
+                                FileUpload2_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 11) {
+                                $('#FileUpload3_View').removeClass('invisible').addClass('visible');
+                                FileUpload3_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 12) {
+                                $('#FileUpload4_View').removeClass('invisible').addClass('visible');
+                                FileUpload4_View = itemData.C_FileName;
+                            }
+                        });
+                    }
+                }
+            });
+            $("#btnUpload").show();
+        }
+        else {
+            $("#btnUpload").hide();
+        }
+    }
+
+</script>

@@ -1,0 +1,338 @@
+﻿@*<div class="form-row py-1">
+        <div class="col-lg-12 duration">
+            <ul class="p-0 m-0">
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input border-0 ml-0" type="checkbox" value="" id="">
+                    </div>
+                </li>
+                <li>
+                    <div class="ibox m-0">
+                        <span class="title-duration"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp; Set duration</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="ibox m-0">
+                        <span class="title-duration"><i class="fa fa-user" aria-hidden="true"></i>&nbsp; Assign user</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>*@
+@*<div class="form-row pro-list-table-resource">*@
+<style>
+    .TextRap {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    .drpOwner {
+        background-color: #e9ecef !important;
+    }
+     #RA_design_table {
+        height: calc(100vh - 285px);
+    }
+    ._trackcircle {
+        font-size: 0.6em;
+    }
+</style>
+
+<div class="form-row py-1">
+    <div class="col-lg-7">
+        <div class="new-project-submit d-flex">
+            <button type="button" class="btn btn-primary pointer mb-2" id="BulkAllocation">Bulk Allocation</button>
+        </div>
+    </div>
+    <div class="col-lg-5 mb-2">
+        <div class="new-project-submit d-flex justify-content-end">
+            <button type="button" class="btn btn-primary pointer" id="PMResourceAdd">Pull Task</button>
+        </div>
+    </div>
+</div>
+
+@*<div class="form-row pro-list-table-pm">
+    <div class="col-lg-12 resource-planning">
+        
+    </div>
+</div>*@
+<div class="d-flex pro-list-table" id="RA_design_table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 mytable" id="ResourceTable">
+        <thead>
+            <tr>
+                <td scope="col" style="width:55px">s.no</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Activity/Task">activity/task</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Building Block">building block</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Application Area">Application Area</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Role">role</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="Owner">owner</td>
+                <td scope="col" data-placement="top" data-toggle="tooltip" title="status">status</td>
+                <td scope="col" type="hidden" style="width:0%">Id</td>
+            </tr>
+        </thead>
+        <tbody class="bg-white">
+            <tr class="colspan">
+                <td colspan="8" style="text-align:center">
+                    No Records Found
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- START POPUP-->
+<div id="addResourceTask" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addactivity">Pull New Activity</h4>
+                <button type="button" class="close btnResourceCancel" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="hidden" id="txtActivity_ID" />
+                                <input type="hidden" id="txtSequence" />
+                                <div class="form-group">
+                                    <label for="">Task<span style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpResTask" name="">
+                                        <option value="0">Select Task</option>
+                                    </select>
+                                    <span class="" id="lblResTask" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnResourceCreate">Save</button>
+                    <button type="button" class="btn btn-secondary pointer btnResourceCancel" id="btnResourceCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PPOPUP-->
+
+<!---Start Bulk Allocation-->
+<div id="addBulkAllocation" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Bulk Allocation </h4>
+                <button type="button" class="close btnBulkCancel" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Role<span style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpBulkRole" name="">
+                                        <option value="0">Select Role</option>
+                                        @*@foreach (var item in ViewBag.Role)
+                                        {
+                                            <option value="@item.RoleID">@item.RoleName</option>
+                                        }*@
+                                    </select>
+                                    <span class="" id="lblBulkRole" style="color:red">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Owner<span style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpBulkOwner" name="">
+                                        <option value="0">Select Owner</option>
+                                    </select>
+                                    <span class="" id="lblBulkOwner" style="color:red">&nbsp;</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">                    
+                    <button type="button" class="btn btn-secondary mr-2 pointer btnBulkCancel" id="btnBulkCancel" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary pointer" id="btnBulkAllocate">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End PopUP-->
+
+<script>
+
+    $(document).ready(function () {
+        $("#BulkAllocation").hide();
+        $("#PMResourceAdd").hide();
+        var PhId = $("#drpPhase").val();
+        var InsId = $("#ProjInstance").val();
+        var UserType = "@Session["UserType"].ToString()";        
+        if (PhId > 0 && InsId != 0 && UserType == 'Project Manager') {
+            
+            ResourceAllocationData(PhId, InsId);
+        }
+
+    });
+
+    $("#BulkAllocation").click(function () {
+        var GetRoleUrl = '@Url.Action("GetRoleFromRA","Transaction")';
+        BulkAllocationLoad(GetRoleUrl);
+    });
+
+    $("#drpBulkRole").change(function () {
+        var DrpUserRole = '@Url.Action("GetUserByRole","Transaction")';
+        DrpBulkAllocation(DrpUserRole);
+    });
+
+    $("#btnBulkAllocate").click(function () {
+         var BulkUrl = '@Url.Action("BulkAllocateOwnerResourceAllocation","Transaction")';
+        BulkAllocationSave(BulkUrl);
+    });
+
+    $(".btnBulkCancel").on("click", function () {
+        ResetBulkAllocation();
+    });
+
+    $("#drpPhase,#ProjInstance").change(function () {
+        //Loading_On();
+        var PhId = $("#drpPhase").val();
+        var PrjId = $("#drpProject").val();
+        var InsId = $("#ProjInstance").val();
+        var CustId = "";
+        $('#Tab_Resource').click();
+        SessionStorage(CustId, PhId, PrjId, InsId);
+         $('#load').css("display", "block");
+        var UserType = "@Session["UserType"].ToString()";
+        if (PhId > 0 && InsId != 0 && UserType == 'Project Manager') {
+            ResourceAllocationData(PhId, InsId);
+
+        }
+        //Loading_Off();
+       // $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function PullActivityTask(PhId, InsId) {
+        
+        $.ajax({
+            url: '@Url.Action("PullTaskButton","Transaction")',
+            data: { PhaseId: PhId, InstanceId: InsId },
+            async: false,
+            success: function (response) {
+                if (response == false) {
+                    $("#PMResourceAdd").hide();
+                } else {
+                    $("#PMResourceAdd").show();
+                }
+            }
+        })
+    }
+
+    function ResourceAllocationData(PhId, InsId) {
+        $('#load').css("display", "block");
+        var PullUrl = '@Url.Action("PullTaskButton","Transaction")';
+        PullActivityTask(PhId, InsId, PullUrl);
+        //$("#PMResourceAdd").show();
+        //$("#BulkAllocation").show();
+        var UserType = "@Session["UserType"].ToString()";
+        if (PhId > 0 && InsId != 0 && UserType == 'Project Manager') {
+             var GetResourceurl = '@Url.Action("__GetDataByResourceAllocation","Transaction")';
+            var GetUserurl = '@Url.Action("_GetUserRole","Transaction")' + "?InstanceId=" + InsId;
+            LoadResource_Allocation(PhId, InsId, GetResourceurl, GetUserurl);
+        }
+
+       // $('#load').css("display", "none");
+    }
+
+    $(document).off('click', '.ToggleResource');
+    $(document).on('click', '.ToggleResource', function (e) {
+        e.preventDefault();
+        var trId = $(this).closest('tr');
+        var tr_Id = trId[0].id;
+        var element = $("#ShowProgressMonitor");
+        ShowModal_Tran1(tr_Id, element);
+    });
+
+    $(document).on('mouseover', '.ToggleResource', function () {
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            title: function () {
+                return $(this).parent().find('.head').html();
+            },
+            content: function () {
+                return $(this).parent().find('.content').html();
+            }
+        });
+    });
+
+    function UpdateUserByRole(RoleID, UserID, InsId) {
+
+        $.ajax({
+            url: '@Url.Action("GetUserByRole","Transaction")',// + "?RoleID=" + RoleID,
+            data: {RoleID:RoleID,InstanceId:InsId},
+            async: false,
+            type: 'GET',
+            success: function (Data) {
+                var Design_ = '<option value="_value">_Name</option>';
+                var Design1_ = '<option value="_value" selected>_Name</option>';
+                var End_Result = '';
+                for (var i = 0; i < Data.length; i++) {
+                    var local = '';
+
+                    if (Data[i].UserId == UserID) {
+                        local = Design1_.replace('_value', Data[i].UserId);
+                    }
+                    else {
+                        local = Design_.replace('_value', Data[i].UserId);
+                    }
+                    local = local.replace("_Name", Data[i].Name);
+                    End_Result = End_Result + local;
+                }
+                $('#UserID').replaceWith(End_Result);
+            }
+        });
+    }
+
+    function UnassingnedTaskCount(PhId,InsId){
+        $.ajax({
+            url: '@Url.Action("UnassingnedTaskCount","Transaction")',
+            async: false,
+            data: { PhaseId: PhId, InstanceId: InsId},
+            success: function (response) {
+                $('#Unassigned_ct').text(response);
+            }
+        });
+    }
+
+    $(document).on('change', ".drpOwner", function () {
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+        drp_Id = this.value;
+        var UpdateOwnerUrl = '@Url.Action("UpdateOwnerResourceAllocation","Transaction")';
+        DrpResourceOwnerChange(UpdateOwnerUrl,tr_Id,drp_Id);
+    });
+
+    $("#PMResourceAdd").on("click", function () {
+        var MasteraddUrl = '@Url.Action("MasterAdd","Transaction")';
+        PmAddResource(MasteraddUrl);
+    });
+
+    $("#btnResourceCreate").on("click", function () {
+        var ResourceCreateUrl = '@Url.Action("AddResource","Transaction")';
+        ResourceCreate(ResourceCreateUrl);
+    });
+
+    $(".btnResourceCancel").on("click", function () {
+        $('#addResourceTask').modal('hide');
+        $("#lblResTask").html("").show();
+    });
+</script>

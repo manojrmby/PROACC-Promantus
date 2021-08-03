@@ -1,0 +1,437 @@
+﻿
+<style>
+    .OverAllDiv {
+        overflow-y: scroll;
+        height: calc(100vh - 230px);
+    }
+
+    .file {
+        visibility: hidden;
+        position: absolute;
+    }
+
+    ._width {
+        width: 200px;
+    }
+</style>
+<div class="OverAllDiv">
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="row w-85">
+            <div class="pro-list-table">
+                <table class="table table-borderless mb-0 " id="">
+                    <thead>
+                        <tr>
+                            <td scope="col" style="width:7%;">S.No</td>
+                            <td scope="col"> FILES</td>
+                            <td scope="col" style="width:48%;">Action</td>
+                            <td scope="col" style="width:11%;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">
+                                1.
+                            </td>
+                            <td>
+                                <span data-toggle="tooltip" title="Comprehensive Assessment and Readiness Check Report">
+                                    Comprehensive Assessment and Readiness Check Report
+                                </span>
+
+                            </td>
+                            <td class="_width">
+
+                                <input type="file" accept="application/pdf" name="files" id="FileUpload1" class="file" onChange='getFileNameWithExt(event)'>
+                                <div class="input-group col-xs-12">
+                                    <br />
+                                    <span class="input-group-addon"><i class="glyphicon fa fa-file"></i></span>
+                                    <input type="text" class="form-control fileName" disabled placeholder="File Name">
+                                    <span class="input-group-btn">
+                                        <button class="browse btn btn-primary" type="button" style="height:100%"><i class="fa fa fa-search"></i> Choose File</button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary form-control invisible" id="FileUpload1_View">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                2.
+                            </td>
+                            <td>
+                                <span class="h6" data-toggle="tooltip" title="Landscape & System Management">
+                                    Landscape & System Management
+                                </span>
+
+                            </td>
+                            <td class="_width">
+
+                                <input type="file" accept="application/pdf" name="files" id="FileUpload2" class="file" onChange='getFileNameWithExt(event)'>
+                                <div class="input-group col-xs-12">
+                                    <br />
+                                    <span class="input-group-addon"><i class="glyphicon fa fa-file"></i></span>
+                                    <input type="text" class="form-control fileName" disabled placeholder="File Name">
+                                    <span class="input-group-btn">
+                                        <button class="browse btn btn-primary" type="button" style="height:100%"><i class="fa fa fa-search"></i>  Choose File</button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary form-control invisible" id="FileUpload2_View">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                3.
+                            </td>
+                            <td>
+                                <span class="h6" data-toggle="tooltip" title="Custom Code Analysis">
+                                    Custom Code Analysis
+                                </span>
+
+                            </td>
+                            <td class="_width">
+
+                                <input type="file" accept="application/pdf" name="files" id="FileUpload3" class="file" onChange='getFileNameWithExt(event)'>
+                                <div class="input-group col-xs-12">
+                                    <br />
+                                    <span class="input-group-addon"><i class="glyphicon fa fa-file"></i></span>
+                                    <input type="text" class="form-control fileName" disabled placeholder="File Name">
+                                    <span class="input-group-btn">
+                                        <button class="browse btn btn-primary" type="button" style="height:100%"><i class="fa fa fa-search"></i> Choose File</button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary form-control invisible" id="FileUpload3_View">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">
+                                4.
+                            </td>
+                            <td>
+                                <span class="h6" data-toggle="tooltip" title="License Optimization">
+                                    License Optimization
+                                </span>
+
+                            </td>
+                            <td class="_width">
+
+                                <input type="file" accept="application/pdf" name="files" id="FileUpload4" class="file" onChange='getFileNameWithExt(event)'>
+                                <div class="input-group col-xs-12">
+                                    <br />
+                                    <span class="input-group-addon"><i class="glyphicon fa fa-file"></i></span>
+                                    <input type="text" class="form-control fileName" disabled placeholder="File Name">
+                                    <span class="input-group-btn">
+                                        <button class="browse btn btn-primary" type="button" style="height:100%"><i class="fa fa fa-search"></i> Choose File</button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary form-control invisible" id="FileUpload4_View">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+                <div class="text-center">
+                    <button class="btn btn-primary" id="btnUpload">
+                        Add / Update
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        @*<div class="row">
+                <div class="col-12">
+                    <div class="position-relative form-group">
+                        <div class="text-center">
+                            <button class="btn-wide mb-2 mr-2 btn btn-primary" id="btnUpload">
+                                Add / Update
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>*@
+    </div>
+    <div id="PdfShow">
+        <span class="h4 font-weight-bold">PDF Preview</span>
+        <div id="Parent" style="min-height:500px;">
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("RedirectTo", Url.Action("Index", "Report"))
+
+<script>
+var FileUpload1_View = "", FileUpload2_View = "", FileUpload3_View = "", FileUpload4_View = "";
+    $(document).ready(function ($) {
+
+         $("#btnUpload").hide();
+        $('#PdfShow').hide();
+        $('.ins').hide();
+        //$('#drpProject').val("0");
+        //$('#ProjInstance').val("0");
+
+        var prj = $('#drpProject').val();
+        var Insid = $('#ProjInstance').val();
+
+        var _PrjId = sessionStorage.getItem("Proj");
+        var _InsId = sessionStorage.getItem("Ins");
+
+        var url3 = '@Url.Action("PMReportData", "PM")';
+
+        if (prj!= "0") {
+            $(".ins").show();
+        }
+        if (Insid == "0" && _PrjId == null && _InsId==null) {
+            var msg = "Kindly select Project & Instance..!";
+            Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+        }
+        //LoadDataPM(Insid, url3);
+
+
+    });
+
+    $("#drpProject").change(function (e) {
+        let tab = $(".nav-tabs li a.active").attr('id');
+        if (tab == "Tab_PMFileUpload") {
+            var PrjId = $("#drpProject").val();
+            var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+            GlobalBindInstance(PrjId, InsTranurl);
+            e.preventDefault();
+        }
+    });
+
+    $("#ProjInstance").change(function () {
+        var ProjectId = $("#drpProject").val();
+        var CustId = "";
+        var PhId = "";
+        var InsId = $("#ProjInstance").val();
+        SessionStorage(CustId, PhId, ProjectId, InsId);
+        PMreset();
+        var url = '@Url.Action("PMReportData", "PM")';
+        var Insid = $('#ProjInstance').val();
+        LoadDataPM(Insid, url);
+    });
+    $('#FileUpload1_View').click(function () {
+        $(".OverAllDiv").animate({ scrollTop: 550 }, 1000);
+        LoadPdf(FileUpload1_View);
+    });
+    $('#FileUpload2_View').click(function () {
+        $(".OverAllDiv").animate({ scrollTop: 550 }, 1000);
+        LoadPdf(FileUpload2_View);
+    });
+    $('#FileUpload3_View').click(function () {
+        $(".OverAllDiv").animate({ scrollTop: 550 }, 1000);
+        LoadPdf(FileUpload3_View);
+    });
+    $('#FileUpload4_View').click(function () {
+        $(".OverAllDiv").animate({ scrollTop: 550 }, 1000);
+        LoadPdf(FileUpload4_View);
+    });
+
+    $('#btnUpload').click(function () {
+        var InstanceId = $("#ProjInstance").val();
+            if (InstanceId != "" && InstanceId != 0) {
+                var fileUpload1 = $("#FileUpload1").get(0);
+                var fileUpload2 = $("#FileUpload2").get(0);
+                var fileUpload3 = $("#FileUpload3").get(0);
+                var fileUpload4 = $("#FileUpload4").get(0);
+                //var InstanceID = $("select#IDInstance").val();
+                var files = [
+                    fileUpload1.files, fileUpload2.files,
+                    fileUpload3.files, fileUpload4.files
+                ];
+
+                var fileData = new FormData();
+                fileData.append("InstanceId", InstanceId);
+                if (fileUpload1 != "" || fileUpload2 != "" || fileUpload3 != "" || fileUpload4 != "") {
+                     // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        if (files[i][0] != null)
+                            fileData.append(i, files[i][0]);
+                    }
+                    $.ajax({
+                        url: '@Url.Action("PM_Upload", "PM")',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        //async: false,
+                        success: function (result) {
+                           // $("#load1").css("display", "none");
+                            if (result == 'File Uploaded Successfully!') {
+                                Notiflix.Notify.Success(result, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                                var url = $("#RedirectTo").val();
+                                location.href = url;
+                                //Redirect();
+                            }
+                            else if (result == 'Please Upload all files.') {
+                                Notiflix.Notify.Info(result, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                            }
+                            else {
+                                Notiflix.Report.Info("ProAcc Info !", result, "Click", function () {
+
+                                @*$.ajax({
+                                    url: '@Url.Action("UploadRevert", "Assessment")',
+                                    type: "POST",
+                                    contentType: false, // Not to set any content header
+                                    processData: false, // Not to process data
+                                    data: fileData,
+                                    success: function (result) {
+                                        Notiflix.Notify.Failure(result, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                                        //alert(result);
+                                    }
+                                });*@
+
+                                });
+                                // Notiflix.Notify.Info(result, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                            }
+                        },
+                        error: function (err) {
+                            //$("#load1").css("display", "none");
+                            Notiflix.Notify.Failure(err.statusText, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                            //alert(err.statusText);
+                        }
+                    });
+                }
+                else {
+                   // $("#load1").css("display", "none");
+                    Notiflix.Notify.Failure("Select at leaset one file .! ", { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                }
+
+            }
+    });
+
+    function LoadPdf(name) {
+        $("#Parent").empty();
+        $("#PdfShow").show();
+        var Path = "@ViewBag.PDFfilepath";
+        Path = Path.replace("~/", "../");
+
+        var idiv = document.createElement('iframe');
+        idiv.id = 'pdf-js-viewer' + name;
+        idiv.src = Path + name + '.pdf';
+        idiv.title = '';
+        idiv.width = "99%";
+        idiv.frameborder = '0';
+        $("#Parent").append(idiv);
+        dimention();
+    }
+    function getFileNameWithExt(event) {
+        if (!event || !event.target || !event.target.files || event.target.files.length === 0) {
+            return;
+        }
+
+        if (event.target.files.length == 1) {
+
+            const name = event.target.files[0].name;
+            const lastDot = name.lastIndexOf('.');
+
+            //const fileName = name.substring(0, lastDot);
+            const ext = name.substring(lastDot + 1).toLowerCase();
+            var id = event.target.id;
+            if (ext == "pdf") {
+
+            }
+            else {
+                Notiflix.Notify.Failure("Only pdf allowed..!", { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                $("#" + id).val("");
+            }
+            //outputfile.value = fileName;
+            //extension.value = ext;
+        }
+        else {
+            Notiflix.Notify.Failure("Select only one pdf file ..!", { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            $("#" + id).val("");
+            //more than one files
+        }
+    }
+    function PMreset() {
+       // debugger;
+        $("#Parent").empty();
+        $("#PdfShow").hide();
+        FileUpload1_View = "";
+        FileUpload2_View = "";
+        FileUpload3_View = "";
+        FileUpload4_View = "";
+
+        $('#FileUpload1').val("");
+        $('#FileUpload2').val("");
+        $('#FileUpload3').val("");
+        $('#FileUpload4').val("");
+
+        $('#FileUpload1_View').removeClass('visible').addClass('invisible');
+        $('#FileUpload2_View').removeClass('visible').addClass('invisible');
+        $('#FileUpload3_View').removeClass('visible').addClass('invisible');
+        $('#FileUpload4_View').removeClass('visible').addClass('invisible');
+        $('.fileName').val("");
+        //$('.file').val("");
+    }
+
+    function dimention() {
+        var newHeight = $("#Parent").height();
+        var Width = $("#Parentr").width();
+        $("iframe").height(newHeight);
+        $("iframe").width(Width);
+    }
+
+    @*function LoadDataPM(IDInstance) {
+        var IDInstance = $('#ProjInstance').val();
+        if (IDInstance != "0") {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PMReportData", "PM")',
+                data: { 'IDInstance': IDInstance },
+                async: false,
+                success: function (data) {
+                    data = data.data;
+                    if (data.length > 0) {
+                        $.each(data, function (index, itemData) {
+                            if (itemData.FileType == 9) {
+                                $('#FileUpload1_View').removeClass('invisible').addClass('visible');
+                                FileUpload1_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 10) {
+                                $('#FileUpload2_View').removeClass('invisible').addClass('visible');
+                                FileUpload2_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 11) {
+                                $('#FileUpload3_View').removeClass('invisible').addClass('visible');
+                                FileUpload3_View = itemData.C_FileName;
+                            }
+                            else if (itemData.FileType == 12) {
+                                $('#FileUpload4_View').removeClass('invisible').addClass('visible');
+                                FileUpload4_View = itemData.C_FileName;
+                            }
+                        });
+                    }
+                }
+            });
+            $("#btnUpload").show();
+        }
+        else {
+            $("#btnUpload").hide();
+        }
+    }*@
+
+    $(window).resize(function () {
+        dimention();
+    });
+
+    $(document).on('click', '.browse', function () {
+        var file = $(this).parent().parent().parent().find('.file');
+        file.trigger('click');
+    });
+    $(document).on('change', '.file', function () {
+        $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+
+
+
+</script>

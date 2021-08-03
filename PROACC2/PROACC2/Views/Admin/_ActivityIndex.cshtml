@@ -1,0 +1,1274 @@
+﻿<style>
+    .pro-list-table {
+        overflow-y: auto;
+        height: calc(100vh - 258px);
+    }
+</style>
+<div class="form-row py-1">
+    <div class="col-lg-7">
+        <div class="d-flex">
+            
+            <div class="projects-dropdown w-40">
+                <label for="">Version Name</label>
+                <div class="ibox">
+                    <select class="form-control border-0" id="drpListVersion" name="Version_List">
+                        @foreach (var item in ViewBag.VersionName)
+                        {
+                            <option value="@item.ID" selected>@item.Version_Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="search-field px-2 w-40">
+                <label for="">.</label>
+                <div class="ibox">
+                    <form class="navbar-search" action="javascript:;">
+                        <div class="rel">
+                            <span class="search-icon"><i class="fa fa-search"></i></span>
+                            <input class="form-control" id="searchActivity" placeholder="Search Activity" style="width:100%">
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnUploadActivityExel">Upload</button>
+            <button id="btnExportToExcel" class="btn btn-primary pointer" onclick="exportToExcel()">Export To Excel</button>
+            <div class="col-lg-5">
+                <div class="sec-left-resource d-flex justify-content-end">
+                    <div class="ibox current-projects mb-0"><span >Current Count:&nbsp;&nbsp;<strong class="badge badge-info  h-100" id="Count">@ViewBag.Activity_Count</strong></span></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary pointer" onclick="AddActivity();">Add Activity</button>
+        </div>
+    </div>
+</div>
+
+<div id="UploadActivityFile" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Activity File Upload</h4>
+                <button type="button" class="close btnActivityExcelcancel" aria-label="Close" id="">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">Activity File Upload<span id="UpldPic" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="file" id="ActivityfileUpload" name="files" accept=".xls, .xlsx" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblActivityFileUpload" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnActivityFileTemplate">Template</button>
+                                    
+                                </div>
+                                <div class="form-group">
+                                    <h5>Active Parallel Type's</h5><br />
+                                    <h7 id="Active_ParallelList"></h7>
+                                </div>
+                            </form>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnActivityFile">Upload</button>
+                    <button type="button" class="btn btn-secondary pointer btnActivityExcelcancel" id="">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="d-flex pro-list-table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0" id="activityTable">
+        <thead>
+            <tr>
+                <td scope="col">Task</td>
+                <td scope="col">Building Block</td>
+                <td scope="col">Phase</td>
+                <td scope="col">Role</td>
+                <td scope="col">Application Area</td>
+                <td scope="col" style="display:none">Sequence</td>
+                <td scope="col" width="8%">EST hours</td>
+                <td scope="col">Task type</td>
+                <td scope="col">Parallel Type</td>
+                <td scope="col">Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Activity)
+            {
+                <tr class="tr_Effect">
+                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Task">@item.Task</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Buildingblock">@item.Buildingblock</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Phase">@item.Phase</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Role">@item.Role</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.ApplicationArea">@item.ApplicationArea</span></td>
+                    <td style="display:none"><span class="text-capitalize" data-toggle="tooltip" title="@item.Sequence_Num">@item.Sequence_Num</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.EST_hours1">@item.EST_hours1</span></td>
+                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Tasktype">@item.Tasktype</span></td>
+                    <td>
+                        @if (item.ParallelType != null)
+                        {
+                            <a class="txtG comment more" value="@item.Parallel_Type">@item.ParallelType</a>
+                        }
+                        else
+                        {
+                            <a class="txtG comment more" value="">--</a>
+                        }
+                    </td>
+                    <td>
+                        <span class="fa fa-pencil btnActivityEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Activity_ID" />
+                        <span class="fa fa-trash btnActivityDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Activity_ID" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<div id="addActivity" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addactivity">Add New Activity</h4>
+                <h4 class="modal-title text-center w-100 semibold" id="h4Updateactivity" style="display:none">Update Activity</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="hidden" id="txtActivity_ID" />
+                                <input type="hidden" id="txtSequence" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Task<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="txtTask" aria-describedby="">
+                                            <span class="" id="lblTask" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Building Block<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpBuildingBlock" name="">
+                                                <option value="0">--Select Building Block--</option>
+                                                @foreach (var item in ViewBag.BuildingBlock)
+                                                {
+                                                    <option value="@item.block_ID">@item.Block_Name</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblBuildingBlock" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Phase<span style="color:red">*</span></label>
+                                            <input id="drphiddenPhase" type="hidden" />
+                                            <select class="form-control drpTextHeight" id="drpPhase" name="">
+                                                <option value="0">--Select Phase--</option>
+                                                @foreach (var item in ViewBag.Phaselist)
+                                                {
+                                                    <option value="@item.Id">@item.PhaseName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblPhase" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Role<span style="color:red">*</span></label>
+                                            <input id="drphiddenRoles" type="hidden" />
+                                            <select class="form-control drpTextHeight" id="drpRoles" name="">
+                                                <option value="0">Select Role</option>
+                                                @foreach (var item in ViewBag.Role)
+                                                {
+                                                    <option value="@item.RoleID">@item.RoleName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblRoles" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Application Area<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpApplicationArea" name="">
+                                                <option value="0">--Select Application Area--</option>
+                                                @foreach (var item in ViewBag.ApplicationArea)
+                                                {
+                                                    <option value="@item.Id">@item.ApplicationArea</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblApplicationArea" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Est Hours HH:MM<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control txtEstimated" id="txtEstimated" aria-describedby="" placeholder="00:00">
+                                            <span class="" id="lblEstimated" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Task Type<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpTaskType" name="">
+                                                <option value="0">--Select Task Name--</option>
+                                                @foreach (var item in ViewBag.TaskTypelist)
+                                                {
+                                                    <option value="@item.TaskId">@item.TaskName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblTaskType" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group" id="parallelhideid" style="display:none">
+                                            <label for="">Parallel Type</label>
+                                            <select class="form-control drpTextHeight" id="drpParallelId" name="">
+                                            </select>
+                                            <span class="" id="lblParallelType" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnActivityCreate">Save</button>
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnActivityUpdate" style="display:none">Update</button>
+                    <button type="button" class="btn btn-secondary pointer" id="Activitycancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PPOPUP-->
+<!-- START SECOND POPUP-->
+<div id="Prev-Activity" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body" style="height:auto !important">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group" id='newParallelrow' style="display:none">
+                                    <label for="">New Parallel Name</label>
+                                    <input type="text" class="form-control" id="txtParallelName" aria-describedby="">
+                                    <span class="" id="lblParallelName" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Previous Task</label>
+                                    <select class="form-control" id="drpTsk" name="">
+                                    </select>
+                                    <span class="" id="lblPreviousTask" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnSeq">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="btnSeqCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END SECOND POPUP-->
+<!-- Start Delete Popup-->
+
+
+<div id="deleteActivity" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content" style="width:70%;">
+            <div class="modal-body">
+                <p>Do you really want to delete &nbsp; <b><span id="hiddenAct" style="color:black"></span></b></p>
+            </div>
+            <input type="hidden" id="delActivityVal" />
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-danger" id="DeleteAct">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Delete Popup-->
+<input type=hidden id="VID" name="VersionID" />
+<script>
+    function exportToExcel() {
+        var VID = $("#drpListVersion").val();
+        $.ajax({
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            url: '@Url.Action("exportToExcel", "Admin")',
+            data: { VID: VID },
+            async: false,
+            beforeSend: function () {
+                $("#btnExportToExcel").text('Loading...');
+                $("#btnExportToExcel").attr('disabled', true);
+            },
+            success: function (response) {
+                var blob = new Blob([response], { type: 'application/ms-excel' });
+                //let blob = new Blob([base64toBlob(blobContent, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')], {});
+                //var blob = new Blob([response], { type: 'application/vnd.ms-excel' });
+                var downloadUrl = URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                a.href = downloadUrl;
+                a.download = "ActivityExcel.xls";
+                document.body.appendChild(a);
+                a.click();
+            },
+            complete: function () {
+                $("#btnExportToExcel").text('Export To Excel');
+                $("#btnExportToExcel").attr('disabled', false);                
+            },
+            error: function (err) {
+                alert(err);
+                alert("No Data Found");
+            }
+        });
+        return false;
+    }
+
+</script>
+
+<script>
+    $(document).ready(function () {
+        var VID = '@Session["VersionID"]';
+        if (VID != "") {
+            $("#drpListVersion").val(VID);
+        }
+    });
+    $('#txtEstimated').on('keyup', function (e) {
+
+        this.value = this.value
+            .replace(/[^\d:]/g, '')             // numbers and decimals only
+            .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at th\e beginning
+            .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+            //.replace(/(\:[\d]{2})./g, '$1')    // not more than 4 digits after decimal
+            .replace(/(\:[0-5][0-9]{1})./g, '$1');
+
+    });
+
+    $("#searchActivity").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#activityTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    function AddActivity() {
+        $('#addActivity').modal('show');
+
+        Activity_reset();
+
+         $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetRoles", "Admin")',
+            success: function (data) {
+                $("#drpRoles").empty();
+                var state = $("#drpRoles");
+                state.append($("<option value='0'>--Select Role--</option>"));
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.RoleID,
+                        text: item.RoleName
+                    }));
+                });
+            }
+        });
+    }
+    $('#Activitycancel').click(function () {
+        $('#addActivity').modal('hide');
+        Activity_reset()
+    });
+
+    $("#btnSeqCancel").on("click", function () {
+        $('#addActivity').modal('show');
+        $('#Prev-Activity').modal('hide');
+    });
+
+    function ValidateName(data) {
+        var letters = /^[A-Za-z._, ]+$/;
+        if (!letters.test(data)) {
+            return false;
+        }
+    }
+
+    function TaskCheck(Task, id) {
+        var Status = true;
+        var VID = $("#drpListVersion").val();
+        var InsId = "00000000-0000-0000-0000-000000000000";
+
+
+        $.ajax({
+           url: '@Url.Action("CheckTaskAvailability", "Transaction")',
+            type: "GET",
+            async: false,
+            data: { namedata: Task, id: id, VID: VID, InsId: InsId },
+           dataType: "json",
+            success: function (data) {
+               if (data != "success") {
+                  Status = false;
+               }
+           },
+           error: function (err) {
+               alert("Please Enter proper details");
+           }
+        });
+        return Status;
+    }
+
+    function Activity_reset() {
+
+        $("#txtTask").val("");
+        $("#drpApplicationArea").val(0);
+        $('#drpPhase').val(0);
+        $('#drpRoles').val(0);
+        $('#drpBuildingBlock').val(0);
+        $("#txtEstimated").val("");
+        $("#drpTaskType").val(0);
+        $("#drpParallelId").val("00000000-0000-0000-0000-000000000000");
+        $("#parallelhideid").hide();
+        $("#txtParallelName").val("");
+
+        $("#lblTask").html("");
+        $("#lblApplicationArea").html("");
+        $("#lblPhase").html("");
+        $("#lblRoles").html("");
+        $("#lblBuildingBlock").html("");
+        $("#lblEstimated").html("");
+        $("#lblTaskType").html("");
+        $("#lblParallelName").html("");
+
+        $('#drpPhase').attr("disabled", false);
+        $("#drpTaskType").prop("disabled", false);
+        $("#drpParallelId").prop("disabled", false);
+        $('#drpRoles').attr("disabled", false);
+
+        $("#h4Updateactivity").hide();
+        $("#h4addactivity").show();
+        $("#btnActivityUpdate").hide();
+        $("#btnActivityCreate").show();
+
+    }
+
+    $("#drpTaskType").change(function () {
+
+        var taskValue = $(this).children("option:selected").val();
+        var PhaseId = $('#drpPhase').val();
+        if (taskValue == "0" || taskValue == "1" || taskValue == "3") {
+            $("#parallelhideid").hide();
+            $('#drpParallelId').prop('selectedIndex', 0);
+            $("#drpParallelId").val("00000000-0000-0000-0000-000000000000");
+        }
+        else if (taskValue == "2") {
+            $('#drpParallelId').prop('selectedIndex', 0);
+            $("#parallelhideid").show();
+            $('#drpParallelId').empty();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ParallelNameByPhase","Transaction")',
+                data: { Id: PhaseId, taskValue: taskValue, instanceid:"00000000-0000-0000-0000-000000000000",first: false },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response != null) {
+                        $('#drpParallelId').append($("<option value='00000000-0000-0000-0000-000000000000'>New Parallel Name</option>"));
+                        $.each(response, function (index, item) {
+                            var option = $("<option value='" + item.ParallelId + "'>" + item.Parallel_Name + "</option>");
+                            $('#drpParallelId').append(option);
+                        });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+    $("#drpListVersion").change(function () {
+         var VersionID = $(this).children("option:selected").val();
+        var url = '@Url.Action("GetActivityList", "Admin")';
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { VersionID: VersionID },
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                RefreshActivity();
+            }
+        });
+    });
+
+    @*$("#drpListVersion").change(function () {
+        var VersionID = $(this).children("option:selected").val();
+        var url = '@Url.Action("GetActivityList", "Admin")';
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: { VersionID: VersionID},
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                $('#activityTable tbody').remove();
+                var tbody = '<tbody>';
+                var tr = '';
+                if (response.length > 0) {
+                    $('#Count').text(response.length);
+                    $.each(response, function (key, val) {
+
+                        var tr2 = '<tr class="tr_Effect">';
+                        var BB = '<td><span class="text-capitalize" data-toggle="tooltip" title="' + val.Task + '">' + val.Task + '.</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.Buildingblock + '">' + val.Buildingblock + '</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.Phase + '">' + val.Phase + '</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.Role + '">' + val.Role + '</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.ApplicationArea + '">' + val.ApplicationArea + '</span></td>';
+                        BB += '<td style="display:none"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Sequence_Num + '">' + val.Sequence_Num + '</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.EST_hours1 + '">' + val.EST_hours1 + '</span></td>';
+                        BB += '<td><span class="text-capitalize comment more" data-toggle="tooltip" title="' + val.Tasktype + '">' + val.Tasktype + '</span></td>';
+                        BB += '<td>';
+                        if (val.ParallelType != null) {
+                            BB += '<a class="txtG comment more" value="' + val.Parallel_Type + '">' + val.ParallelType + '</a>';
+                        } else {
+                            BB += '<a class="txtG comment more" value="">--</a>';
+                        }
+                        BB += '</td >';
+                        BB += '<td>';
+                        BB += '<span class="fa fa-pencil btnActivityEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="'+ val.Activity_ID +'"/>';
+                        BB += '<span class="fa fa-trash btnActivityDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="'+ val.Activity_ID +'"/>';
+                        BB += '</td >';
+                        tr = tr + tr2 + BB + '</tr>' + '</tr>';
+                    });
+                }
+                tbody = tbody + tr + '</tbody>';
+                $('#activityTable').append(tbody);
+               // debugger;
+                //RefreshActivity();
+                $("#drpListVersion").val(VersionID);
+            }
+        });
+    });*@
+
+    function ParallelName(Parallel_Name, Tasktype) {
+
+        Parallel_Name = Parallel_Name.replace(/,/g, " ");
+        var status = true
+        if (Tasktype == 2 && Parallel_Name != "") {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CheckParallel_NameAvailability", "Transaction")',
+                data: { namedata: Parallel_Name,InstanceId:'00000000-0000-0000-0000-000000000000'},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data != "success") {
+                        status = false
+                    }
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+        return status;
+    }
+
+    function TaskEstHrs(Estimated) {
+       var Status = true;
+        var filter = /^([0-9]{1,2}).[0-5][0-9]$/
+        var filter1 = /^(00.[0-5][1-9]|0.[0-5][1-9]|00.[1-5][0-9]|0.[1-5][0-9]|0[1-9]+[.][0-5][0-9]|[1-9]+[.][0-5][0-9]|[1-9][0-9]+[.][0-5][0-9])$/
+        if (!filter.test(Estimated)) {
+            Status = false;
+        }
+        else if (!filter1.test(Estimated)) {
+           Status = false;
+        }
+        return Status;
+    }
+
+
+
+    $("#drpPhase").on('change', function () {
+            $('#drpParallelId').prop('selectedIndex', 0);
+            $("#parallelhidecheck , #parallelhideid").hide();
+             $("#drpTaskType").prop('selectedIndex', 0);
+    })
+
+    $("#btnActivityCreate").on("click", function () {
+
+        var Task = $("#txtTask").val();
+        Task = Task.replace(/,/g, " ");
+        var ApplicationArea = $("#drpApplicationArea").val();
+        var Phase = $('#drpPhase').val();
+        var Role = $('#drpRoles').val();
+        var BlockId = $('#drpBuildingBlock').val();
+        var Estimated = $("#txtEstimated").val();
+        var Tasktype = $("#drpTaskType").val();
+        var Paralleltype = $("#drpParallelId").val();
+        var VID = $("#drpListVersion").val();
+        if (Paralleltype == null) {
+            Paralleltype = '00000000-0000-0000-0000-000000000000';
+        }
+        Estimated = Estimated.replace(/:/g, ".");
+
+        var model = {
+            Task: Task,
+            PhaseID: Phase,
+            BuildingBlock_id: BlockId,
+            EST_hours: Estimated,
+            ApplicationAreaID: ApplicationArea,
+            RoleID: Role,
+            Task_id: Tasktype,
+            Parallel_Id: Paralleltype,
+            Version_Id : VID
+        }
+
+        var Task_ = PhaseID_ = BuildingBlock_ = EST_hours_ = ApplicationAreaID_ = RoleID_ = Task_id_ = Parallel_Id = false;
+
+        if (Task == "") {
+            Task_ = true;
+            $("#lblTask").html("Please enter the Task").show();
+        }
+        else if (TaskCheck(Task, null) == false) {
+            Task_ = true;
+            $("#lblTask").html("Task name is already exists").show();
+        }
+        else {
+            $("#lblTask").html("").show();
+        }
+
+        if (ApplicationArea == 0) {
+            ApplicationAreaID_ = true;
+            $("#lblApplicationArea").html("Please select the Application Area").show();
+        }
+        else {
+            $("#lblApplicationArea").html("").show();
+        }
+
+        if (Phase == 0) {
+            PhaseID_ = true;
+            $("#lblPhase").html("Please select the Phase").show();
+        }
+        else {
+            $("#lblPhase").html("").show();
+        }
+
+        if (Role == 0) {
+            RoleID_ = true;
+            $("#lblRoles").html("Please select the Role").show();
+        }
+        else {
+            $("#lblRoles").html("").show();
+        }
+
+        if (BlockId == 0) {
+            BuildingBlock_ = true;
+            $("#lblBuildingBlock").html("Please select the Building Block").show();
+        }
+        else {
+            $("#lblBuildingBlock").html("").show();
+        }
+
+        if (Estimated == "") {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Please enter Est hours").show();
+        }
+        else if (TaskEstHrs(Estimated) == false) {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Invalid Est hrs").show();
+        }
+        else {
+            $("#lblEstimated").html("").show();
+        }
+        if (Tasktype == 0) {
+            Task_id_ = true;
+            $("#lblTaskType").html("Please select the Task Type").show();
+        }
+        else {
+            $("#lblTaskType").html("").show();
+        }
+
+        if (Task_ == false && PhaseID_ == false && BuildingBlock_ == false && EST_hours_ == false && ApplicationAreaID_ == false && RoleID_ == false && Task_id_ == false && Parallel_Id == false) {
+            $("#drpTsk").empty();
+            var id = $("#drpPhase").val()
+            //$('#Prev-Activity').modal('show');
+            $('#addActivity').modal('hide');
+            $('#Prev-Activity').modal('show');
+
+
+            if (id > 0 && (Paralleltype != '00000000-0000-0000-0000-000000000000')) {
+                $("#newParallelrow").hide();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetAllTaskByParallelType","Transaction")',
+                    data: { id: id, Parallel_Id: Paralleltype, instanceid: '00000000-0000-0000-0000-000000000000', first: false, VID: VID },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            // $('#drpTsk').append($("<option value='0'>Please Select Previous Task</option>"));
+                            $.each(response, function (index, item) {
+                                var option = $("<option value='" + item.Activity_ID + "'>" + item.Task + "</option>");
+                                $('#drpTsk').append(option);
+                            });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            else if (id > 0) {
+                $("#newParallelrow").hide();
+                if (Tasktype == 2 && Paralleltype == '00000000-0000-0000-0000-000000000000') {
+                    $("#newParallelrow").show();
+                }
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetAllTask","Admin")',
+                    data: { id: id, VID: VID},
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            $('#drpTsk').append($("<option value='0'>Please Select Previous Task</option>"));
+                            $.each(response, function (index, item) {
+                                var option = $("<option value='" + item.Activity_ID + "'>" + item.Task + "</option>");
+                                $('#drpTsk').append(option);
+                            });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+    });
+
+    $("#btnSeq").on("click", function () {
+        //debugger
+
+        var id = $("#txtActivity_ID").val();
+        var Task = $("#txtTask").val();
+        Task = Task.replace(/,/g, " ");
+        var ApplicationArea = $("#drpApplicationArea").val();
+        var Phase = $('#drpPhase').val();
+        var Role = $('#drpRoles').val();
+        var BlockId = $('#drpBuildingBlock').val();
+        var Estimated = $("#txtEstimated").val();
+        var Tasktype = $("#drpTaskType").val();
+        var Paralleltype = $("#drpParallelId").val();
+        Estimated = Estimated.replace(/:/g, ".");
+
+        var LatestTaskId = $("#hiddenActivityId").val();
+        var LastTaskId = $("#drpTsk").val();
+        var Parallel_Name = $("#txtParallelName").val();
+        var VID = $("#drpListVersion").val();
+
+        var model = {
+            Activity_ID: id,
+            Task: Task,
+            PhaseID: Phase,
+            BuildingBlock_id: BlockId,
+            EST_hours: Estimated,
+            ApplicationAreaID: ApplicationArea,
+            RoleID: Role,
+            TaskId: Tasktype,
+            PreviousId: LastTaskId,
+            ParallelId: Paralleltype,
+            Parallel_Name: Parallel_Name,
+            Version_Id: VID
+        }
+
+        var Task_ = PhaseID_ = BuildingBlock_ = EST_hours_ = ApplicationAreaID_ = RoleID_ = Task_id_ = Parallel_Id = ParallelName_ = false;
+
+        if (Task == "") {
+            Task_ = true;
+            $("#lblTask").html("Please enter the Task").show();
+        }
+        else {
+            $("#lblTask").html("").show();
+        }
+
+        if (ApplicationArea == 0) {
+            ApplicationAreaID_ = true;
+            $("#lblApplicationArea").html("Please select the ApplicationArea").show();
+        }
+        else {
+            $("#lblApplicationArea").html("").show();
+        }
+
+        if (Phase == 0) {
+            PhaseID_ = true;
+            $("#lblPhase").html("Please select the Phase").show();
+        }
+        else {
+            $("#lblPhase").html("").show();
+        }
+
+        if (Role == 0) {
+            RoleID_ = true;
+            $("#lblRoles").html("Please select the Role").show();
+        }
+        else {
+            $("#lblRoles").html("").show();
+        }
+
+        if (BlockId == 0) {
+            BuildingBlock_ = true;
+            $("#lblBuildingBlock").html("Please select the Building Block").show();
+        }
+        else {
+            $("#lblBuildingBlock").html("").show();
+        }
+
+        if (Estimated == "") {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Please fill the Estimated hours").show();
+        }
+        else {
+            $("#lblEstimated").html("").show();
+        }
+        if (Tasktype == 0) {
+            Task_id_ = true;
+            $("#lblTaskType").html("Please select the Task Type").show();
+        }
+        else {
+            $("#lblTaskType").html("").show();
+        }
+
+        if (ParallelName(Parallel_Name, Tasktype) == false) {
+            ParallelName_ = true;
+            $("#lblParallelName").html("Parallel Name already in use").show();
+        }
+        else if (Paralleltype == '00000000-0000-0000-0000-000000000000' && Parallel_Name == "") {
+            ParallelName_ = true;
+            $("#lblParallelName").html("Please enter the Parallel Name").show();
+        }
+        else {
+            $("#lblParallelName").html("").show();
+        }
+
+        if (Task_ == false && PhaseID_ == false && BuildingBlock_ == false && EST_hours_ == false && ApplicationAreaID_ == false && RoleID_ == false && Task_id_ == false && Parallel_Id == false && ParallelName_ == false) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ActivityCreate", "Admin")',
+                data: { activityMaster: model },
+                success: function (response) {
+                    $('#Prev-Activity').modal('hide');
+                    if (id == "") {
+                        Notiflix.Notify.Success('Activity <Strong>Added </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                    else {
+                        Notiflix.Notify.Success('Activity <Strong>Updated </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                    RefreshActivity();
+                    Activity_reset();
+                    $('#addActivity').modal('hide');
+
+                }
+            });
+        }
+    });
+
+    $(".btnActivityEdit").on("click", function () {
+        Activity_reset();
+        var id = $(this).next().val();
+        $.ajax({
+            url: '@Url.Action("GetActivityCreationById","Admin")',
+            type: "GET",
+            data: { id: id },
+            success: function (result) {
+
+                $('#addActivity').modal('show');
+                $("#txtActivity_ID").val(result.Activity_ID);
+                $("#txtTask").val(result.Task);
+                $("#txtSequence").val(result.Sequence_Num);
+                $("#drpPhase").val(result.PhaseID);
+                $('#drpPhase').attr("disabled", true);
+                $("#drphiddenPhase").val(result.PhaseID);
+                $("#drpBuildingBlock").val(result.BuildingBlock_id);
+                $("#drpRoles").val(result.RoleID);
+                $("#drpTaskType").val(result.Tasktype);
+                $("#drpTaskType").prop("disabled", true);
+                if (result.Tasktype == '2') {
+                    $('#drpParallelId').empty();
+                    $('#drpParallelId').append($("<option value='" + result.Parallel_Type + "'>" + result.ParallelType + "</option>"));
+                    $("#drpParallelId").prop("disabled", true);
+                    $("#parallelhideid").show();
+                }
+                else {
+                    $("#parallelhidecheck , #parallelhideid").hide();
+                }
+
+                $('#drpRoles').attr("disabled", true);
+                $("#drphiddenRoles").val(result.RoleID);
+                $("#txtEstimated").val(result.EST_hours1);
+                $("#drpApplicationArea").val(result.ApplicationAreaID);
+
+                $("#h4Updateactivity").show();
+                $("#h4addactivity").hide();
+                $("#btnActivityUpdate").show();
+                $("#btnActivityCreate").hide();
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    });
+
+    $("#btnActivityUpdate").on("click", function () {
+
+        var id = $("#txtActivity_ID").val();
+        var Task = $("#txtTask").val();
+        Task = Task.replace(/,/g, " ");
+        var ApplicationArea = $("#drpApplicationArea").val();
+        var sequence = $("#txtSequence").val();
+        var Phase = $('#drphiddenPhase').val();
+        var Role = $('#drphiddenRoles').val();
+        var BlockId = $('#drpBuildingBlock').val();
+        var Estimated = $("#txtEstimated").val();
+        var Tasktype = $("#drpTaskType").val();
+        var Paralleltype = $("#drpParallelId").val();
+        Estimated = Estimated.replace(/:/g, ".");
+
+
+        var model = {
+            Activity_ID: id,
+            Task: Task,
+            PhaseID: Phase,
+            Sequence_Num: sequence,
+            BuildingBlock_id: BlockId,
+            ApplicationAreaID: ApplicationArea,
+            RoleID: Role,
+            EST_hours: Estimated
+        }
+
+        var Task_ = PhaseID_ = BuildingBlock_ = EST_hours_ = ApplicationAreaID_ = RoleID_ = Task_id_ = Parallel_Id = false;
+
+        if (Task == "") {
+            Task_ = true;
+            $("#lblTask").html("Please enter the Task").show();
+        }
+        else if (TaskCheck(Task, id) == true) {
+            Task_ = true;
+            $("#lblTask").html("Task name is already exists").show();
+        }
+        else {
+            $("#lblTask").html("").show();
+        }
+
+        if (ApplicationArea == 0) {
+            ApplicationAreaID_ = true;
+            $("#lblApplicationArea").html("Please select the Application Area").show();
+        }
+        else {
+            $("#lblApplicationArea").html("").show();
+        }
+
+        if (Phase == 0) {
+            PhaseID_ = true;
+            $("#lblPhase").html("Please select the Phase").show();
+        }
+        else {
+            $("#lblPhase").html("").show();
+        }
+
+        if (Role == 0) {
+            RoleID_ = true;
+            $("#lblRoles").html("Please select the Role").show();
+        }
+        else {
+            $("#lblRoles").html("").show();
+        }
+
+        if (BlockId == 0) {
+            BuildingBlock_ = true;
+            $("#lblBuildingBlock").html("Please select the Building Block").show();
+        }
+        else {
+            $("#lblBuildingBlock").html("").show();
+        }
+
+        if (Estimated == "") {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Please enter the Est hours").show();
+        }
+        else if (TaskEstHrs(Estimated) == false) {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Invalid Est hrs").show();
+        }
+        else {
+            $("#lblEstimated").html("").show();
+        }
+        if (Tasktype == 0) {
+            Task_id_ = true;
+            $("#lblTaskType").html("Please select the Task Type").show();
+        }
+        else {
+            $("#lblTaskType").html("").show();
+        }
+
+        if (Task_ == false && PhaseID_ == false && BuildingBlock_ == false && EST_hours_ == false && ApplicationAreaID_ == false && RoleID_ == false && Task_id_ == false && Parallel_Id == false) {
+            $("#drpTsk").empty();
+            var id = $("#drpPhase").val();
+            $('#addActivity').modal('hide');
+            $('#Prev-Activity').modal('show');
+            var VID = $("#drpListVersion").val();
+            if (id > 0 && (Paralleltype != null && Paralleltype != '00000000-0000-0000-0000-000000000000')) {
+                $("#newParallelrow").hide();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetAllTaskByParallelType","Transaction")',
+                    data: { id: id, Parallel_Id: Paralleltype, instanceid: '00000000-0000-0000-0000-000000000000', first: false, VID: VID },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            // $('#drpTsk').append($("<option value='0'>Please Select Previous Task</option>"));
+                            $.each(response, function (index, item) {
+                                var option = $("<option value='" + item.Activity_ID + "'>" + item.Task + "</option>");
+                                $('#drpTsk').append(option);
+                            });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+            else if (id > 0) {
+                $("#newParallelrow").hide();
+                if (Tasktype == 2 && Paralleltype == '00000000-0000-0000-0000-000000000000') {
+                    $("#newParallelrow").show();
+                }
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetAllTask","Admin")',
+                    data: { id: id, VID: VID },
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response != null) {
+                            $('#drpTsk').append($("<option value='0'>Please Select Previous Task</option>"));
+                            $.each(response, function (index, item) {
+                                var option = $("<option value='" + item.Activity_ID + "'>" + item.Task + "</option>");
+                                $('#drpTsk').append(option);
+                            });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        }
+    });
+
+    //$(".btnActivityDelete").on("click", function () {
+    //    var id = $(this).next().val();
+
+    //});
+
+    @*$('.btnActivityDelete').on("click", function () {
+
+        $('#deleteActivity').modal('show');
+        var id = $(this).next().val();
+         var Act = $(this).closest("tr").find('td:eq(0)').text();
+
+        $("#hiddenAct").text(Act);
+        $("#delActivityVal").val(id);
+    })
+    $('#DeleteAct').on("click", function () {
+        var id = $("#delActivityVal").val();
+        //var id = $(this).next().val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ActivityDelete","Admin")',
+            data: { id: id },
+            dataType: "json",
+            success: function (response) {
+                if (response == "success") {
+                    $('#deleteActivity').modal('hide');
+
+                    $('.modal-backdrop').remove();
+                    //$('#activityTable').load('#activityTable');
+                    RefreshActivity();
+                }
+            }
+        });
+    });*@
+
+     $(".btnActivityDelete").on("click", function () {
+        var id = $(this).next().val();
+         Notiflix.Confirm.Show(
+                'Confirm',
+                'Do you want to delete ?',
+                'Yes', 'No',
+                function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("ActivityDelete","Admin")',
+                        data: { id: id },
+                        dataType: "json",
+                        success: function (response) {
+                            if (response == "success") {
+                                //$('#deleteActivity').modal('hide');
+
+                                $('.modal-backdrop').remove();
+                                //$('#activityTable').load('#activityTable');
+                                RefreshActivity();
+                                 Notiflix.Notify.Success('Activity <Strong>deleted </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                            }
+                        }
+                    });
+                }, function () {
+                    //location.reload();
+                    // No button callback
+                    //alert('If you say so...');
+                }
+            )
+     });
+
+    $("#btnUploadActivityExel").on("click", function () {
+
+        //alert("Activity Upload is getting ready");
+        $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetAllParallel", "Admin")',
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        var PList = $("#Active_ParallelList");
+                        PList.empty();
+                        var Data = "";
+                        $.each(response, function (index, item) {
+                           
+                            Data = Data + item.Parallel_Name+" , ";
+                        });
+                        var strVal = $.trim(Data);
+                        var lastChar = strVal.slice(-1);
+                        if (lastChar == ',') {
+                            strVal = strVal.slice(0, -1);
+                        }
+                        PList.text(strVal)
+                        
+                    }
+                });
+        $("#UploadActivityFile").modal("show");
+    });
+
+    $("#btnActivityFile").on("click", function () {
+
+        var Activityfile = $("#ActivityfileUpload").val();
+        var fileUpload = $("#ActivityfileUpload").get(0);
+        var files = fileUpload.files;
+
+        var fileData = new FormData();
+        if (files.length > 0) {
+            fileData.append(files[0].name, files[0]);
+
+            for (var i = 0; i < files.length; i++) {
+                if (files[i][0] != null)
+                    fileData.append(i, files[i][0]);
+            }
+
+            if (Activityfile == "") {
+                Notiflix.Notify.Failure('Activity File Missing..!');
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ActivityFileUpload","Admin")',
+                    data: fileData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        //debugger
+                        if (response.Status) {
+
+                            //$("#UploadActivityFile").modal("hide");
+                            $('.modal-backdrop').remove();
+                            Notiflix.Notify.Success('Activity <Strong>Upload </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                            //$('#activityTable').load('#activityTable');
+                            RefreshActivity();
+
+                        } else {
+
+                            $('.modal-backdrop').remove();
+                            RefreshActivity();
+                            Notiflix.Report.Failure('Please Check Again..!', response.Errormessage, 'OK');
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            //$('.modal-backdrop').remove();
+            //$("#UploadActivityFile").modal("hide");
+            Notiflix.Notify.Failure('Activity File Missing..!');
+
+            //debugger;
+        }
+    });
+
+    $(".btnActivityExcelcancel").on("click", function () {
+        $("#UploadActivityFile").modal("hide");
+    });
+
+    $("#btnActivityFileTemplate").on("click", function () {
+        var href = "@Url.RouteUrl(new{ Controller = "Admin", Action = "ActivityTemplate" })/?file=";
+        window.location.href = href;
+        setTimeout(DownloadSucess,5000)
+
+    });
+    function DownloadSucess() {
+        $('.modal-backdrop').remove();
+        RefreshActivity();
+        $('#load').css("display", "none");
+        Notiflix.Notify.Success('File <Strong>successfully </strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+    }
+</script>

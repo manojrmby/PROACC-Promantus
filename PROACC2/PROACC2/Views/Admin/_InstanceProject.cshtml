@@ -1,0 +1,2217 @@
+﻿@*<input type="hidden" value="@insta.Instance_id" name="InstaID" />*@
+
+@{ 
+    var P_Count = ViewBag.ProJCount;
+}
+<style>
+    .modal-dialog{
+        overflow-y:initial !important;
+    }
+    .modal-body {
+        height: 65vh;
+        overflow-y: auto;
+    }
+</style>
+<div class="form-row py-1">
+    <div class="col-lg-7">
+        <div class="d-flex">
+            <div class="projects-dropdown w-40">
+                <div class="ibox">
+                    @*<div class="ibox-body">*@
+                        <select class="form-control border-0" id="SearchSelect">
+                            <option>--Select Choice--</option>
+                            <option>Project</option>
+                            <option>Instance</option>
+                        </select>
+                    @*</div>*@
+                </div>
+            </div>
+            <div class="search-field px-2 w-40">
+                <div class="ibox">
+                    <!-- <div class="ibox-body"> -->
+                    <form class="navbar-search" action="javascript:;">
+                        <div class="rel">
+                            <span class="search-icon"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search" id="searchProject">
+                        </div>
+                    </form>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            <div class="col-lg-5">
+                <div class="sec-left-resource d-flex justify-content-end">
+                    <div class="ibox current-projects mb-0"><span>Current Count:&nbsp;&nbsp;<strong class="badge badge-info  h-100">@P_Count</strong></span></div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary order-1 ml-2  pointer" id="btnClick">Add New Instance</button>
+            <button type="button" class="btn btn-primary pointer" id="btnAddProject">Add New project</button>
+        </div>
+    </div>
+</div>
+<div class="d-flex pro-list-table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion Projectbody" id="accordion">
+        <thead>
+            <tr>
+                <td scope="col" width=20%>Project Name</td>
+
+                <td scope="col" width=15%>Customer</td>
+                <td scope="col" width=15%>Project Manager</td>
+                <td scope="col" width=15%>Scenario</td>
+                <td scope="col" width=15%>No. of instance</td>
+                <td scope="col" width=15%>
+                    Created on
+                    @*<small>&nbsp;&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></small>*@
+                    @*<small>&nbsp;&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></small>*@
+                </td>
+                <td scope="col" width=10%>Action</td>
+                <td scope="col" width=5%><span></span></td>
+            </tr>
+        </thead>
+        <tbody id="ProjectSearch">
+            @foreach (var item in ViewBag.Result)
+            {
+                <tr class="accordion-toggle card-header collapsed tr_Effect" data-toggle="collapse" data-target="#@item.ProjectId" id="projSearch" value="@item.ProjectId">
+                    <td><span  class="text-capitalize" data-toggle="tooltip" title="@item.ProjectName">@item.ProjectName</span></td>
+
+                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.CustomerName">@item.CustomerName</span></td>
+                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ProjectManagerName">@item.ProjectManagerName</span></td>
+                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ScenarioName">@item.ScenarioName</span></td>
+                    <td><span class="badge badge-primary pri-badge-num text-capitalize" data-toggle="tooltip" title="@item.Count">@item.Count</span></td>
+                    @*<td>
+                            <span class="card-title">
+                                <i class="fa fa-ellipsis-h ellipsis-read" id="drpeditdialog" aria-hidden="true" onclick="funcload('@item.ProjectId')">
+                                </i>
+                            </span>
+
+                        </td>
+                        <td>
+                            <div class="divdialog">
+                                <img src="~/assets/img/tooltip-bubble-reverse.png" id="Imgedit" />
+                                <i class="fa fa-pencil getProjectID" aria-hidden="true" id="EditProject" style="cursor:pointer" data-toggle="modal" data-target="#EditProjectModal">&nbsp;&nbsp;EDIT</i>
+                                &nbsp;&nbsp;&nbsp;<i class="fa fa-trash" id="delProj" style="cursor:pointer" aria-hidden="true" onclick="func('@item.ProjectId')">&nbsp;&nbsp;DELETE</i><input type="hidden" value="@item.ProjectId" id="hiddenID" />
+
+                            </div>
+                        </td>*@
+                    <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
+                    <td>
+                        <span class="text-capitalize">
+                            <i class="fa fa-pencil getProjectID pointer" aria-hidden="true" id="EditProject" data-toggle="modal" data-target="#EditProjectModal" onclick="GetProject('@item.ProjectId')"></i>
+                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delProj pointer" id="delProj" aria-hidden="true"></i><input type="hidden" value="@item.ProjectId" />
+                        </span>
+                    </td>
+                </tr>
+                <tr class="accordion-body collapse InstanceBody" id="@item.ProjectId" data-parent="#accordion">
+                    <td colspan="8" style="width:100%;">
+                        <table class="fixed table mb-0" id="InstanceTable">
+                            <tbody>
+                                <tr>
+                                    <td class="p-0">
+                                        <a><b>Description</b></a>
+                                        <p>@item.Description</p>
+                                        <div class="pro-innertable">
+                                            <table class="table">
+                                                <thead class="bg-mediumgray">
+                                                    <tr>
+                                                        <td scope="col">instance</td>
+                                                        <td scope="col">Version</td>
+                                                        <td scope="col">description</td>
+                                                        <td scope="col">created on</td>
+                                                        <td scope="col">created by</td>
+                                                        <td scope="col">actions</td>
+                                                    </tr>
+                                                </thead>
+                                                
+                                              
+                                                <tbody id="Instancesearch">
+                                                    
+                                                    @foreach (var item2 in item.Instance)
+                                                    {
+
+                                                        if (item.ProjectId == item2.Project_ID)
+                                                        {
+                                                    <tr id="@item2.Instance_id" class="tr_Effect">
+                                                        <td><span class="text-capitalize" scope="row" data-toggle="tooltip" title="@item2.InstanceName"><strong>@item2.InstanceName</strong></span></td>
+                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Version_Name">@item2.Version_Name</span></td>
+                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Description">@item2.Description</span></td>
+                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")</span></td>
+                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Cre_By">@item2.Cre_By</span></td>
+                                                        <td>
+                                                            <i class="fa fa-pencil" aria-hidden="true" id="Edit" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></i>
+                                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delIns" id="delIns" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item2.Instance_id" />
+                                                        </td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            <a href="#" onclick="AddInstance('@item.ProjectId')"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Instance</a>
+                                            &nbsp;&nbsp;<a href="#" style="float:right" onclick="AddClone('@item.ProjectId')" id="CloneInstanceDisable"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;Clone Instance</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="addProject" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Add New Project</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePr">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Project Name<span id="asterisk" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtProjectName" name="ProjectName" maxlength="30" />
+                                    <span id="lblProjectName" style="color:red"></span>                                    
+                                </div>
+                                <div class="form-group">
+                                    <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToUserSettings()"></span>
+                                    <label for="">Project Manager<span id="asterisk1" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpProjectManager" name="ProjectManager" style="width:100%">
+                                        <option value="0">--Select Project Manager---</option>
+
+                                        @foreach (var item in ViewBag.ProjectManager)
+                                        {
+                                            if (item != null)
+                                            {
+                                                <option value="@item.ProjectManagerId">@item.ProjectManagerName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="0">---No Record---</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span id="lblProjectManager" style=" color:red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToUserSettings()"></span>
+                                    <label for="">Customer<span id="asterisk2" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpCustomer" name="Customer" style="width:100%">
+                                        <option value="0">--Select Customer---</option>
+
+                                        @*@foreach (var item in ViewBag.Company)
+            {
+                <option value="@item.Customer_ID">@item.Company_Name</option>
+            }*@
+                                    </select>
+                                    <span id="lblCustomerName" style=" color:red;"></span>
+                                </div>
+                                @*<div>
+                                    <label for="">Category<span id="asterisk1" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="Category" name="Category" style="width:100%">
+                                        <option value="0">--Select Category---</option>
+                                        <option value="0">Discover</option>
+                                        <option value="0">Prepare</option>
+                                    </select>                                    
+                                </div>*@
+                            <div class="form-group">
+                                <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToOther()"></span>
+                                <label for="">Scenario<span id="asterisk3" style="color:red">*</span></label>
+                                <select class="form-control drpTextHeight" id="drpScenario" name="Scenario" style="width:100%">
+                                    <option value="0">--Select Scenario---</option>
+
+                                    @foreach (var item in ViewBag.Scenario)
+                                    {
+                                        <option value="@item.ScenarioId">@item.ScenarioName</option>
+                                    }
+                                </select>
+                                <small id="Buildind_Block_Text" class="form-text text-muted"> </small>
+                                <span id="lblScenerio" style=" color:red;"></span>
+                            </div>
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="desc" name="Descripton" rows="4" cols="50"></textarea>
+                                    <span id="lblDescripton" style="color:red"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnProjectCreate">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelProject">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EditProjectModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <input type="hidden" id="PrId" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Update Project</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="EditCloseProject">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Project Name<span id="star" style="color:red;">*</span></label>
+                                    <input type="text" class="form-control" id="txtUpdateProjectName" name="UpdateProjectName" />
+                                    <span id="lblUpdtProjectName" style="color:red"></span>
+                                </div>
+                                
+
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="Updatedescript" name="UpdateDescripton" rows="4" cols="50"></textarea>
+                                    <span id="lblUpdtDescripton" style="color:red"></span>
+                                </div>
+                            </form>
+                            <div class="form-group">
+                                <label for="">Project Manager<span id="star1" style="color:red;">*</span></label>
+                                <select class="form-control drpTextHeight" id="drpUpdateProjectManager" name="UpdateProjectManager" style="width:100%">
+                                    <option value="0">--Select Project Manager--</option>
+                                    @foreach (var item in ViewBag.ProjectManager)
+                                    {
+
+                                        <option value="@item.ProjectManagerId" selected>@item.ProjectManagerName</option>
+
+                                    }
+                                </select>
+                                <span id="lblUpdtProjectManager" style=" color:red;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Customer<span id="star2" style="color:red;">*</span></label>
+                                <select class="form-control drpTextHeight" id="drpUpdateCustomer" name="UpdateCustomer" style="width:100%">
+                                    <option value="0">--Select Customer--</option>
+
+                                    @foreach (var item in ViewBag.Company)
+                                    {
+                                        <option value="@item.Customer_ID" selected>@item.Company_Name</option>
+                                    }
+                                </select>
+                                <span id="lblUpdtCustomerName" style=" color:red;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Scenario<span id="star3" style="color:red;">*</span></label>
+                                <select class="form-control drpTextHeight" id="drpUpdateScenario" name="UpdateScenario" style="width:100%">
+                                    <option value="0">--Select Scenario--</option>
+
+                                    @foreach (var item in ViewBag.Scenario)
+                                    {
+                                        <option value="@item.ScenarioId" selected>@item.ScenarioName</option>
+                                    }
+                                </select>
+                                <small id="UpdateBuildind_Block_Text" class="form-text text-muted"> </small>
+                                <span id="lblUpdtScenerio" style=" color:red;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnProjectUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelUpdateProj" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="addinstance" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        Modal content
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Add New Instance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnInstaClose">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Instance Name<span id="Insstar" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtInstanceName" name="InstanceName" maxlength="3" />
+                                    <span id="lblInstanceName" style="color:red" class="form-text"></span>
+                                    <small id="Maxchar" class="form-text text-muted">Maximum Characters 3.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Project Name<span id="Prostar" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpProject" name="Project">
+                                    </select>
+                                    <span class="form-text" id="lblProject" style=" color:red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <span class="fa fa-plus-circle pointer " style="float: right;" onclick="OpenActivity();"></span>
+                                    <label for="">Activity Version<span id="AMstar" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpActivity" name="Version">
+                                    </select>
+                                    <span class="form-text" id="lblActivity" style=" color:red;"></span>
+                                </div>
+                                @*<div>
+            <label for="">Category<span id="asterisk1" style="color:red">*</span></label>
+            <select class="form-control drpTextHeight" id="Category" name="Category" style="width:100%">
+                <option value="0">--Select Category---</option>
+                <option value="0">Explore</option>
+                <option value="0">Realize</option>
+                <option value="0">Deploy</option>
+                <option value="0">Run</option>
+            </select>
+        </div>*@
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="description" name="Descript" rows="4" cols="50"></textarea>
+                                    <span id="lblDescription" style="color:red"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">System Landscape: </label>
+                                    <input id="radio_landscape" name="landscape" type="radio" value="Manual" />&nbsp; Manual
+                                    <input id="radio_landscape" name="landscape" type="radio" value="Automation" /> &nbsp;Automation<br />
+                                    <span id="lbllandscape" style="color:red"></span>
+                                </div>
+                                @*<div class="form-group" id="divdestinationName">
+            <label for="">Destination Name <span id="updtInsta" style="color:red">*</span></label>
+            <input type="text" class="form-control" id="txtdestinationName" name="" />
+            <span id="lbldestinationName" style="color:red"></span>
+        </div>*@
+                                <div class="form-group" id="divAppServerHost">
+                                    <label for="">App Server Host <span id="updtInsta" style="color:red">*</span> </label>
+                                    <input type="text" class="form-control" id="txtAppServerHost" name="" />
+                                    <span id="lblAppServerHost" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSystemNumber">
+                                    <label for="">System Number <span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtSystemNumber" name="" />
+                                    <span id="lblSystemNumber" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPRouter">
+                                    <label for="">SAP Router <span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtSAPRouter" name="" />
+                                    <span id="lblSAPRouter" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPUser">
+                                    <label for="">User <span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtSAPUser" name="" />
+                                    <span id="lblSAPUser" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPPassword">
+                                    <label for="">Password <span id="updtInsta" style="color:red">*</span> </label>
+                                    <input type="password" class="form-control" id="txtSAPPassword" name="" />
+                                    <span id="lblSAPPassword" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divClient">
+                                    <label for="">Client <span id="updtInsta" style="color:red">*</span> </label>
+                                    <input type="text" class="form-control" id="txtClient" name="" />
+                                    <span id="lblClient" style="color:red"></span>
+                                </div>
+                                @*<div class="form-group" id="divLanguage">
+            <label for="">Language</label>
+            <input type="text" class="form-control" id="txtLanguage" name="" placeholder="EN"/>
+            <span id="lblLanguage" style="color:red"></span>
+        </div>*@
+                                @*<div class="form-group" id="divPoolSize">
+            <label for="">PoolSize</label>
+            <input type="text" class="form-control" id="txtPoolSize" name="" />
+            <span id="lblPoolSize" style="color:red"></span>
+        </div>*@
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnInstanceCreate">Save</button>
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" style="display:none" id="btnTestConnection">Test Connection</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="EditInstanceModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <input type="hidden" id="InstaiD" />
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Update Instance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="EditInstaClose">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input id="Edit_Sys_Landscape" type="hidden" />
+                                <div class="form-group">
+                                    <label for="">Instane Name<span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtUpdateInstanceName" name="InstaName" maxlength="3" />
+                                    <span id="lblUpdtInstanceName" style="color:red"></span>
+                                    <small id="MaxUpdtChar" class="form-text text-muted">Maximum Characters 3.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Project Name</label>
+                                    <select class="form-control drpTextHeight" id="drpUpdateProj" name="Project">
+                                        @foreach (var item in ViewBag.ProjectName)
+                                        {
+                                            <option value="@item.Project_ID" selected>@item.ProjectName</option>
+                                        }
+                                    </select>
+                                    <span id="lblUpdtProject" style=" color:red;"></span>
+                                    @*<small id="" class="form-text text-muted">Maximum Characters 3.</small>*@
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Version Name</label>
+                                    <select class="form-control drpTextHeight" id="drpUpdateVersion" name="Project">
+                                        @foreach (var item in ViewBag.VersionName)
+                                        {
+                                            <option value="@item.ID" selected>@item.Version_Name</option>
+                                        }
+                                    </select>
+                                    <span id="lblUpdtVersion" style=" color:red;"></span>
+                                    @*<small id="" class="form-text text-muted">Maximum Characters 3.</small>*@
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="Updatedescription" name="Descript" rows="4" cols="50"></textarea>
+                                    <span id="lblUpdtDescription" style="color:red"></span>
+                                </div>
+                                @*<div class="form-group" id="divdestinationName1">
+            <label for="">Destination Name<span id="updtInsta" style="color:red">*</span></label>
+            <input type="text" class="form-control" id="Edit_txtdestinationName" name="" />
+            <span id="lblUpdtdestinationName" style="color:red"></span>
+        </div>*@
+                                <div class="form-group" id="divAppServerHost1">
+                                    <label for="">App Server Host <span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="Edit_txtAppServerHost" name="" />
+                                    <span id="lblUpdtAppServerHost" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSystemNumber1">
+                                    <label for="">System Number <span id="updtInsta" style="color:red">*</span> </label>
+                                    <input type="text" class="form-control" id="Edit_txtSystemNumber" name="" />
+                                    <span id="lblUpdtSystemNumber" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPRouter1">
+                                    <label for="">SAP Router<span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="Edit_txtSAPRouter" name="" />
+                                    <span id="lblUpdtSAPRouter" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPUser1">
+                                    <label for="">User<span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="Edit_txtSAPUser" name="" />
+                                    <span id="lblUpdtSAPUser" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divSAPPassword1">
+                                    <label for="">Password<span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="password" class="form-control" id="Edit_txtSAPPassword" name="" />
+                                    <span id="lblUpdtSAPPassword" style="color:red"></span>
+                                </div>
+                                <div class="form-group" id="divClient1">
+                                    <label for="">Client<span id="updtInsta" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="Edit_txtClient" name="" />
+                                    <span id="lblUpdtClient" style="color:red"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnInstanceUpdate">Update</button>
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" style="display:none" id="btnUptTestConnection">Test Connection</button>
+                    <button type="button" class="btn btn-secondary pointer" id="canceleditInsta" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="CloneModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <input type="hidden" id="InstaiD" />
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Clone Instance</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="EditCloneClose">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Project Name<span id="Cpdrpstar" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpCloneProj" name="Project2">
+                                        <option value="0">---Select---</option>
+                                    </select>
+                                    <span id="lblCloneProject" style=" color:red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Instance Name<span id="Cidrpstar" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpCloneInstance" name="InstanceClone">
+                                        <option value="0">---Select---</option>
+                                    </select>
+                                    <span id="lblCloneInstance" style=" color:red;"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Instance<span id="Ctextstar" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtCloneInstanceName" name="InstaNameClone" maxlength="3" />
+                                    <span id="lblCloneInstanceName" style="color:red"></span>
+                                    <small id="MaxtxtCloneChar" class="form-text text-muted">Maximum Characters 3.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="Clonedescription" name="DescriptionClone" rows="4" cols="50"></textarea>
+                                    <span id="lblCloneDescription" style="color:red"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnCloneSave">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelClone" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- END PPOPUP-->
+
+<script>
+    function OpenActivity() {
+        $("#ActivityTabID").click();
+        $(".modal-backdrop").remove();
+    }
+    function RedirectToUserSettings() {
+        var url = '@Url.Action("UserSettings", "Admin")';
+        window.location.href = url;
+    }
+    function RedirectToOther() {
+        var url = '@Url.Action("Index", "Other")';
+        window.location.href = url;
+    }
+    $("#EditCloseProject,#cancelUpdateProj").click(function () {
+        ResetUpdateProject();
+        ResetUpdateInstance();
+        RefreshInstanceProject();
+
+    });
+
+    $('#cancel,#btnInstaClose').click(function () {
+        ResetInstance();
+        RefreshInstanceProject();
+    });
+
+    $("#closePr,#cancelProject").click(function () {
+        ResetProject();
+        RefreshInstanceProject();
+    });
+
+    $("#EditInstaClose,#canceleditInsta").click(function () {
+        ResetUpdateInstance();
+        RefreshInstanceProject();
+    });
+
+    $('.fa-pencil').click(function () {
+        var id = $(this).closest('tr').attr('id');
+        $("#divdestinationName1").hide();
+        $("#divAppServerHost1").hide();
+        $("#divSystemNumber1").hide();
+        $("#divSAPRouter1").hide();
+        $("#divSAPUser1").hide();
+        $("#divSAPPassword1").hide();
+        $("#divClient1").hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("__UpdateInstance", "Admin")',
+            data: { 'id': id },
+            success: function (data) {
+                $('#EditInstanceModal').modal('show');
+                $("#txtUpdateInstanceName").val(data.InstanceName);
+                $("#drpUpdateProj").val(data.Project_ID);
+                $("#Updatedescription").val(data.Description);
+                $("#InstaiD").val(data.Instance_id);
+                $("#Edit_Sys_Landscape").val(data.Sys_Landscape);
+                $("#drpUpdateVersion").val(data.Version_ID);
+
+                if (data.Sys_Landscape == "Automation") {
+                    $("#divdestinationName1").show();
+                    $("#divAppServerHost1").show();
+                    $("#divSystemNumber1").show();
+                    $("#divSAPRouter1").show();
+                    $("#divSAPUser1").show();
+                    $("#divSAPPassword1").show();
+                    $("#divClient1").show();
+
+                    //$("#Edit_txtdestinationName").val(data.destinationName);
+                    $("#Edit_txtAppServerHost").val(data.AppServerHost);
+                    $("#Edit_txtSystemNumber").val(data.SystemNumber);
+                    $("#Edit_txtSAPRouter").val(data.SAPRouter);
+                    $("#Edit_txtSAPUser").val(data.User);
+                    $("#Edit_txtSAPPassword").val(data.Password);
+                    $("#Edit_txtClient").val(data.Client);
+                }
+            },
+            error: function (a) {
+            }
+        });
+    });
+
+    function CheckProjectAvailabiltiy(ProjectName) {
+        var _Projname = ProjectName;
+        var _status = true
+
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("CheckProjectAvailabilty", "Admin")',
+                data: {
+                    ProjectName: _Projname,
+                },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        _status = false;
+                    }
+                },
+                error: function () {
+                },
+            });
+
+        return _status;
+    }
+
+    function CheckInstanceAvailabiltiy(InstanceName, Project) {
+        var _InstaName = InstanceName;
+        var _Pid = Project;
+        var InstanceName
+        var _status = true;
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("CheckInsatanceAvailabilty", "Admin")',
+                data: {
+                    InstaName: _InstaName,
+                    ProjectId: _Pid
+                },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        _status = false;
+                    }
+                },
+                error: function () {
+                },
+            });
+
+        return _status;
+    }
+
+
+
+    //function InstaCharachter() {
+    //    var txt = $("#txtInstanceName").val();
+    //    var length = txt.length;
+    //    var _status = true;
+    //    if(length > 3)
+    //    {
+    //        _status = false;
+    //        return _status;
+    //    }
+    //    return _status;
+    //}
+
+    $(document).ready(function () {
+        $(".divdialog").hide();
+
+        $("#divdestinationName").hide();
+        $("#divAppServerHost").hide();
+        $("#divSystemNumber").hide();
+        $("#divSAPRouter").hide();
+        $("#divSAPUser").hide();
+        $("#divSAPPassword").hide();
+        $("#divClient").hide();
+        //$("#divLanguage").hide();
+        //$("#divPoolSize").hide();
+    });
+
+    $('input[type=radio][name=landscape]').change(function () {
+        if (this.value == 'Manual') {
+            $("#divdestinationName").hide();
+            $("#divAppServerHost").hide();
+            $("#divSystemNumber").hide();
+            $("#divSAPRouter").hide();
+            $("#divSAPUser").hide();
+            $("#divSAPPassword").hide();
+            $("#divClient").hide();
+            //$("#divLanguage").hide();
+            //$("#divPoolSize").hide();
+
+            //$("#txtdestinationName").val("");
+            $("#txtAppServerHost").val("");
+            $("#txtSystemNumber").val("");
+            $("#txtSAPRouter").val("");
+            $("#txtSAPUser").val("");
+            $("#txtSAPPassword").val("");
+            $("#txtClient").val("");
+            //$("#txtLanguage").val("");
+            //$("#txtPoolSize").val("");
+            $("#btnInstanceCreate").show();
+            $("#btnTestConnection").hide();
+        }
+        else if (this.value == 'Automation') {
+            $("#divdestinationName").show();
+            $("#divAppServerHost").show();
+            $("#divSystemNumber").show();
+            $("#divSAPRouter").show();
+            $("#divSAPUser").show();
+            $("#divSAPPassword").show();
+            $("#divClient").show();
+            //$("#divLanguage").show();
+            //$("#divPoolSize").show();
+            $("#btnTestConnection").show();
+            $("#btnInstanceCreate").hide();
+        }
+    });
+
+    $("#txtdestinationName,#txtAppServerHost,#txtSystemNumber,#txtSAPRouter,#txtSAPUser,#txtSAPPassword,#txtClient").on("keyup", function () {
+        $("#btnTestConnection").show();
+        $("#btnInstanceCreate").hide();
+    });
+
+    $("#btnTestConnection").on('click', function () {
+        var Status = ValidateAutoMation();
+        var syslandscape = $('input[type=radio][name=landscape]:checked').val();
+        //var destinationName = $("#txtdestinationName").val().trim();
+        var AppServerHost = $("#txtAppServerHost").val().trim();
+        var SystemNumber = $("#txtSystemNumber").val().trim();
+        var SAPRouter = $("#txtSAPRouter").val().trim();
+        var SAPUser = $("#txtSAPUser").val().trim();
+        var SAPPassword = $("#txtSAPPassword").val().trim();
+        var Client = $("#txtClient").val().trim();
+        //var Language = $("#txtLanguage").val();
+        //var PoolSize = $("#txtPoolSize").val();
+        if (Status) {
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("TestSAPConnection", "SAP")',
+                data: {
+                    //destinationName: destinationName,
+                    AppServerHost: AppServerHost,
+                    SystemNumber: SystemNumber,
+                    SAPRouter: SAPRouter,
+                    User: SAPUser,
+                    Password: SAPPassword,
+                    Client: Client,
+                    //Language: Language,
+                    //PoolSize: PoolSize
+                },
+                success: function (response) {
+
+                    if (response == "success") {
+                        $("#btnInstanceCreate").show();
+                        $("#btnTestConnection").hide();
+                        Notiflix.Notify.Success('Test Connection Passed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                    else {
+                        Notiflix.Notify.Failure('Test Connection Failed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 200, });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        else {
+             Notiflix.Notify.Failure('Test Connection Failed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 200, });
+        }
+    });
+
+    function funcload(id) {
+        var ID = $(this).closest('tr').attr('id');
+        var data = $(this).find('td').attr('id');
+        var ID3 = $("#PRID").val();
+        if (id == data) {
+            $(".divdialog").show();
+        }
+    }
+
+
+    function GetProject(Id) {
+        var id = Id
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("__UpdateProject", "Admin")',
+            data: { 'id': id },
+            success: function (result) {
+                
+                //$("#txtUpdateInstanceName").val(data.ProjectId);
+                $("#drpUpdateCustomer").val(result.CustomerID);
+                $("#drpUpdateProjectManager").val(result.ProjectManagerID);
+                $("#drpUpdateScenario").val(result.ScenerioID);
+                $("#txtUpdateProjectName").val(result.ProjectName);
+                $("#Updatedescript").val(result.Description);
+                $("#drpUpdateCustomer").val(result.CustomerID);
+                $("#drpUpdateScenario").val(result.ScenerioID );
+                $("#drpUpdateProjectManager").val(result.ProjectManagerID);
+                $("#UpdateBuildind_Block_Text").text(result.BuildingBlockName);
+                //$("#drpUpdateCustomer").select2(result, { id: result.CustomerID });
+                //$("#drpUpdateScenario").select2(result, { id: result.ScenerioID });
+                //$("#drpUpdateProjectManager").select2(result, { id: result.ProjectManagerID });
+                if (result.Scenario_Status) {
+                    $("#drpUpdateScenario").prop("disabled", true);
+                } else {
+                    $("#drpUpdateScenario").prop("disabled", false);
+                }
+                $("#PrId").val(result.ProjectId);
+                $('#EditProjectModal').modal('show');
+            },
+            error: function (a) {
+            }
+        });
+    }
+
+    $("#btnAddProject").click(function () {
+        $('#addProject').modal('show');
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCompanyName", "Admin")',
+            success: function (data) {
+                var state = $("#drpCustomer");
+                // state.empty();
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.Customer_ID,
+                        text: item.Company_Name
+                    }));
+                });
+            }
+        });
+    });
+
+
+    $("#btnClick").click(function () {
+        $('#addinstance').modal('show');
+         $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetProjectList", "Admin")',
+            success: function (data) {
+                var state = $("#drpProject");
+                state.empty();
+                state.append($('<option/>', {
+                    value:0,
+                    text:'--Select Project--'
+                }));
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.Project_ID,
+                        text: item.ProjectName
+                    }));
+                });
+            }
+         });
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetVersionList", "Admin")',
+            success: function (data) {
+                var state = $("#drpActivity");
+                state.empty();
+                state.append($('<option/>', {
+                    value:0,
+                    text:'--Select Version--'
+                }));
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.ID,
+                        text: item.Version_Name
+                    }));
+                });
+            }
+        });
+
+    });
+
+    function AddInstance(Id) {
+        $('#addinstance').modal('show');
+        $("select[name='Project']").prop("disabled", true);
+        $("select[name='Project'] option:selected").prop("disabled", true);
+        $.ajax({
+            type: 'POST',
+            data: { id: Id },
+            url: '@Url.Action("GetInstanceProject", "Admin")',
+            success: function (data) {
+
+                var state = $("#drpProject");
+                state.empty();
+
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.ProjectID,
+                        text: item.ProjectName
+                    }));
+                });
+            }
+        });
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetVersionList", "Admin")',
+            success: function (data) {
+                var state = $("#drpActivity");
+                state.empty();
+                state.append($('<option/>', {
+                    value:0,
+                    text:'--Select Version--'
+                }));
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.ID,
+                        text: item.Version_Name
+                    }));
+                });
+            }
+        });
+    }
+
+    $("#txtInstanceName").keypress(function (event) {
+            var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(str)) {
+                event.preventDefault();
+               // $("#lblInstanceName").html("Not Allowed").show();
+            }
+            else {
+                $("#btnInstanceCreate").prop('disabled', false);
+            }
+
+        });
+
+    $("#btnProjectCreate").on("click", function () {
+
+        var ProjectName = $("input[name='ProjectName']").val();
+        var CustomerName = $("select[name='Customer'] option:selected").val().trim();
+        var ProjectManagerName = $("select[name='ProjectManager'] option:selected").val().trim();
+        var ScenerioName = $("select[name='Scenario'] option:selected").val().trim();
+        var Description = $("textarea[name='Descripton']").val();
+
+        var _ProjectName = _CustomerName = _ProjectManagerName = _ScenerioName = _Description = false;
+
+        if (ProjectName == "") {
+            _ProjectName = true;
+            $("#asterisk").show();
+            $("#lblProjectName").html("Please enter the Project Name").show();
+        }
+        else {
+            $("#asterisk").hide();
+            $("#lblProjectName").html("").show();
+        }
+        if (CustomerName == 0) {
+            _CustomerName = true;
+            $("#asterisk2").show();
+            $("#lblCustomerName").html("Please Select the Customer").show();
+        }
+        else {
+            $("#asterisk2").hide();
+            $("#lblCustomerName").html("").show();
+        }
+        if (ProjectManagerName == 0) {
+            _ProjectManagerName = true;
+            $("#asterisk1").show();
+            $("#lblProjectManager").html("Please Select the Project Manager").show();
+        }
+        else {
+            $("#asterisk1").hide();
+            $("#lblProjectManager").html("").show();
+
+        }
+        if (ScenerioName == 0) {
+            _ScenerioName = true;
+
+            $("#asterisk3").show();
+            $("#lblScenerio").html("Please Select the Scenario Name").show();
+        }
+        else {
+            $("#asterisk3").hide();
+
+            $("#lblScenerio").html("").show();
+
+        }
+        //if (Description == "") {
+        //    _Description = true;
+        //    $("#lblDescripton").html("Please enter the Description").show();
+        //}
+        //else {
+        //    $("#lblDescripton").html("").show();
+        //}
+        if (CheckProjectAvailabiltiy(ProjectName)==false) {
+            $("#lblProjectName").html("Project Name already exists").show();
+        }
+        else {
+            if (ProjectName == "") {
+                $("#lblProjectName").html("Please enter the Project Name").show();
+            }
+            else {
+                $("#lblProjectName").html("").show();
+            }
+        }
+        if (_ProjectName == false && _ProjectManagerName == false && _CustomerName == false && _ScenerioName == false  && CheckProjectAvailabiltiy(ProjectName) == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateProject", "Admin")',
+                data: {
+                    ProjectName: ProjectName,
+                    CustomerName: CustomerName,
+                    ScenerioName: ScenerioName,
+                    ProjectManagerName: ProjectManagerName,
+                    Description: Description
+                },
+                    success: function (response) {
+                        if (response == "success") {
+                            ResetProject();
+                            RefreshInstanceProject();
+                            Notiflix.Notify.Success('Project <Strong>created </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                        }
+                        else {
+                            $("#btnProjectCreate").prop('disabled', true);
+                        }
+                    },
+                    failure: function (response) {
+                       alert(response.responseText);
+                    },
+                error: function (response) {
+                        alert(response.responseText);
+                    }
+            });
+        }
+    });
+
+    $("#btnInstanceCreate").on("click", function () {
+        $("select[name='Project'] option:selected").prop("disabled", false);
+        var InstanceName = $("input[name='InstanceName']").val();
+        var Project = $("select[name='Project'] option:selected").val().trim();
+        var Version = $("select[name='Version'] option:selected").val().trim();
+        var Description = $("textarea[name='Descript']").val();
+
+        //var syslandscape = $('input[type=radio][name=landscape]').val();
+        var syslandscape = $('input[type=radio][name=landscape]:checked').val();
+        //var destinationName = $("#txtdestinationName").val().trim();
+        var AppServerHost = $("#txtAppServerHost").val().trim();
+        var SystemNumber = $("#txtSystemNumber").val().trim();
+        var SAPRouter = $("#txtSAPRouter").val().trim();
+        var SAPUser = $("#txtSAPUser").val().trim();
+        var SAPPassword = $("#txtSAPPassword").val().trim();
+        var Client = $("#txtClient").val().trim();
+        //var Language = $("#txtLanguage").val();
+        //var PoolSize = $("#txtPoolSize").val();
+
+        var _Instance = _ProjectInstance = _DescriptionInstance = _syslandscape = _DestinationName = _AppServerHost = _SystemNumber = _SAPRouter = _SAPUser = _SAPPassword = _Client = _Language = _PoolSize = _Version= false;
+
+        if (InstanceName == "") {
+            _Instance = true;
+            $("#Insstar").show();
+            $("#lblInstanceName").html("Please enter the Instance Name").show();
+        }
+        else {
+            $("#Insstar").show();
+
+            $("#lblInstanceName").html("").show();
+        }
+        if (Project == 0) {
+            _ProjectInstance = true;
+            $("#Prostar").show();
+            $("#lblProject").html("Please Select the project").show();
+        }
+        else {
+            $("#Prostar").hide();
+            $("#lblProject").html("").show();
+        }
+        if (Version == 0) {
+            _Version = true;
+            $("#AMstar").show();
+            $("#lblActivity").html("Please Select the Version").show();
+        }
+        else {
+            $("#AMstar").hide();
+            $("#lblActivity").html("").show();
+        }
+
+        if (CheckInstanceAvailabiltiy(InstanceName, Project) == false) {
+            $("#lblInstanceName").html("Instance Name Already Exists").show();
+        }
+        else {
+            if (InstanceName == "") {
+                $("#lblInstanceName").html("Please enter the Instance Name").show();
+            }
+            else {
+                $("#lblInstanceName").html("").show();
+            }
+        }
+
+        if (syslandscape == "" || syslandscape==undefined) {
+            _syslandscape = true;
+            $("#lbllandscape").html("Please select the radio button").show();
+        } else if (syslandscape == 'Manual') {
+            $("#lbllandscape").html("").show();
+        }
+        else if (syslandscape == 'Automation') {
+
+            $("#lbllandscape").html("").show();
+
+            if (InstanceName == "") {
+                Notiflix.Notify.Failure('Please enter Instance Name..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 200, });
+            }
+            else if (CheckInstanceAvailabiltiy(InstanceName, Project) == false) {
+                 Notiflix.Notify.Failure('Instance Name Already Exists', { cssAnimationStyle: 'zoom', cssAnimationDuration: 200, });
+            }
+            else if (Project == 0) {
+                Notiflix.Notify.Failure('Please select Project..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 200, });
+            }
+
+            //if (destinationName == "") {
+            //    _DestinationName = true;
+            //    $("#lbldestinationName").html("Please enter the Destination Name").show();
+            //} else {
+            //    $("#lbldestinationName").html("").show();
+            //}
+
+            if (AppServerHost == "") {
+                _AppServerHost = true;
+                $("#lblAppServerHost").html("Please enter the AppServerHost").show();
+            } else {
+                $("#lblAppServerHost").html("").show();
+            }
+
+            if (SystemNumber == "") {
+                _SystemNumber = true;
+                $("#lblSystemNumber").html("Please enter the SystemNumber").show();
+            } else {
+                $("#lblSystemNumber").html("").show();
+            }
+
+            if (SAPRouter == "") {
+                _SAPRouter = true;
+                $("#lblSAPRouter").html("Please enter the SAPRouter").show();
+            } else {
+                $("#lblSAPRouter").html("").show();
+            }
+
+            if (SAPUser == "") {
+                _SAPUser = true;
+                $("#lblSAPUser").html("Please enter the User").show();
+            } else {
+                $("#lblSAPUser").html("").show();
+            }
+
+            if (SAPPassword == "") {
+                _SAPPassword = true;
+                $("#lblSAPPassword").html("Please enter the Password").show();
+            } else {
+                $("#lblSAPPassword").html("").show();
+            }
+
+            if (Client == "") {
+                _Client = true;
+                $("#lblClient").html("Please enter the Client").show();
+            } else {
+                $("#lblClient").html("").show();
+            }
+
+            //if (Language == "") {
+            //    _Language = true;
+            //    $("#lblLanguage").html("Please enter the Language").show();
+            //} else {
+            //    $("#lblLanguage").html("").show();
+            //}
+
+            //if (PoolSize == "") {
+            //    _PoolSize = true;
+            //    $("#lblPoolSize").html("Please enter the PoolSize").show();
+            //} else {
+            //    $("#lblPoolSize").html("").show();
+            //}
+        }
+
+        if (_Instance == false && _ProjectInstance == false && CheckInstanceAvailabiltiy(InstanceName, Project) == true && _syslandscape == false && _DestinationName == false && _AppServerHost == false && _SystemNumber == false && _SAPRouter == false && _SAPUser == false && _SAPPassword == false && _Client == false && _Language == false && _PoolSize == false && _Version == false) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("InstanceCreation", "Admin")',
+                data: {
+                    InstanceName: InstanceName,
+                    Version_ID: Version,
+                    Project_ID: Project,
+                    Description: Description,
+                    Sys_Landscape: syslandscape,
+
+                    //destinationName: destinationName,
+                    AppServerHost: AppServerHost,
+                    SystemNumber: SystemNumber,
+                    SAPRouter: SAPRouter,
+                    User: SAPUser,
+                    Password: SAPPassword,
+                    Client: Client,
+                    //Language: Language,
+                    //PoolSize: PoolSize
+                },
+                success: function (response) {
+                    if (response == "success") {
+                        ResetInstance();
+                        RefreshInstanceProject();
+                        Notiflix.Notify.Success('Instance <Strong>created </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                    }
+                    else {
+                        $("#lblInstanceName").html("This Instance Name is already in use for this project").show().fadeOut(5000);
+                        $("#btnInstanceCreate").prop('disabled', true);
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+    function ValidateAutoMation() {
+
+        var status = false;
+        var syslandscape = $('input[type=radio][name=landscape]:checked').val();
+        //var destinationName = $("#txtdestinationName").val().trim();
+        var AppServerHost = $("#txtAppServerHost").val().trim();
+        var SystemNumber = $("#txtSystemNumber").val().trim();
+        var SAPRouter = $("#txtSAPRouter").val().trim();
+        var SAPUser = $("#txtSAPUser").val().trim();
+        var SAPPassword = $("#txtSAPPassword").val().trim();
+        var Client = $("#txtClient").val().trim();
+
+        if (syslandscape == "" || syslandscape == undefined) {
+
+            $("#lbllandscape").html("Please select the radio button").show();
+        } else if (syslandscape == 'Manual') {
+            $("#lbllandscape").html("").show();
+        }
+        else if (syslandscape == 'Automation') {
+
+            $("#lbllandscape").html("").show();
+            if (syslandscape == 'Automation') {
+                //if (destinationName == "") {
+                //    $("#lbldestinationName").html("Please enter the Destination Name").show();
+                //    return status;
+                //} else {
+                //    $("#lbldestinationName").html("").show();
+
+                //}
+
+                if (AppServerHost == "") {
+                    $("#lblAppServerHost").html("Please enter the AppServerHost").show();
+                    return status;
+                } else {
+                    $("#lblAppServerHost").html("").show();
+
+                }
+
+                if (SystemNumber == "") {
+                    $("#lblSystemNumber").html("Please enter the SystemNumber").show();
+                    return status;
+                } else {
+                    $("#lblSystemNumber").html("").show();
+
+                }
+
+                if (SAPRouter == "") {
+                    $("#lblSAPRouter").html("Please enter the SAPRouter").show();
+                    return status;
+                } else {
+                    $("#lblSAPRouter").html("").show();
+                }
+
+                if (SAPUser == "") {
+                    $("#lblSAPUser").html("Please enter the User").show();
+                    return status;
+                } else {
+                    $("#lblSAPUser").html("").show();
+                }
+
+                if (SAPPassword == "") {
+                    $("#lblSAPPassword").html("Please enter the Password").show();
+                    return status;
+                } else {
+                    $("#lblSAPPassword").html("").show();
+                }
+
+                if (Client == "") {
+                    $("#lblClient").html("Please enter the Client").show();
+                    return status;
+                } else {
+                    $("#lblClient").html("").show();
+                }
+                status = true;
+                return status;
+            }
+        }
+    }
+
+    $(".delIns").click(function () {
+        var id = $(this).next().val();
+        Notiflix.Confirm.Show(
+            'Confirm',
+            'Do you want to delete ?',
+            'Yes', 'No',
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteInstance", "Admin")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == "success") {
+                            RefreshInstanceProject();
+                            Notiflix.Notify.Success('Instance <Strong>deleted </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                        else {
+                            Notiflix.Notify.Info('Instance holding some task...!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            })
+    });
+
+
+    $(".delProj").click(function () {
+        var id = $(this).next().val();
+        Notiflix.Confirm.Show(
+            'Confirm',
+            'Do you want to delete ?',
+            'Yes', 'No',
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteProject", "Admin")',
+                    data: { id: id },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response == 0) {
+                            RefreshInstanceProject();
+                            Notiflix.Notify.Success('Project <Strong>deleted </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                        else if(response==1){
+                            Notiflix.Notify.Info('Kindly Delete The Respective Instance', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                        else if (response == 2) {
+                            Notiflix.Notify.Info('Kindly Complete The Respective PM Task Monitor data', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+         )
+    });
+</script>
+
+<script>
+    function CheckInstanceUpdtAvailabiltiy(InstanceName, Project, InstaId) {
+        var _InstaName = InstanceName;
+        var _Pid = Project;
+        var _status = true;
+        var _instaid = InstaId
+
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("CheckInsatanceAvailabilty", "Admin")',
+                data: {
+                    InstaName: _InstaName,
+                    ProjectId: _Pid,
+                    InsId:_instaid
+                },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        _status = false;
+                    }
+                },
+                error: function () {
+                },
+            });
+
+        return _status;
+    }
+
+    $("#txtUpdateInstanceName").keypress(function (event) {
+        var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(str)) {
+            event.preventDefault();
+            //$("#lblUpdtInstanceName").html("Not Allowed").show();
+        }
+        else {
+        }
+
+    });
+
+
+    function ResetUpdateInstance() {
+        $("#EditInstanceModal").modal('hide');
+        $('.modal-backdrop').remove();
+
+        $("#txtUpdateInstanceName").val('')
+        $("#drpUpdateProj").val(0)
+        $("#Updatedescription").val('')
+        $('#lblUpdtInstanceName').html("").show();
+        $('#lblUpdtDescription').html("").show();
+        $('#lblUpdtProject').html("").show();
+        $("#MaxUpdtChar").hide();
+    }
+
+    $("#MaxUpdtChar").hide();
+
+    //function InstaUpdateCharachter() {
+    //    var txt = $("#txtUpdateInstanceName").val();
+    //    var length = txt.length;
+    //    var _status = true;
+    //    if (length > 3) {
+    //        _status = false;
+    //    }
+    //    else {
+    //        _status = true;
+    //    }
+    //    return _status;
+
+    //}
+
+
+    $("#drpUpdateProj").prop("disabled", true);
+    $("#drpUpdateVersion").prop("disabled", true);
+    $("#btnInstanceUpdate").on("click", function () {
+        
+        var InstanceName = $("input[name='InstaName']").val();
+        var Description = $("#Updatedescription").val();
+        var Project = $("#drpUpdateProj").children("option:selected").val();
+        var InstaId = $("#InstaiD").val();
+        var Edit_Sys_Landscape = $("#Edit_Sys_Landscape").val();
+
+        //var destinationName = $("#Edit_txtdestinationName").val().trim();
+        var AppServerHost = $("#Edit_txtAppServerHost").val().trim();
+        var SystemNumber = $("#Edit_txtSystemNumber").val().trim();
+        var SAPRouter = $("#Edit_txtSAPRouter").val().trim();
+        var SAPUser = $("#Edit_txtSAPUser").val().trim();
+        var SAPPassword = $("#Edit_txtSAPPassword").val().trim();
+        var Client = $("#Edit_txtClient").val().trim();
+
+        var _InstanceName = _Project = _Description =  _DestinationName = _AppServerHost = _SystemNumber = _SAPRouter = _SAPUser = _SAPPassword = _Client = _Language = _PoolSize = false;
+
+        if (InstanceName == "") {
+            _InstanceName = true;
+            $("#updtInsta").show();
+            $("#lblUpdtInstanceName").html("Please enter the Instance Name").show();
+        }
+        else {
+            $("#updtInsta").hide();
+            $("#lblUpdtInstanceName").html("").show();
+
+        }
+        if (Project == 0) {
+            _Project = true;
+            $("#lblUpdtProject").html("Please Select the project").show();
+        }
+        else {
+            $("#lblUpdtProject").html("").show();
+        }
+        if (CheckInstanceUpdtAvailabiltiy(InstanceName, Project, InstaId) == false) {
+            $("#updtInsta").show();
+            $("#lblUpdtInstanceName").html("Instance Name Already Exists").show();
+        }
+        else {
+            if (InstanceName == "") {
+                $("#updtInsta").show();
+                $("#lblUpdtInstanceName").html("Please enter the Instance Name").show();
+            }
+            else {
+                $("#updtInsta").hide();
+                $("#lblUpdtInstanceName").html("").show();
+            }
+        }
+
+        if (Edit_Sys_Landscape == "Automation") {
+            //if (destinationName == "") {
+            //    _DestinationName = true;
+            //    $("#lblUpdtdestinationName").html("Please enter the Destination Name").show();
+            //} else {
+            //    $("#lblUpdtdestinationName").html("").show();
+            //}
+
+            if (AppServerHost == "") {
+                _AppServerHost = true;
+                $("#lblUpdtAppServerHost").html("Please enter the AppServerHost").show();
+            } else {
+                $("#lblUpdtAppServerHost").html("").show();
+            }
+
+            if (SystemNumber == "") {
+                _SystemNumber = true;
+                $("#lblUpdtSystemNumber").html("Please enter the SystemNumber").show();
+            } else {
+                $("#lblUpdtSystemNumber").html("").show();
+            }
+
+            if (SAPRouter == "") {
+                _SAPRouter = true;
+                $("#lblUpdtSAPRouter").html("Please enter the SAPRouter").show();
+            } else {
+                $("#lblUpdtSAPRouter").html("").show();
+            }
+
+            if (SAPUser == "") {
+                _SAPUser = true;
+                $("#lblUpdtSAPUser").html("Please enter the User").show();
+            } else {
+                $("#lblUpdtSAPUser").html("").show();
+            }
+
+            if (SAPPassword == "") {
+                _SAPPassword = true;
+                $("#lblUpdtSAPPassword").html("Please enter the Password").show();
+            } else {
+                $("#lblUpdtSAPPassword").html("").show();
+            }
+
+            if (Client == "") {
+                _Client = true;
+                $("#lblUpdtClient").html("Please enter the Client").show();
+            } else {
+                $("#lblUpdtClient").html("").show();
+            }
+        }
+        if (_InstanceName == false && _Project == false && CheckInstanceUpdtAvailabiltiy(InstanceName, Project, InstaId) == true && _DestinationName == false && _AppServerHost == false && _SystemNumber == false && _SAPRouter == false && _SAPUser == false && _SAPPassword == false && _Client == false && _Language == false && _PoolSize == false) {
+
+            var model = {
+                InstanceName: InstanceName,
+                Project_ID: Project,
+                Description: Description,
+                Instance_id: InstaId,
+
+                Sys_Landscape: Edit_Sys_Landscape,
+                //destinationName: destinationName,
+                AppServerHost: AppServerHost,
+                SystemNumber: SystemNumber,
+                SAPRouter: SAPRouter,
+                User: SAPUser,
+                Password: SAPPassword,
+                Client: Client
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateInstance", "Admin")',
+                async: false,
+                data: model,
+                success: function (response) {
+                    if (response == "success") {
+                        ResetUpdateInstance();
+                        RefreshInstanceProject();
+                        Notiflix.Notify.Success('Instance <Strong>updated </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
+    });
+    
+    $("#Edit_txtdestinationName,#Edit_txtAppServerHost,#Edit_txtSystemNumber,#Edit_txtSAPRouter,#Edit_txtSAPUser,#Edit_txtSAPPassword,#Edit_txtClient").on("keyup", function () {
+        //alert("change");
+        $("#btnUptTestConnection").show();
+        $("#btnInstanceUpdate").hide();
+    });
+
+    $("#btnUptTestConnection").on('click', function () {
+         
+        //var destinationName = $("#Edit_txtdestinationName").val().trim();
+        var AppServerHost = $("#Edit_txtAppServerHost").val().trim();
+        var SystemNumber = $("#Edit_txtSystemNumber").val().trim();
+        var SAPRouter = $("#Edit_txtSAPRouter").val().trim();
+        var SAPUser = $("#Edit_txtSAPUser").val().trim();
+        var SAPPassword = $("#Edit_txtSAPPassword").val().trim();
+        var Client = $("#Edit_txtClient").val().trim();
+      
+        if (AppServerHost != "" && SystemNumber != "" && SAPRouter != "" && SAPUser != "" && SAPPassword != "" && Client != "") {
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("TestSAPConnection", "SAP")',
+                data: {
+                    //destinationName: destinationName,
+                    AppServerHost: AppServerHost,
+                    SystemNumber: SystemNumber,
+                    SAPRouter: SAPRouter,
+                    User: SAPUser,
+                    Password: SAPPassword,
+                    Client: Client
+                },
+                success: function (response) {
+
+                    if (response == "success") {
+                        $("#btnInstanceUpdate").show();
+                        $("#btnUptTestConnection").hide();
+                        Notiflix.Notify.Success('Test Connection Passed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                    else {
+                        Notiflix.Notify.Failure('Test Connection Failed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+        else {
+             Notiflix.Notify.Failure('Test Connection Failed..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+        }
+    });
+
+</script>
+
+<script>
+
+
+        $("#star").hide();
+        $("#star1").hide();
+        $("#star2").hide();
+        $("#star3").hide();
+
+
+    function CheckProjectUpdateAvailabiltiy(ProjectName, Id) {
+            var _Projname = ProjectName;
+            var _Id = Id;
+            var _status = true
+
+                $.ajax({
+                    type: 'Get',
+                    url: '@Url.Action("CheckProjectAvailabilty", "Admin")',
+                    data: {
+                        ProjectName: _Projname,
+                        Id: _Id
+                    },
+                    dataType: "json",
+                    async: false,
+                    success: function (response) {
+                        if (response == false) {
+                            _status = false;
+                        }
+                    },
+                    error: function () {
+                    },
+                });
+
+            return _status;
+        }
+
+
+    function ResetUpdateProject() {
+        $("#EditProjectModal").modal('hide');
+        $('.modal-backdrop').remove();
+
+        $("#txtProjectName").val('')
+        $("#drpProjectManager").val(0)
+        $("#drpScenario").val(0)
+        $("#drpCustomer").val(0)
+        $("#desc").val('')
+
+        $("#Maxchar").show();
+        $("#asterisk").show();
+        $("#asterisk1").show();
+        $("#asterisk2").show();
+        $("#asterisk3").show();
+        $("#Insstar").show();
+        $("#Prostar").show();
+        $("#updtInsta").show();
+
+        $("#lblUpdtProjectName").html("").show();
+        $("#lblUpdtCustomerName").html("").show();
+        $("#lblUpdtProjectManager").html("").show();
+        $("#lblUpdtScenerio").html("").show();
+        $("#lblUpdtDescripton").html("").show();
+
+    }
+
+
+        $("#btnProjectUpdate").on("click", function () {
+            var ProjectName = $("input[name='UpdateProjectName']").val();
+            var CustomerName = $("select[name='UpdateCustomer'] option:selected").val().trim();
+            var ProjectManagerName = $("select[name='UpdateProjectManager'] option:selected").val().trim();
+            var ScenerioName = $("select[name='UpdateScenario'] option:selected").val().trim();
+            var Description = $("textarea[name='UpdateDescripton']").val();
+            var ProjectId = $("#PrId").val();
+            var _Projname = _Customname = _Pmanagername = _Scename = _Desc = false;
+
+            if (ProjectName == "") {
+                _Projname = true;
+                $("#star").show();
+                $("#lblUpdtProjectName").html("Please enter the Instance Name").show();
+            }
+            else {
+                $("#star").hide();
+                $("#lblUpdtProjectName").html("").show();
+            }
+            if (CustomerName == 0) {
+                _Customname = true;
+                $("#star2").show();
+                $("#lblUpdtCustomerName").html("Please Select the project").show();
+            }
+            else {
+                $("#star2").hide();
+                $("#lblUpdtCustomerName").html("").show();
+            }
+            if (ProjectManagerName == 0) {
+                _Pmanagername = true;
+                $("#star1").show();
+
+                $("#lblUpdtProjectManager").html("Please Select the project").show();
+            }
+            else {
+                $("#star1").hide();
+                $("#lblUpdtProjectManager").html("").show();
+            }
+
+            if (ScenerioName == 0) {
+                _Scename = true;
+                $("#star3").show();
+                $("#lblUpdtScenerio").html("Please Select the project").show();
+            }
+            else {
+                $("#star3").hide();
+                $("#lblUpdtScenerio").html("").show();
+            }
+            //if (Description == "") {
+            //    _Desc = true;
+            //    $("#lblUpdtDescripton").html("Please Select the Description").show();
+            //}
+            //else {
+            //    $("#lblUpdtDescripton").html("").show();
+            //}
+            if (CheckProjectUpdateAvailabiltiy(ProjectName, ProjectId) == false) {
+                $("#star").show();
+                $("#lblUpdtProjectName").html("Project Name already exists").show();
+            }
+            else {
+                if (ProjectName == "") {
+                    $("#star").show();
+                    $("#lblUpdtProjectName").html("Please enter the Project Name").show();
+                }
+                else {
+                    $("#star").hide();
+                    $("#lblUpdtProjectName").html("").show();
+                }
+            }
+            if (_Projname == false && _Customname == false && _Pmanagername == false && _Scename == false && CheckProjectUpdateAvailabiltiy(ProjectName, ProjectId) == true) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateProject", "Admin")',
+                    data: {
+                        ProjectName: ProjectName,
+                        CustomerName: CustomerName,
+                        ScenerioName: ScenerioName,
+                        ProjectManagerName: ProjectManagerName,
+                        Description: Description,
+                        Id: ProjectId
+                    },
+                    success: function (response) {
+                        if (response == "success") {
+                            ResetUpdateProject();
+                            RefreshInstanceProject();
+                            Notiflix.Notify.Success('Project <Strong>updated </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                        }
+                        else {
+                            $("#btnProjectCreate").prop('disabled', true);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+
+</script>
+
+<script>
+    $("#Cpdrpstar").show();
+    $("#Cidrpstar").show();
+    $("#Ctextstar").show();
+    $("#MaxtxtCloneChar").show();
+
+    $("#txtCloneInstanceName").keypress(function (event) {
+        var status = true;
+        var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(str)) {
+            event.preventDefault();
+            //$("#lblCloneInstanceName").html("Not Allowed").show();
+            status = false;
+        }
+        else {
+            status = true;
+        }
+    });
+
+    //function InstaCloneCharachter() {
+    //    var txt = $("#txtCloneInstanceName").val();
+    //    var length = txt.length;
+    //    var _status = true;
+    //    if (length > 3) {
+    //        _status = false;
+    //    }
+    //    else {
+    //        _status = true;
+    //    }
+    //    return _status;
+
+    //}
+
+    function ResetClone() {
+        $("#CloneModal").modal('hide');
+        $(".modal-backdrop").remove();
+
+        $("#drpCloneProj").val(0);
+        $("#drpCloneInstance").val(0);
+        $("#txtCloneInstanceName").val('');
+        $("#CloneInsta").hide();
+        $("#Clonedescription").val('');
+
+        $("#lblCloneProject").html("").show();
+        $("#lblCloneInstance").html("").show();
+        $("#lblCloneInstanceName").html("").show();
+        $("#lblCloneDescription").html("").show();
+
+        $("#Cpdrpstar").show();
+        $("#Cidrpstar").show();
+        $("#Ctextstar").show();
+        $("#MaxtxtCloneChar").show();
+
+
+        //RefreshInstanceProject();
+    }
+
+    //$("#drpCloneProj,#drpCloneInstance").select2({
+    //});
+
+
+
+    function AddClone(Id) {
+        $.ajax({
+            type: 'POST',
+            data: { id: Id },
+            url: '@Url.Action("GetInstanceProject", "Admin")',
+            success: function (data) {
+                var state = $("#drpCloneProj");
+                state.empty();
+
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.ProjectID,
+                        text: item.ProjectName
+                    }));
+                });
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("GetInstancesByProject", "Admin")',
+            dataType: "json",
+            async: false,
+            contentType: "application/json; charset=utf-8",
+            data: { id: Id },
+            success: function (data) {
+                $('#drpCloneInstance').empty();
+                $.each(data, function (item, value) {
+                    $('#drpCloneInstance').append($("<option value='" + value.Instance_id + "'>" + value.InstanceName + "</option>"));
+                })
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+        var CheckInstanceVal = $("#drpCloneInstance").val();
+        if (CheckInstanceVal != null) {
+            $("#CloneModal").modal('show');
+            $("select[name='Project2']").prop("disabled", true);
+            $("select[name='Project2'] option:selected").prop("disabled", true);
+        }
+        else {
+            $("#CloneModal").modal('hide');
+            Notiflix.Notify.Info('Kindly Create Instance For <strong>Cloning</strong>..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+        }
+    }
+    
+
+    $("#EditCloneClose,#cancelClone").click(function () {
+        ResetClone();
+        RefreshInstanceProject();
+    })
+
+    @*$('#drpCloneProj').change(function () {
+        var Project = $("#drpCloneProj").val().trim();
+            $.ajax({
+                url: '@Url.Action("GetInstancesByProject", "Admin")',
+                dataType: "json",
+                async: false,
+			    contentType: "application/json; charset=utf-8",
+                data: { id: Project},
+                success: function (data) {
+                    $('#drpCloneInstance').empty();
+                    $.each(data, function (item, value) {
+                        $('#drpCloneInstance').append($("<option value='" + value.Instance_id + "'>" + value.InstanceName + "</option>"));
+                    })
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        });*@
+
+    function ClonecheckInstance() {
+        var status = true;
+        var DrpInstance = $.map($("#drpCloneInstance option"), function (e) { return e.text.toUpperCase(); });
+        var length = DrpInstance.length;
+        var TxtInstance = $("#txtCloneInstanceName").val().toUpperCase();
+        for (var i = 0; i < length; i++) {
+            var value = DrpInstance[i];
+            if (TxtInstance == value) {
+                status = false;
+            }
+        }
+        return status;
+    }
+
+    $("#btnCloneSave").on("click", function () {
+
+        var InstanceName = $("#txtCloneInstanceName").val();
+        var Project = $("#drpCloneProj").val();
+        var Previous_Instance = $("#drpCloneInstance").val();
+        var DescriptionClone = $("#Clonedescription").val();
+        var _ProjectClone = _PreviousInstanceClone = _InstanceCloneName = false;
+
+        if (InstanceName == "") {
+            _InstanceCloneName = true;
+            $("#Ctextstar").show();
+            $("#lblCloneInstanceName").html("Please enter the Instance Name").show();
+        }
+        else {
+            $("#Ctextstar").hide();
+            $("#lblCloneInstanceName").html("").show();
+        }
+        if (ClonecheckInstance() == false) {
+            $("#Ctextstar").show();
+            $("#lblCloneInstanceName").html("Clone Name Already Exists ").show();
+        }
+        else {
+            if (InstanceName == "") {
+                _InstanceCloneName = true;
+                $("#Ctextstar").show();
+                $("#lblCloneInstanceName").html("Please enter the Instance Name").show();
+
+            }
+            else {
+                $("#Ctextstar").hide();
+                $("#lblCloneInstanceName").html("").show();
+            }
+        }
+        //if (InstaCloneCharachter() == false) {
+        //    $("#MaxtxtCloneChar").show();
+        //}
+        //else {
+        //    $("#MaxtxtCloneChar").hide();
+        //}
+        if (Project == 0) {
+            _ProjectClone = true;
+            $("#Cpdrpstar").show();
+            $("#lblCloneProject").html("Please Select the project").show();
+        }
+        else {
+            $("#Cpdrpstar").hide();
+            $("#lblCloneProject").html("").show();
+        }
+        if (Previous_Instance == 0) {
+            _PreviousInstanceClone = true;
+            $("#Cidrpstar").show();
+            $("#lblCloneInstance").html("Please Select the Instance").show();
+        }
+        else {
+            $("#Cidrpstar").hide();
+            $("#lblCloneInstance").html("").show();
+
+        }
+        if (_ProjectClone == false && _InstanceCloneName == false && _PreviousInstanceClone == false && ClonecheckInstance() == true) {
+                  $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CreateInstanceClone", "Admin")',
+                      data: {
+                          InstaceNameClone: InstanceName,
+                          ProjectidClone: Project,
+                          InstanceClone: Previous_Instance,
+                          DescriptionClone: DescriptionClone
+                      },
+                        success: function (response) {
+                            if (response == "success") {
+                                ResetClone();
+                                RefreshInstanceProject();
+                                Notiflix.Notify.Success('Instance Clone <strong> created</strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                            }
+                            else {
+                            }
+                        },
+                        failure: function (response) {
+                           alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                });
+            }
+
+        });
+
+</script>
+
+<script>
+    $("#searchProject").attr("disabled", "disabled");
+
+    $("#SearchSelect").change(function () {
+        $("#searchProject").removeAttr("disabled");
+        var txt = $("#SearchSelect option:selected").text();
+
+        if (txt == "Project") {
+            $("#searchProject").attr("placeholder", "Search By Project");
+            $("#searchProject").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#accordion #ProjectSearch #projSearch ").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        }
+
+        if (txt == "Instance") {
+            $("#searchProject").attr("placeholder", "Search By Instance");
+            $("#searchProject").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".InstanceBody #InstanceTable #Instancesearch tr ").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        }
+        else {
+            $("#searchProject").attr("placeholder", "Search");
+        }
+    });
+</script>
+<script>
+    $("#drpScenario").on("change", function () {
+        var id = $("#drpScenario").val();
+        if (id > 0) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Scenario_BuildingBlock", "Admin")',
+                data: { id: id },
+                success: function (response) {
+                    $("#Buildind_Block_Text").text(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+      
+    });
+    
+    $("#drpUpdateScenario").on("change", function () {
+        var id = $("#drpUpdateScenario").val();
+        if (id > 0) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Scenario_BuildingBlock", "Admin")',
+                data: { id: id },
+                success: function (response) {
+                    $("#UpdateBuildind_Block_Text").text(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+      
+    });
+</script>

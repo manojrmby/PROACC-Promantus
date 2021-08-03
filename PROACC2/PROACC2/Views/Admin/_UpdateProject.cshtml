@@ -1,0 +1,265 @@
+﻿@{ 
+    var proj = ViewBag.ProjectDetail;
+}
+<input type="hidden" value="@proj.ProjectId" name="UpdateProjectID" />
+
+    <div class="modal-dialog">
+        Modal content
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Update Project</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Project Name<spna id="star" style="color:red;">*</spna></label>
+                                    <input type="text" class="form-control" id="txtUpdateProjectName" name="UpdateProjectName" value="@proj.ProjectName" />
+                                    <span id="lblUpdtProjectName" style="color:red"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <input type="text" class="form-control" id="Updatedesc" name="UpdateDescripton" rows="4" cols="50" value="@proj.Description" />
+                                    <span id="lblUpdtDescripton" style="color:red"></span>
+                                </div>
+                            </form>
+                            <div class="form-group">
+                                <label for="">Project Manager<spna id="star1" style="color:red;">*</spna></label>
+                                <select class="form-control" id="drpUpdateProjectManager" name="UpdateProjectManager">
+                                    <option value="0">--Select Project Manager--</option>
+                                    @foreach (var item in ViewBag.ProjectManager)
+                                    {
+                                        if (proj.ProjectManagerID == item.ProjectManagerId)
+                                        {
+                                            <option value="@item.ProjectManagerId" selected>@item.ProjectManagerName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ProjectManagerId">@item.ProjectManagerName</option>
+                                        }
+                                    }
+                                </select>
+                                <span id="lblUpdtProjectManager" style=" color:red;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Customer<spna id="star2" style="color:red;">*</spna></label>
+                                <select class="form-control" id="drpUpdateCustomer" name="UpdateCustomer">
+                                    <option value="0">--Select Customer--</option>
+
+                                    @foreach (var item in ViewBag.Company)
+                                    {
+                                        if (proj.CustomerID == item.Customer_ID)
+                                        {
+                                            <option value="@item.Customer_ID" selected>@item.Company_Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Customer_ID">@item.Company_Name</option>
+                                        }
+
+                                    }
+                                </select>
+                                <span id="lblUpdtCustomerName" style=" color:red;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Scenario<spna id="star3" style="color:red;">*</spna></label>
+                                <select class="form-control" id="drpUpdateScenario" name="UpdateScenario">
+                                    <option value="0">--Select Scenario--</option>
+
+                                    @foreach (var item in ViewBag.Scenario)
+                                    {
+                                        if (proj.ScenerioID == item.ScenarioId)
+                                        {
+                                            <option value="@item.ScenarioId" selected>@item.ScenarioName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ScenarioId">@item.ScenarioName</option>
+                                        }
+                                    }
+                                </select>
+                                <span id="lblUpdtScenerio" style=" color:red;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnProjectUpdate">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelUpdateModal" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+
+
+        $("#star").hide();
+        $("#star1").hide();
+        $("#star2").hide();
+        $("#star3").hide();
+
+
+        function CheckProjectUpdateAvailabiltiy(ProjectName, ProjectManagerName, CustomerName, ScenerioName) {
+            var _Projname = ProjectName;
+            var _Pmname = ProjectManagerName;
+            var _Cname = CustomerName;
+            var _Scname = ScenerioName;
+            var _status = true
+            
+                $.ajax({
+                    type: 'Get',
+                    url: '@Url.Action("CheckProjectAvailabilty", "Admin")',
+                    data: {
+                        ProjectName: _Projname,
+                        ProjectManagerName: _Pmname,
+                        CustomerName: _Cname,
+                        ScenerioName: _Scname
+                    },
+                    dataType: "json",
+                    async: false,
+                    success: function (response) {
+                        if (response == false) {
+                            _status = false;
+                        }
+                    },
+                    error: function () {
+                    },
+                });
+            
+            return _status;
+        }
+
+
+        function ResetUpdateProject() {
+            $('.Projectbody').load(' .Projectbody');
+            $("#txtProjectName").val('')
+            $("#drpProjectManager").val(0)
+            $("#drpScenario").val(0)
+            $("#drpCustomer").val(0)
+            $("#desc").val('')
+
+            $("#lblUpdtProjectName").html("").show();
+            $("#lblUpdtCustomerName").html("").show();
+            $("#lblUpdtProjectManager").html("").show();
+            $("#lblUpdtScenerio").html("").show();
+            $("#lblUpdtDescripton").html("").show();
+
+            $("#EditProjectModal").modal('hide');
+            $('.modal-backdrop').remove();
+        }
+
+    $('button[data-dismiss="modal"]').click(function () {
+        $(this).parent().parent().parent().parent().modal('hide');
+        ResetUpdateProject();
+    })
+
+
+        $("#btnProjectUpdate").on("click", function () {
+            var ProjectName = $("input[name='UpdateProjectName']").val();
+            var CustomerName = $("select[name='UpdateCustomer'] option:selected").val().trim();
+            var ProjectManagerName = $("select[name='UpdateProjectManager'] option:selected").val().trim();
+            var ScenerioName = $("select[name='UpdateScenario'] option:selected").val().trim();
+            var Description = $("input[name='UpdateDescripton']").val();
+            var ProjectId = $("input[name='UpdateProjectID']").val();
+            var _Projname = _Customname = _Pmanagername = _Scename = _Desc = false;
+
+            if (ProjectName == "") {
+                _Projname = true;
+                $("#star").show();
+                $("#lblUpdtProjectName").html("Please enter the Instance Name").show();
+            }
+            else {
+                $("#star").hide();
+                $("#lblUpdtProjectName").html("").show();
+            }
+            if (CustomerName == 0) {
+                _Customname = true;
+                $("#star2").show();
+                $("#lblUpdtCustomerName").html("Please Select the project").show();
+            }
+            else {
+                $("#star2").hide();
+                $("#lblUpdtCustomerName").html("").show();
+            }
+            if (ProjectManagerName == 0) {
+                _Pmanagername = true;
+                $("#star1").show();
+
+                $("#lblUpdtProjectManager").html("Please Select the project").show();
+            }
+            else {
+                $("#star1").hide();
+                $("#lblUpdtProjectManager").html("").show();
+            }
+
+            if (ScenerioName == 0) {
+                _Scename = true;
+                $("#star3").show();
+                $("#lblUpdtScenerio").html("Please Select the project").show();
+            }
+            else {
+                $("#star3").hide();
+                $("#lblUpdtScenerio").html("").show();
+            }
+            if (Description == "") {
+                _Desc = true;
+                $("#lblUpdtDescripton").html("Please Select the Description").show();
+            }
+            else {
+                $("#lblUpdtDescripton").html("").show();
+            }
+            if (CheckProjectUpdateAvailabiltiy(ProjectName, ProjectManagerName, CustomerName, ScenerioName) == false) {
+                $("#lblUpdtProjectName").html("Please enter the Instance Name").show();
+            }
+            else {
+                if (ProjectName == "") {
+                    $("#lblUpdtProjectName").html("Please enter the Instance Name").show();
+                }
+                else {
+                    $("#lblUpdtProjectName").html("").show();
+                }
+            }
+            if (_Projname == false && _Customname == false && _Pmanagername == false && _Scename == false && _Desc == false && CheckProjectUpdateAvailabiltiy(ProjectName, ProjectManagerName, CustomerName, ScenerioName) == true) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateProject", "Admin")',
+                    data: {
+                        ProjectName: ProjectName,
+                        CustomerName: CustomerName,
+                        ScenerioName: ScenerioName,
+                        ProjectManagerName: ProjectManagerName,
+                        Description: Description,
+                        Id: ProjectId
+                    },
+                    success: function (response) {
+                        if (response == "success") {
+
+                            ResetUpdateProject();
+
+                        }
+                        else {
+                            $("#btnProjectCreate").prop('disabled', true);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+        });
+
+    </script>

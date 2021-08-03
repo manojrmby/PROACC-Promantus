@@ -1,0 +1,517 @@
+﻿
+@{
+    ViewBag.Title = "ReadinessCheck";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    g {
+        stroke-width: 0;
+    }   
+</style>
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row">
+        <div class="col-lg-9">
+            <ul class="nav navbar-toolbar sec-left-resource">
+                <li>
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpCustomer">
+                                <option value="0">Select Customer</option>
+                                @foreach (var item in ViewBag.CustomerName)
+                                {
+                                    <option class="text-capitalize" value="@item.Value">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>//&nbsp; &nbsp;
+                    }
+
+                </li>
+                <li class="show_prj">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_prj">
+                    @if (User.IsInRole("Customer") || User.IsInRole("Project Manager"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option class="text-capitalize" value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                            </select>
+                        </div>
+                    }
+                    @*<div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0" id="drpProject">
+                            <option value="0">Select Project</option>
+                            @foreach (var item in ViewBag.ProjectName)
+                            {
+                                <option value="@item.Project_ID">@item.ProjectName</option>
+                            }
+                        </select>
+                    </div>*@
+                </li>
+                <li class="show_ins">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_ins">
+                    <div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                            <option value="0">Select Instance</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-3">
+            <div class="sec-left-resource d-flex justify-content-end shadow">
+                @*<div class="ibox current-projects mb-0"><span class="">Current Phase:&nbsp;&nbsp;<strong id="CurrentPhase"></strong></span></div>*@
+                <marquee behavior="scroll" direction="left">Current Phase:&nbsp;&nbsp;<strong id="CurrentPhase" class="color-blue-light">Assessment</strong></marquee>
+            </div>
+        </div>
+    </div>
+    <div class="row py-1 ">
+        <div class="col-lg-6">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                <li class="nav-item" data-ref="@Url.Action("_Readiness","Home", new { name = "_ReadinessCheck" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#readinessCheck" role="tab" aria-controls="readinessCheck" id="Tab_ReadinessCheck">SAP Readiness Check</a>
+                                </li>
+                                <li class="nav-item" data-ref="@Url.Action("_Readiness","Home", new { name = "_ProAccExtractor" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#ProAccExtractor" role="tab" aria-controls="ProAccExtractor" id="Tab_ProAccExtractor">ProAcc Extractor</a>
+                                </li>
+                                @*<li class="nav-item" data-ref="@Url.Action("_Test","Home", new { name = "_Test" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#Test" role="tab" aria-controls="Test" id="Tab_Test">Test</a>
+                                </li>*@
+                            </ul>
+                            <!-- <span class="title-project active">Resource Planning<span> -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+       
+        <div class="bottom-line"></div>
+
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade-in-up" id="readinessCheck" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="ProAccExtractor" role="tabpanel">
+        </div>
+        @*<div class="tab-pane fade-in-up" id="Test" role="tabpanel">
+        </div>*@
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var PrjId = sessionStorage.getItem("Proj");
+        var CustId = sessionStorage.getItem("CustId");
+        var InsId = sessionStorage.getItem("Ins");
+        var UserType = "@Session["UserType"].ToString()";
+         var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+        var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+
+        var sys_LandScape;
+        @*if (InsId != null && InsId != 'undefined') {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: InsId },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    sys_LandScape = Data;
+
+                }
+            });
+        }*@
+
+
+        if (UserType == 'Project Manager' || UserType == 'Customer') {
+            if (PrjId == null || PrjId == 0) {
+                $('#Tab_ReadinessCheck').click();
+                var msg = "Kindly select Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+            }
+            else {
+                $('#Tab_ReadinessCheck').click();
+            }
+        }
+        else if (UserType == 'Consultant') {
+            if (CustId == null || CustId == 0) {
+                $('#Tab_ReadinessCheck').click();
+                var msg = "Kindly select Customer,Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+            }
+            else {
+                $('#Tab_ReadinessCheck').click();
+            }
+        }
+
+    });
+
+    $("#drpCustomer").change(function () {
+        var Id = $("#drpCustomer").val();
+        $("#readinessCheck").html("");
+        $("#ProAccExtractor").html("");
+        if (Id == 0) {
+            var insta = $('#drpProject');
+            insta.empty();
+            insta.append($('<option/>', {
+                value: 0,
+                text: 'Select Project'
+            }));
+             var insta1 = $('#ProjInstance');
+            insta1.empty();
+            insta1.append($('<option/>', {
+                value: 0,
+                text: 'Select Instance All'
+            }));
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetProjectByCustomer", "Transaction")',
+                dataType: "json",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: { id: Id },
+                success: function (data) {
+                    var state = $('#drpProject');
+                    state.empty();
+                    state.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Project'
+                    }));
+                     var insta1 = $('#ProjInstance');
+                    insta1.empty();
+                    insta1.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Instance All'
+                    }));
+                    $.each(data, function (item, value) {
+                        $('#drpProject').append($("<option class='text-capitalize' value='" + value.ProjectId + "'>" + value.ProjectName + "</option>"));
+                    })
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        }
+    });
+
+    $("#drpProject").change(function () {
+        var Id = $("#drpProject").val();
+         $("#readinessCheck").html("");
+        $("#ProAccExtractor").html("");
+        if (Id == 0) {
+            var insta = $('#ProjInstance');
+            insta.empty();
+            insta.append($('<option/>', {
+                value: 0,
+                text: 'Select Instance'
+            }));
+        }
+        else {
+
+            $.ajax({
+                url: '@Url.Action("GetInstancesByProject", "Transaction")',
+                dataType: "json",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: { id: Id },
+                success: function (data) {
+                    var state = $('#ProjInstance');
+                    state.empty();
+                    state.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Instance'
+                    }));
+                    $.each(data, function (item, value) {
+                        $('#ProjInstance').append($("<option class='text-capitalize' value='" + value.Instance_id + "'>" + value.InstanceName + "</option>"));
+                    })
+                    $('.show_ins').addClass('show_data').removeClass('show_ins');
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        }
+    });
+
+
+    function sys_LandScape_(ID) {
+
+        var status = false;
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: '@Url.Action("GetInstance_LandScape","Home")',
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+
+                if (Data == 'Manual') {
+                    status = true;
+                } else if (Data == 'Automation') {
+                    status = false;
+                }
+            }
+        });
+        return status
+    }
+
+    function LoadAnalysisCompletedInstance(PrjId,InsId) {
+        var LoadAnalysisCompleted;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("LoadAnalysisCompletedInstance", "Consultant")',
+            data: { 'ProjectId': PrjId, 'pagename': 'Readiness', Instance_Id: InsId },
+            success: function (data) {
+                LoadAnalysisCompleted = data;
+            },
+            error: function (a) {
+                Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+        });
+        return LoadAnalysisCompleted;
+    }
+
+    function SAPFileUploadCompleted(InsId) {
+        var SAPFileUploadCompleted;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("SAPFileUploadCompletedInstance", "Consultant")',
+            data: { Instance_Id: InsId },
+            success: function (data) {
+                SAPFileUploadCompleted = data;
+            },
+            error: function (a) {
+                Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+        });
+        return SAPFileUploadCompleted;
+    }
+
+    $(".nav-tabs li").click(function (e) {
+        
+        var url = $(this).data('ref');
+        var PrjId = sessionStorage.getItem("Proj");
+        var InsId = sessionStorage.getItem("Ins");
+        var CustId = sessionStorage.getItem("CustId");
+        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+        var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+        var UserType = "@Session["UserType"].ToString()";
+        
+        if (InsId != null && InsId != 'undefined' && InsId != 0) { //if (InsId != 0) {
+
+            var sys_LandScape = sys_LandScape_(InsId);
+            var LoadAnalysisCompleted = LoadAnalysisCompletedInstance(PrjId, InsId);
+            var SAPFileUpload = SAPFileUploadCompleted(InsId);
+            
+            $.ajax({
+                url: url,
+                async: false,
+                //data: { pageId: pageId },
+                success: function (response) {
+                    
+                    if (UserType == "Consultant") {
+                        $("#drpCustomer").val(CustId);
+                        BindingProject_Detail(CustId, CustUrl);
+                    }
+                    $("#drpProject").val(PrjId);
+                    GlobalBindInstance(PrjId, InsTranurl);
+                    $("#ProjInstance").val(InsId);
+
+                    if (InsId == null || InsId == 0) {
+                        $("#drpProject").val(0);
+                        $("#ProjInstance").val(0);
+                        e.preventDefault();
+                    }
+                    else if (url.includes("_ReadinessCheck")) {
+                       
+                        $(this).addClass("active");
+                        $("#readinessCheck").html("");
+                        $('#ProAccExtractor').removeClass("active");
+
+                        if (InsId != 0 && sys_LandScape == false && LoadAnalysisCompleted == false) {
+                            Notiflix.Report.Info('Alert', 'This is an Automation Instance.. And Analysis is not Completed!', 'OK',
+                                function () {
+                                    $('#Tab_ProAccExtractor').click();
+                                    $("#Tab_Reload").css("display", "block");
+                                });
+                            e.preventDefault();
+                        }
+                        //else if (InsId != 0 && sys_LandScape == false && LoadAnalysisCompleted == true) {
+                        //    $("#readinessCheck").html(response);
+                        //    ReadinessCheck(InsId);
+                        //    setTimeout(function () { LoadCharts(InsId); }, 3000);
+                        //    setTimeout(function () { Tables(InsId); }, 3000);
+                        //}
+                        
+                        else if (InsId != 0 && sys_LandScape == true && LoadAnalysisCompleted == false) {
+                            Notiflix.Report.Info('Alert', 'This is an Manual Instance.. And Analysis is not Completed!', 'OK',
+                                function () {
+                                    $("#readinessCheck").html("");
+                                    $("#ProAccExtractor").html("");
+                                    $("#Tab_Reload").css("display", "none");
+                                });
+                        }
+                        else if (InsId != 0 && LoadAnalysisCompleted == true) {
+                            $("#readinessCheck").html(response);
+                            ReadinessCheck(InsId);
+                            setTimeout(function () { LoadCharts(InsId); }, 3000);
+                            setTimeout(function () { Tables(InsId); }, 3000);
+                            Readiness_ECCHanaCount(InsId, '@Url.Action("GetHanaCountReport")', '@Url.Action("GetHanaCountTable")');
+                            $("#Tab_Reload").css("display", "none");
+                        }
+                    }
+                    else if (url.includes("_ProAccExtractor")) {
+                        $(this).addClass("active");
+                        $("#ProAccExtractor").html("");
+                        $('#readinessCheck').removeClass("active")
+
+                        if (SAPFileUpload == true || sys_LandScape == false) {
+                            $("#ProAccExtractor").html(response);
+                            setTimeout(function () { Tables1(InsId, sys_LandScape); }, 3000);
+                            if (sys_LandScape == true)
+                                $("#Tab_Reload").css("display", "none");
+                            else
+                                $("#Tab_Reload").css("display", "block");
+                            e.preventDefault();
+                        }
+                        else if (SAPFileUpload == false && LoadAnalysisCompleted == true) {
+                            Notiflix.Report.Info('Alert', 'SAP File Upload is Not Completed But Analysis is Completed!', 'OK',
+                                function () {
+                                    $('#Tab_ReadinessCheck').click();
+                                    $("#Tab_Reload").css("display", "none");
+                                    
+                                });
+                            e.preventDefault();
+                        }
+                        else {
+                            $("#readinessCheck").html("");
+                            $("#ProAccExtractor").html("");
+                            $("#Tab_Reload").css("display", "none");
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    $('#ProjInstance').change(function (e) {
+        var ID = $(this).val();
+        //var Proj_Id = $("#drpProject").val();
+        $('#load').css("display", "block");
+        var PhId = "";
+        var PrjId = $("#drpProject").val();
+        var InsId = $("#ProjInstance").val();
+        var CustId = $("#drpCustomer").val();
+
+        SessionStorage(CustId, PhId, PrjId, InsId);
+
+        var ref_this = $("ul.nav-tabs li a.active");
+
+        if (ID != null && ID != undefined && InsId != 0) {
+
+            var sys_LandScape = sys_LandScape_(InsId);
+            var LoadAnalysisCompleted = LoadAnalysisCompletedInstance(PrjId, InsId);
+            var SAPFileUpload = SAPFileUploadCompleted(InsId);
+
+            if (ref_this[0].id == 'Tab_ReadinessCheck') {
+                //if (SAPFileUpload == true && LoadAnalysisCompleted == true) {
+                if (LoadAnalysisCompleted == true) {
+                    $('#Tab_ReadinessCheck').click();
+                    $('#Tab_Readiness_Report').click();
+                    e.preventDefault();
+                }
+                else if (SAPFileUpload == true && LoadAnalysisCompleted == false) {
+                    Notiflix.Report.Info('Alert', 'Analysis is not done But SAP File Upload is Completed!', 'OK',
+                        function () {
+                            $('#Tab_ProAccExtractor').click();
+                        });
+                    e.preventDefault();
+                }
+                else if (sys_LandScape == false && LoadAnalysisCompleted == false) {
+                     Notiflix.Report.Info('Alert', 'This is an Automation Instance and Analysis is not done !', 'OK',
+                        function () {
+                            $('#Tab_ProAccExtractor').click();
+                            $("#Tab_Reload").css("display", "block");
+                        });
+                    e.preventDefault();
+                }
+                //else if (SAPFileUpload == false && LoadAnalysisCompleted == true) {
+                //    $('#Tab_ReadinessCheck').click();
+                //    $('#Tab_Readiness_Report').click();
+                //    e.preventDefault();
+                //}
+                else if (SAPFileUpload == false && LoadAnalysisCompleted == false) {
+                    Notiflix.Report.Info('Alert', 'Analysis and SAP Upload is not done!', 'OK',
+                        function () {
+                            //$('#Tab_ReadinessCheck').click();
+                            $("#readinessCheck").html("");
+                            $("#ProAccExtractor").html("");
+                        });
+                }
+            }
+            else if (ref_this[0].id == 'Tab_ProAccExtractor') {
+                if (SAPFileUpload == true || sys_LandScape == false) { //&& LoadAnalysisCompleted == true
+                    $('#Tab_ProAccExtractor').click();
+                    $("#Tab_Reload").css("display", "block");
+                    e.preventDefault();
+                }
+                else if (SAPFileUpload == true && LoadAnalysisCompleted == false) {
+                    $('#Tab_ProAccExtractor').click();
+                    $("#Tab_Reload").css("display", "none");
+                    e.preventDefault();
+                }
+                else if (SAPFileUpload == false && LoadAnalysisCompleted == true) {
+                    Notiflix.Report.Info('Alert', 'SAP Upload is not done But Analysis is Completed!', 'OK',
+                        function () {
+                            $('#Tab_ReadinessCheck').click();
+                        });
+                }
+                else if (SAPFileUpload == false && LoadAnalysisCompleted == false) {
+                    Notiflix.Report.Info('Alert', 'Analysis and SAP Upload is not done!', 'OK',
+                        function () {
+                            //$('#Tab_ReadinessCheck').click();
+                            $("#readinessCheck").html("");
+                            $("#ProAccExtractor").html("");
+                        });
+                }
+            }
+        }
+    });
+</script>
+<!-- END PAGE CONTENT-->

@@ -1,0 +1,224 @@
+﻿
+
+
+@{
+    var proj = ViewBag.PTM;
+}
+<input type="hidden" value="@proj.PMTaskId" name="UpdatePMId" />
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title text-center w-100 semibold">Update PM</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row bg-white">
+                <div class="ibox w-100">
+                    <div class="ibox-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">Task Category</label>
+                                <select class="form-control" id="txtUpdtTaskcategory" name="UpdtTaskCategory" style="width:100%">
+                                    <option value="0">---Select Task Category---</option>
+                                    @foreach (var item in ViewBag.TaskList)
+                                    {
+                                        if (proj.PMTaskCategoryID == item.PMTaskCategoryID)
+                                        {
+                                            <option value="@item.PMTaskCategoryID" selected>@item.PMtTaskCatName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.PMTaskCategoryID"> @item.PMtTaskCatName </option>
+                                        }
+                                    }
+                                </select>
+                                <span id="lblUpdtaskCategory" style="color:red"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">ESTD Hours HH:MM*</label>
+                                <input type="text" class="form-control" id="txtUpdtEstdHours" name="UpdtESTDHours" placeholder="00:00" value="@proj.EST_Hours" />
+                                <span id="lblUpdtEstdHours" style="color:red"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Task Name</label>
+                                <input type="text" class="form-control" id="txtUpdtTaskName" name="UpdtTaskName" value="@proj.PMTaskName" />
+                                <span id="lblUpdttaskName" style="color:red"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="submit d-flex justify-content-center w-100">
+                <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnPmUpdate">Save</button>
+                <button type="button" class="btn btn-secondary pointer" id="cancelPMModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+      function CheckPmUpdateAvailability(TaskName) {
+        var _CheckTask = TaskName;
+        var _status = true;
+        $.ajax({
+            type: 'Get',
+            url: '@Url.Action("CheckTaskAvailabilty", "Admin")',
+            data: {
+                TaskName: _CheckTask
+            },
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                if (response == false) {
+                    _status = false;
+                }
+            },
+            error: function () {
+            },
+        });
+        return _status;
+    }
+
+    $("#txtUpdtTaskcategory").select2(
+    );
+
+    function ResetUpdatePm() {
+        $('#accordion2').load('#accordion2');
+        $("#txtUpdtTaskcategory").val(0)
+        $("#txtUpdtTaskName").val('')
+        $("#txtUpdtEstdHours").val('')
+        $("#lblUpdtaskCategory").html("").show();
+        $("#lblUpdtEstdHours").html("").show();
+        $("#lblUpdttaskName").html("").show();
+        $('#EditPMModal').modal('hide')
+        $('.modal-backdrop').remove();
+    }
+
+    $('button[data-dismiss="modal"]').click(function () {
+        $(this).parent().parent().parent().parent().modal('hide');
+        ResetUpdatePm();
+    })
+
+    function TaskEstHrs() {
+        var status = true
+        var txtEstimated = $("#txtUpdtEstdHours").val();
+        var filter = /^([0-9]{1,2}):[0-5][0-9]$/
+        if (!filter.test(txtEstimated)) {
+            status = false;
+        }
+        return status;
+    }
+
+    $('#txtUpdtEstdHours').on('keypress', function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 58)) {
+            event.preventDefault();
+            $("#lblUpdtEstdHours").html("Time Only").show().fadeOut(5000);
+        }
+
+    });
+
+    $('#txtEstdHours').keyup(function (event) {
+        this.value = this.value
+            .replace(/[^\d:]/g, '')             // numbers and decimals only
+            .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at the beginning
+            .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+            //.replace(/(\:[\d]{2})./g, '$1');    // not more than 4 digits after decimal
+            .replace(/(\:[0-5][0-9]{1})./g, '$1');
+
+    });
+
+    $('#cancelPMModal').click(function () {
+        $('#addPM').modal('hide');
+    });
+
+    $("#btnPmUpdate").on("click", function () {
+        var EstdHours = $("input[name='UpdtESTDHours']").val();
+        EstdHours = EstdHours.replace(":", ".");
+        var TaskName = $("input[name='UpdtTaskName']").val();
+        var TaskCategory = $("select[name='UpdtTaskCategory'] option:selected").val().trim();
+        var Id = $("input[name='UpdatePMId']").val();
+
+        var _EstUpdtdHours = _TaskUpdtName = _TaskUpdtCategory = false;
+
+        if (TaskCategory == 0) {
+            _TaskUpdtCategory = true;
+            $("#lblUpdtaskCategory").html("Please select the Task Category").show();
+        }
+        else {
+            $("#lblUpdtaskCategory").html("").show();
+        }
+        if (TaskName == "") {
+            _TaskUpdtName = true;
+            $("#lblUpdttaskName").html("Please enter the TaskName").show();
+        }
+        else {
+            $("#lblUpdttaskName").html("").show();
+
+        }
+        if (EstdHours == "") {
+            _EstUpdtdHours = true;
+            $("#lblUpdtEstdHours").html("Please enter the Estd Hours").show();
+        }
+        else {
+            $("#lblUpdtEstdHours").html("Please enter the Estd Hours").show();
+        }
+        if (TaskEstHrs() == false) {
+            $("#lblUpdtEstdHours").html("Invalid Est hours").show().fadeOut(5000);
+        }
+        else {
+            if (EstdHours == "") {
+                $("#lblUpdtEstdHours").html("Please enter the Estd Hours").show();
+            }
+            else {
+                $("#lblUpdtEstdHours").html("").show();
+            }
+        }
+        if (CheckPmUpdateAvailability(TaskName) == false) {
+            $("#lblUpdttaskName").html("Please re-enter the TaskName").show();
+        }
+        else {
+            if (TaskName == "") {
+                $("#lblUpdttaskName").html("Please enter the TaskName").show();
+            }
+            else {
+                $("#lblUpdttaskName").html("").show();
+
+            }
+        }
+        if (_EstUpdtdHours == false && _TaskUpdtName == false && _TaskUpdtCategory == false && CheckPmUpdateAvailability(TaskName) == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdatePmTaskCreation", "Admin")',
+                data: {
+                    EstdHours: EstdHours,
+                    TaskCategory: TaskCategory,
+                    TaskName: TaskName,
+                    Id:Id
+                },
+                success: function (response) {
+                    if (response == "success") {
+                        ResetUpdatePm();
+                    }
+                    else {
+                        $("#btnPMCreate").prop('disabled', true);
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+</script>

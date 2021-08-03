@@ -1,0 +1,459 @@
+﻿@{
+   ViewBag.Title = "ProgressEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw==" crossorigin="anonymous" />
+
+<style>
+    .col-md-6.mb-3 {
+        height: 85px;
+    }
+
+    span#lblEstdHours {
+        position: relative;
+        top: -20px;
+    }
+
+    .section-lt {
+        border-radius: 10px;
+    }
+
+    #calendar, #calendar2, #calendar3, #calendar4 {
+        position: absolute;
+        top: 44%;
+        left: 85%;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
+
+    .datepicker {
+        width: 220px;
+        height: 210px;
+    }
+
+    .table-condensed {
+        width: 209px;
+        height: 206px;
+    }
+</style>
+
+<ul class="flexbox flex-1 nav navbar-toolbar">
+    <li>
+        <a class="link" href="index.html">
+            <i class="fa fa-arrow-circle-o-left" aria-hidden="true" id="btnback"></i>&nbsp;&nbsp; Back
+        </a>
+    </li>
+</ul>
+
+<div class="page-content fade-in-up">
+    <div class="bg-white section-lt">
+        <div class="form-row py-0">
+            <div class="col-lg-12">
+                <div class="ibox task-detail ">
+                    <div class="ibox-body m-0 p-0 pm">
+                        <table class="table table-borderless mb-0">
+                            <thead>
+                                <tr>
+                                    <td scope="col" width="40%">TASK</td>
+                                    <td scope="col" width="15%">STATUS</td>
+                                    <td scope="col" width="20%">TIME</td>
+                                    <td scope="col" width="20%">OWNER</td>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.GetPM)
+                                {
+                                <tr>
+                                    <td hidden><input type="hidden" value="@item.Id" id="Pmid" /></td>
+                                    <td scope="row" data-toggle="tooltip" title="@item.Task">@item.Task</td>
+                                    <td scope="row" data-toggle="tooltip" title="@item.Status">@item.Status</td>
+                                    <td data-toggle="tooltip" title="@item.ActualDate"><i class="fa fa-circle schedule" aria-hidden="true"></i>&nbsp; @item.ActualDate</td>
+                                    <td data-toggle="tooltip" title="@item.Owner">@item.Owner</td>
+
+                                    @*<td><button type="button" class="btn btn-primary order-1 ml-2 pointer opacity2"><i class="fa fa-check-circle-o" aria-hidden="true"></i>&nbsp;Mark as complete</button></td>*@
+
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row py-1 ">
+            <div class="col-lg-12">
+                <ul class="m-0 p-0 sec-project">
+                    <li class="resource-planning">
+                        <div class="i-box">
+                            <div class="ibox-body">
+                                <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link  title-project active" data-toggle="tab" href="#details" role="tab" aria-controls="details">Details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project comments-bdg" data-toggle="tab" href="#comments" role="tab" aria-controls="comments">Comments<sup class="badge badge-primary table-badge">4</sup></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-line"></div>
+        </div>
+        <div class="d-flex">
+            <div class="tab-content w-100">
+                <div class="tab-pane active" id="details" role="tabpanel">
+                    <div class="d-flex details-tabel">
+                        <div class="col-lg-6 form-details">
+                            <form class="needs-validation" novalidate>
+                                @foreach (var item2 in ViewBag.GetPM)
+                                {
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">BUILDING BLOCK</label>
+                                        <h6><strong>@item2.BuildingBlock</strong></h6>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">ROLE</label>
+                                        <h6><strong>@item2.Role</strong></h6>
+                                    </div>
+                                </div>
+                                <div class="row" id="Planned">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">PLANNED START DATE</label>
+                                        <div class="form-group mb-4">
+                                            @if (item2.PlanedDate != null)
+                                            {
+                                                <input type="text" id="PlannedStDate" class="fa fa-calendar form-control _Date" value="@item2.PlanedDate">
+                                                //<span class="fa fa-calendar" id="calendar"></span>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="PlannedStDate" class="fa fa-calendar form-control _Date" value="">
+                                                //<span class="fa fa-calendar" id="calendar"></span>
+                                            }
+                                            <span id="lblPlannedStDate" style="color:red;display:none"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">PLANNED END DATE</label>
+                                        <div class="form-group mb-4">
+                                            @if (item2.PlanedEn_Date != null)
+                                            {
+                                                <input type="text" id="PlannedEnDate" class="fa fa-calendar form-control _Date" value="@item2.PlanedEn_Date">
+                                                //<span class="fa fa-calendar" id="calendar2"></span>
+                                            }
+                                            else
+                                            {
+                                                <input type="text" id="PlannedEnDate" class="fa fa-calendar form-control _Date" value="">
+                                                //<span class="fa fa-calendar" id="calendar2"></span>
+                                            }
+                                            <span id="lblPlannedEnDate" style="color:red;display:none"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="Actual">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">ACTUAL START DATE</label>
+                                        <div class="form-group mb-4">                                            
+                                            <input type="text" class="form-control _Date" id="ActStDt" value="@item2.ActualDate">
+                                            <span class="fa fa-calendar" id="calendar3"></span>
+                                            <span id="lblActStDt" style="color:red;display:none"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">ACTUAL END DATE</label>
+                                        <div class="form-group mb-4">
+                                            <input type="text" id="ActEnDt" class="form-control _Date" value="@item2.ActualEn_Date">
+                                            <span class="fa fa-calendar" id="calendar4"></span>
+                                            <span id="lblActEnDt" style="color:red;display:none"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">ESTIMATED HOURS</label>
+                                        <div class="form-group mb-4">
+                                            <input type="text" class="form-control" id="EstHours" value="@item2.EST_hrs">
+                                            <span id="lblEstimated" style="color:red;display:none"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="">Status</label>
+                                        <div class="form-group mb-4 ">
+                                            <select id="drpStatus" class="form-control">
+                                                @foreach (var item1 in ViewBag.GetStatus)
+                                                {
+                                                    if (item2.Status == item1.StatusName)
+                                                    {
+                                                        <option value="@item1.Id" selected>@item1.StatusName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item1.Id">@item1.StatusName</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span class="" id="lblStatus" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row submit d-flex justify-content-left w-100">
+                                    <button type="button" class="btn btn-primary ml-2 pointer opacity" id="btnSavePm">Save</button>
+                                    <button type="button" class="btn btn-outline-secondary pointer">Cancel</button>
+                                </div>
+                                }
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="comments" role="tabpanel">
+                    comments.....
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<script>
+
+    $(document).ready(function () {
+
+        //Get_Status();
+        var User = '@Session["UserType"]';
+        if (User != 'Project Manager') {
+            $('#Planned').addClass('opacity2');
+            $('#Actual').addClass('');
+            //$("#PlannedStDate").prop("disabled",true);
+            //$("#PlannedEnDate").prop("disabled",true);
+            //$('#calendar3').click(function () {
+            //    $("#ActStDt").focus();
+            //});
+            //$('#calendar4').click(function () {
+            //    $("#ActEnDt").focus();                
+            //});
+        }
+        else {
+            $('#Planned').addClass('');
+            $('#Actual').addClass('opacity2');
+            //$("#ActStDt").prop("disabled",true);
+            //$("#ActEnDt").prop("disabled",true);
+            //$('#calendar').click(function () {
+            //    $("#PlannedStDate").focus();
+            //});
+
+            //$('#calendar2').click(function () {
+            //    $("#PlannedEnDate").focus();
+            //});
+        }
+        $("._Date").keypress(function (e) {
+                e.preventDefault();            
+        });
+        //$('#calendar2').datepicker({
+        //    minDate: '21/11/2020'
+        //});
+          $('#PlannedStDate').datepicker({
+                duration: "slow",
+                //dateFormat: "dd/mm/yy",
+                autoSize: false,
+                changeYear: true,
+                changeMonth: true,
+                showButtonPanel: false,
+                showWeek: false,
+                showButtonPanel: true,
+              onClose: function (selectedDate) {
+                  debugger
+                    $("#PlannedEnDate").datepicker("option", "minDate", selectedDate);
+                },
+            })
+
+     });
+
+     
+    function Get_Status(){        
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetStatus","Transaction")',
+            success: function (response) {
+                var status = $("#drpStatus");
+                status.empty();
+                status.append($('<option/>', {
+                    value: 0,
+                    text: '--Select Status--'
+                }));
+                $.each(response, function (index, val) {
+                    status.append($('<option/>', {
+                        value: val.Id,
+                        text: val.StatusName
+                    }));
+                });
+
+            }
+        });
+    }
+    $("#PlannedStDate,#PlannedEnDate,#ActStDt,#ActEnDt").datepicker({
+        format: 'dd/mm/yyyy'
+    });
+    //$('#calendar').click(function () {
+    //    $("#PlstDT").focus();
+    //});
+
+    //$('#calendar2').click(function () {
+    //    $("#PlannedEnDate").focus();
+    //});
+    //$('#calendar3').click(function () {
+    //    $("#ActStDt").focus();
+    //});
+    //$('#calendar4').click(function () {
+    //    $("#ActEnDt").focus();
+    //});
+
+
+    $('#EstHours').on('keypress', function (e) {
+        if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 58)) {
+            event.preventDefault();
+            $("#lblEstdHours").html("Time Only").show().fadeOut(5000);
+        }
+    });
+
+
+    $('#EstHours').keyup(function (event) {
+        this.value = this.value
+            .replace(/[^\d:]/g, '')             // numbers and decimals only
+            .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at the beginning
+            .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+            //.replace(/(\:[\d]{2})./g, '$1');    // not more than 4 digits after decimal
+            .replace(/(\:[0-5][0-9]{1})./g, '$1');
+
+    });
+    function TaskEstHrs(Estimated) {
+        var Status = true;
+        var filter = /^([0-9]{1,2}).[0-5][0-9]$/
+        var filter1 = /^(00.[0-5][1-9]|0.[0-5][1-9]|00.[1-5][0-9]|0.[1-5][0-9]|0[1-9]+[.][0-5][0-9]|[1-9]+[.][0-5][0-9]|[1-9][0-9]+[.][0-5][0-9])$/
+        if (!filter.test(Estimated)) {
+            Status = false;
+        }
+        else if (!filter1.test(Estimated)) {
+           Status = false;
+        }
+        return Status;
+    }
+   
+    $("#btnSavePm").on("click", function () {
+        
+        var id = $("#Pmid").val();
+        var status = $("#drpStatus").val();;
+        var Estimated = $("#EstHours").val();; 
+        Estimated = Estimated.replace(/:/g, ".");
+        var PlannedStDate = $("#PlannedStDate").val();
+        var PlannedEnDate = $("#PlannedEnDate").val();        
+        var ActStDt = $("#ActStDt").val();
+        var ActEnDt = $("#ActEnDt").val();
+
+        var model = {
+            Id:id,
+            StatusId:status,
+            EST_hours:Estimated,
+            PlanedDate:PlannedStDate,
+            PlanedEn_Date:PlannedEnDate,
+            ActualDate:ActStDt,
+            ActualEn_Date:ActEnDt 
+        }
+        var status_ = EST_hours_ = PlannedStDate_ = PlannedEnDate_ = ActStDt_ = ActEnDt_ = false;
+       
+        if (status == 0) {
+            status_ = true;
+            $("#lblStatus").html("Please Select the Status").show();
+        } else {
+            $("#lblStatus").html("").show();
+        }
+
+        if (Estimated == "") {            
+            EST_hours_ = true;
+            $("#lblEstimated").html("Please enter Est hours").show();
+        }
+        else if (TaskEstHrs(Estimated) == false) {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Invalid Est hrs").show();
+        }
+        else {
+            $("#lblEstimated").html("").show();
+        }
+
+        if (PlannedStDate == "") {
+            PlannedStDate_ = true;
+            $("#lblPlannedStDate").html("Please Enter the Planned Start Date").show();
+        }
+        else {
+            $("#lblPlannedStDate").html("").show();
+        }
+
+        if (PlannedEnDate == "") {
+            PlannedEnDate_ = true;
+            $("#lblPlannedEnDate").html("Please Enter the Planned End Date").show();
+        }
+        else {
+            $("#lblPlannedEnDate").html("").show();
+        }
+
+        if (ActStDt == "") {
+            ActStDt_ = true;
+            $("#lblActStDt").html("Please Enter the Actual Start Date").show();
+        }
+        else {
+            $("#lblActStDt").html("").show();
+        }
+
+        if (ActEnDt == "") {
+            ActEnDt = true;
+            $("#lblActEnDt").html("Please Enter the Actual End Date").show();
+        }
+        else {
+            $("#lblActEnDt").html("").show();
+        }
+
+        if (status_ == false && EST_hours_ == false && PlannedStDate_ ==false && PlannedEnDate_ ==false && ActStDt_ ==false && ActEnDt_ == false) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SubmitProgressMonitor","Transaction")',
+                async: false,
+                data: { projectMonitor:model },
+                success: function (response) {
+
+                    if (response == true) {
+                        Notiflix.Notify.Success('Saved successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                         var url = '@Url.Action("Index","Transaction")';
+                        window.location = url;
+                        //RefreshProjectMonitor();
+                    }
+                    else {
+                        Notiflix.Notify.failure('Not Saved!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
+    });
+   
+    $("#btnback").click(function () {
+        var url = '@Url.Action("Index","Transaction")';
+        window.location = url;
+    });
+
+    
+
+</script>

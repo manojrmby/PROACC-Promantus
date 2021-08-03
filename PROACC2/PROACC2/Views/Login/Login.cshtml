@@ -1,0 +1,457 @@
+﻿@model PROACC2.BL.Model.UserModel
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="follow,index">
+    <meta name="description" content="">
+    <meta name="author" content="ProAcc">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - PROAcc Application</title>
+    <!-- Favicons -->
+    <link href="~/assets/img/logos/Logo_Arrow.png" rel="icon">
+    <!-- GLOBAL MAINLY STYLES-->
+
+
+
+    <link href="~/Assets/Notiflix/notiflix-2.3.1.min.css" rel="stylesheet" />
+    <script src="~/Assets/Notiflix/notiflix-2.3.1.min.js"></script>
+    <script src="~/Assets/Notiflix/notiflix-aio-2.3.1.min.js"></script>
+    <script>
+        Notiflix.Notify.Init({
+            width: '280px',
+            position: 'left-bottom',
+            opacity: 1,
+            fontFamily: "sans-serif",
+            fontSize: "15px",
+            distance: "2px",
+            borderRadius: "10px",
+        });
+    </script>
+    <style>
+        .btn-signin:hover {
+            font-size: large !important;
+        }
+
+        .bg-lightgray {
+            background-color: #e3e6df !important;
+        }
+    </style>
+
+    @Styles.Render("~/Content/css/Layout")
+    @Scripts.Render("~/bundles/Scripts/jquery")
+
+
+</head>
+<body class="fixed-navbar">
+
+
+    <div class="page-wrapper bg-darkgray" id="divReload">
+        <div id="" class="login">
+            <!-- START PAGE CONTENT-->
+            <div id="compass"></div>
+
+            <section class="section content-login">
+                @using (Html.BeginForm("Validate", "Login"))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="container">
+                        <div class="d-flex align-items-center bg-lightgray" style="color: #2f3d53;">
+                            <div class="col-lg-6 order-1 bg-lightgray padding5 slider-log text-center d-flex align-items-center" id="carousel-login">
+                                <div class="">
+                                    <h5 class="mb-md-5 mb-sm-0">
+                                        <strong>Welcome To ProAcc..!</strong>
+                                        <br />
+                                        <br />
+                                        <strong>SAP S/4HANA Migration</strong>
+                                    </h5><br />
+                                    <div class="carousel-slider">
+                                        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                                            <ol class="carousel-indicators">
+                                                <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                                                <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                                                <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                                            </ol>
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img src="~/assets/img/AiConsult1.png" class="d-block w-100 img-responsive" alt="...">
+                                                    <!-- <div class="carousel-caption d-none d-md-block">
+                                                    <h5>First slide label</h5>
+                                                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                                                    </div> -->
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="~/assets/img/digital-1.png" class="d-block w-100 img-responsive" alt="...">
+                                                    <!-- <div class="carousel-caption d-none d-md-block">
+                                                    <h5>Second slide label</h5>
+                                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                                    </div> -->
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="~/assets/img/personal-business.png" class="d-block w-100 img-responsive" alt="...">
+                                                    <!-- <div class="carousel-caption d-none d-md-block">
+                                                    <h5>Third slide label</h5>
+                                                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                            <!-- <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                            </a> -->
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <a>&nbsp;A Lego brick approach with automation and step by step follow-up sequence </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 r bg-white sec-formlogin padding5" id="">
+                                <div class="ibox w-100">
+                                    <div class="row logo js-tilt">
+                                        <img class="centered" src="~/assets/img/logos/Logowhite.png" width="50%;">
+                                    </div>
+                                    <div class="ibox-head d-flex justify-content-center border-0 ">
+                                        <div class="ibox-title text-center semibold">
+                                            <h5 class="font-weight-bold">Login</h5>
+                                        </div>
+                                    </div>
+
+                                    <div class="ibox-body">
+                                        <form class="login100-form validate-form">
+                                            <div class="form-group">
+                                                <label for="">User Name</label>
+                                                <input type="text" name="Username" class="form-control" id="Username" aria-describedby="" placeholder="User Name">
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label for="">Password</label>
+                                                <input type="password" name="Password" class="form-control" id="Password" aria-describedby="" placeholder="Password">
+                                            </div>
+                                            <span class="d-flex justify-content-end forgot-password"><a href="javascript:;" id="FwdPwd">Forgot password</a></span>
+                                            <div class="submit mt-4">
+                                                <button class="btn btn-primary pointer btn-signin fa  spinner-border" id="loginclick" type="submit" onclick="callme();" role="status">
+                                                    Sign In
+                                                </button>
+                                            </div>
+                                            @if (TempData["Message"] != null)
+                                            {
+                                                <span style="color: red;">@TempData["Message"].ToString()</span>
+                                            }
+
+                                            <input type="hidden" name="ReturnUrl" value="@Request.QueryString["ReturnUrl"]" />
+                                        </form>
+                                    </div>
+
+                                    <div class="clogo mt-4 text-left">
+                                        <p class="m-0" style="padding-left: 8px;">A product of</p>
+                                        <img class="max-height50 img-responsive" src="~/assets/img/promantus-new-logo.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </section>
+            <!-- END PAGE CONTENT-->
+            <!-- <footer class="page-footer text-center">
+            <div class="font-13 ">2020 © <b>ProACC</b> - All rights reserved</div>
+            <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+            </footer> -->
+
+
+        </div>
+    </div>
+    <!----------Forgot Password------------->
+    <div id="FgPwd" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center w-100 semibold">Forgot Password</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnFgtClose">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row bg-white">
+                        <div class="ibox w-100">
+                            <div class="ibox-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="">User Name<span id="Namestar" style="color:red">*</span></label>
+                                        <input type="text" class="form-control" id="txtName" name="Name" placeholder="User Name" />
+                                        <span id="lblName" style="color:red"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Email<span id="EmailIdstar" style="color:red">*</span></label>
+                                        <input class="form-control" id="EmailId" name="Emailid" placeholder="Email" />
+                                        <span id="lblEmailFgt" style="color:red"></span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="submit d-flex justify-content-center w-100">
+                        <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnForgot">Submit</button>
+                        <button type="button" class="btn btn-secondary pointer" id="cancelForgotModal" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----------Forgot Password------------->
+    <!-- BEGIN PAGA BACKDROPS-->
+    @*<div class="sidenav-backdrop backdrop"></div>
+        <div class="preloader-backdrop">
+            <div class="page-preloader">Loading</div>
+        </div>*@
+    @Scripts.Render("~/bundles/Scripts/Layout")
+    @Scripts.Render("~/bundles/Scripts/bootstrap")
+</body>
+</html>
+
+<script>
+    function callme() {
+        //console.log("INN");
+        
+        $('#loginclick').html(
+            `<span class="fa fa-cog fa-spin" role="status" aria-hidden="true"></span> Loading...`
+        );
+        $('#loginclick').css('font-size', 'large !important');
+        // $('#loginclick').prop('disabled', true);
+    }
+   
+    $("#Namestar").hide();
+    $("#EmailIdstar").hide();
+    function checkEmail(emailId) {
+        //var emailId = $("#EmailId").val().trim();
+        var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!regex.test(emailId)) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function Validation() {
+        $("#txtName").val('');
+        $("#EmailId").val('');
+        $("#Namestar").show();
+        $("#lblName").html("Please re-enter User-Name").show();
+        $("#EmailIdstar").show();
+        $("#lblEmailFgt").html("Please re-enter the Email-ID").show();
+    }
+
+    function CheckUserNameEmailAvailabiltiy(Name, EmailId) {
+        var _name = Name;
+        var _email = EmailId;
+        var _status = true;
+        $.ajax({
+            type: 'Get',
+            url: '@Url.Action("CheckUserNameEmailAvailabiltiy", "Login")',
+            data: {
+                Name: _name,
+                EmailId: _email
+            },
+            dataType: "json",
+            async: false,
+            success: function (response) {
+                if (response == false) {
+                    _status = false;
+                }
+            }
+        })
+        return _status;
+    }
+
+    function ResetForgot() {
+        $("#Namestar").hide();
+        $("#EmailIdstar").hide();
+        $("#txtName").val('');
+        $("#EmailId").val('');
+        $("#lblName").html("").show();
+        $("#lblEmailFgt").html("").show();
+
+        $("#FgPwd").modal('hide');
+        $('.modal-backdrop').remove();
+    }
+
+    function Restvalidate() {
+        $("#Namestar").hide();
+        $("#lblName").html("").show();
+        $("#EmailIdstar").hide();
+        $("#lblEmailFgt").html("").show();
+        $("#lblName").html("").show();
+    }
+
+    $("#FwdPwd").click(function () {
+        $("#FgPwd").modal('show');
+    });
+
+    $("#cancelForgotModal,#btnFgtClose").click(function () {
+        ResetForgot();
+    });
+    @*$("#btnForgot").click(function () {
+        var Name=$("#txtName").val();
+        var EmailId = $("#EmailId").val();
+
+        var _Name = _EmailId = false;
+
+        if (Name == "") {
+            _Name = false;
+            $("#Namestar").show();
+            $("#lblName").html("Enter The User-Name").show();
+        }
+        else {
+            $("#Namestar").hide();
+            $("#lblName").html("").show();
+        }
+        if (EmailId == "") {
+            _EmailId = true;
+            $("#EmailIdstar").show();
+            $("#lblEmailFgt").html("Enter the Email-ID").show();
+        }
+        else {
+            $("#EmailIdstar").hide();
+            $("#lblEmailFgt").html("").show();
+        }
+        if (checkEmail() == false) {
+            $("#EmailIdstar").show();
+            $("#lblEmailFgt").html("Kindly re-enter the Email-ID").show();
+        }
+        else {
+            if (EmailId == "") {
+                $("#EmailIdstar").show();
+                $("#lblEmailFgt").html("Enter the Email-ID").show();
+            }
+            else {
+                $("#EmailIdstar").hide();
+                $("#lblEmailFgt").html("").show();
+            }
+        }
+        if (CheckUserNameEmailAvailabiltiy(Name, EmailId) == false) {
+            Validation();
+        }
+        else {
+            if (Name == "" && EmailId == "") {
+                $("#Namestar").show();
+                $("#lblName").html("Enter The User-Name").show();
+                $("#EmailIdstar").show();
+                $("#lblEmailFgt").html("Enter the Email-ID").show();
+            }
+            else {
+                Restvalidate();
+            }
+        }
+        if (_EmailId == false && _Name == false && checkEmail() ==true) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ForgotPassword","Login")',
+                data: {
+                    Name: Name,
+                    EmailId: EmailId
+                },
+                success: function (response) {
+                    if (response == "success") {
+                        ResetForgot();
+                        $('#divReload').load('divReload');
+                    }
+                }
+            });
+
+        }
+    })*@
+
+    $("#btnForgot").click(function () {
+        debugger;
+        var Name=$("#txtName").val();
+        var EmailId = $("#EmailId").val();
+
+        var _Name = _EmailId = false;
+
+        if (Name == "") {
+            _Name = true;
+            $("#lblName").html("Enter The User Name").show();
+        }
+        else {
+            $("#Namestar").hide();
+            $("#lblName").html("").show();
+        }
+        if (EmailId == "") {
+            _EmailId = true;
+            $("#EmailIdstar").show();
+            $("#lblEmailFgt").html("Enter the Email").show();
+        }
+        else if (checkEmail(EmailId)==false) {
+            _EmailId = true;
+            $("#EmailIdstar").show();
+            $("#lblEmailFgt").html("Please Enter The Valid Email").show();
+        }
+        else {
+            $("#EmailIdstar").hide();
+            $("#lblEmailFgt").html("").show();
+        }
+        if (CheckUserNameEmailAvailabiltiy(Name, EmailId) == false) {
+            if (Name == "") {
+                _Name = true;
+                $("#lblName").html("Enter The User Name").show();
+            }
+            else if (EmailId == "") {
+                _EmailId = true;
+                $("#EmailIdstar").show();
+                $("#lblEmailFgt").html("Enter the Email").show();
+            }
+            else {
+                _EmailId = true;
+                _Name = true;
+                $("#lblEmailFgt").html("Name and Email Mismatched").show();
+            }
+        }
+        else {
+            $("#lblName").html(" ").show();
+            $("#lblEmailFgt").html("").show();
+        }
+
+        if (_EmailId == false && _Name == false) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ForgotPassword","Login")',
+                data: {
+                    Name: Name,
+                    EmailId: EmailId
+                },
+                success: function (response) {
+                    if (response == "success") {
+                        Notiflix.Notify.Success('Reset Password Link Sent Successfully..Kindly Check Email!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        ResetForgot();
+                        location.reload();
+                        //$('#divReload').load('divReload');
+                    }
+                    else {
+                        //Validation();
+                        alert("validation Fail");
+                    }
+                }
+            });
+
+        }
+    })
+</script>
+
+

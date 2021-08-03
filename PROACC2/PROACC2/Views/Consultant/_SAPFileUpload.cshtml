@@ -1,0 +1,387 @@
+﻿
+
+<style>
+    .upload-box {
+        border: 2px dashed #0089cc;
+        border-radius: 10px !important;
+        margin: 5%;
+        text-align: center;
+    }
+
+    .fa-cloud-upload {
+        margin: 39px;
+        font-size: 3.5em;
+        color: #0089cc;
+    }
+
+    .dm-uploader {
+        cursor: default;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+        .dm-uploader .btn {
+            position: relative;
+            overflow: hidden
+        }
+
+            .dm-uploader .btn input[type=file] {
+                /* position: absolute;*/
+                top: 0;
+                right: 0;
+                margin: 0;
+                border: solid transparent;
+                width: 100%;
+                opacity: 0;
+                cursor: pointer
+            }
+
+    #btnApiStart, #btnApiCancel {
+        height: 18px;
+    }
+
+    .missing {
+        color: red;
+    }
+
+    .added {
+        color: yellow;
+    }
+
+    .sucess {
+        color: greenyellow;
+    }
+</style>
+
+
+
+
+<!-- Custom styles -->
+@*<link href="~/assets/Test/jquery.dm-uploader.min.css" rel="stylesheet" />*@
+@*<link href="~/assets/Test/styles.css" rel="stylesheet" />*@
+
+
+
+<div class="align-content-center justify-content-center ml-5">
+    <div class="form-row py-1">
+        <div class="col-lg-7">
+            <div class="d-flex">
+                <div class=" px-2 w-85">
+                    <div class="">
+                        <a class="font-strong"> SAP Manual Upload Files</a> - Upload files to start SAP analysis
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-row py-0 pt-1">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-md-3 col-sm-12">
+
+                    <div class="">
+                        <div class="card-header">
+                            SAP File Upload
+                        </div>
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                01.
+                                <span>RFC_FM_Output</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="RFC"></p>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                02.
+                                <span>BillingDocuments</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="BIL"></p>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                03.
+                                <span>OrderDocuments</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="ORD"></p>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                04.
+                                <span>SalesDocuments</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="SAL"></p>
+                            </li>
+                        </ul>
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                05.
+                                <span>ComplexityAnalysis</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="COM"></p>
+                            </li>
+                        </ul> 
+                        <ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                06.
+                                <span>MaterialityScore</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="MAT"></p>
+                            </li>
+                        </ul>
+                        @*<ul class="list-unstyled d-flex flex-column col">
+                            <li class="text-md-left empty">
+                                06.
+                                <span>Purchase Documents</span>
+                                <p class="progress-bar bg-secondary" style="height: 5px;" id="ACT"></p>
+                            </li>
+                        </ul>*@
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12">
+                    <div class="">
+                        <!-- Our markup, the important part here! -->
+                        <div id="drag-and-drop-zone1" class="dm-uploader upload-box p-5">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                            <h4 class="mb-5 mt-5 text-muted">Drag &amp; drop files here</h4>
+
+                            <div class="btn-block mb-5">
+                                <input type="file" id="fileLoader1" name="files1" title="Load File" accept=".pdf,.xlsx,.xls,.doc,.docx" class="hidden" />
+                                <input type="button" class="btn btn-primary" id="btnOpenFileDialog" value="Click to Open !!!" onclick="openfileDialog();" />
+                            </div>
+                        </div><!-- /uploader -->
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="">
+                        <div class="card-header">
+                            Upload File Progress
+                        </div>
+
+                        <ul class="list-unstyled p-2 d-flex flex-column col" id="files1">
+                            <li class="text-muted text-center empty">No files uploaded.</li>
+                        </ul>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="button" class="btn btn-primary" id="btnReset1"><i class="fa fa-recycle" aria-hidden="true"></i><span>&nbsp;&nbsp;Reset</span></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row" style="display:none;">
+            <div class="col-12">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Debug Messages
+                    </div>
+
+                    <ul class="list-group list-group-flush" id="debug">
+                        <li class="list-group-item text-muted empty">Loading plugin....</li>
+                    </ul>
+                </div>
+            </div>
+        </div> <!-- /debug -->
+        <br />
+        <div class="align-content-center justify-content-center">
+            <div class="row" style="margin-left:40px;">
+                <button type="button" class="btn btn-primary btnSAPApiStart" id="btnUpload_SAP"><i class="fa fa-upload" aria-hidden="true"></i><span>&nbsp;&nbsp;Start Analysis</span></button>
+                @*<div class="col-lg-3 d-flex justify-content-center align-items-center w-100 mb-4">
+                    <div class="">
+                        <button type="button" class="btn btn-primary btnSAPApiStart" id="btnUpload_SAP"><i class="fa fa-upload" aria-hidden="true"></i><span>&nbsp;&nbsp;Start Analysis</span></button>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- END PAGE CONTENT-->
+<!-- File item template -->
+<script type="text/html" id="files-template_SAP">
+    <li class="media">
+        <div class="media-body mb-1">
+            <p class="mb-2">
+                <strong>%%filename%%</strong> - Status: <span class="text-muted">Waiting</span>
+            </p>
+            <div class="progress mb-2">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary "
+                     role="progressbar"
+                     style="width: 0%"
+                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
+            <hr class="mt-1 mb-1" />
+        </div>
+    </li>
+</script>
+
+<!-- Debug item template -->
+<script type="text/html" id="debug-template">
+    <li class="list-group-item text-%%color%%"><strong>%%date%%</strong>: %%message%%</li>
+</script>
+
+@*<script src="~/assets/js/Upload/jquery.dm-uploader.min.js"></script>
+<script src="~/assets/js/Upload/UploadScript.js"></script>*@
+<!--Upload-->
+<script>
+   
+
+    var Count = 0;
+    $('#drag-and-drop-zone1').dmUploader({ //
+        url: '@Url.Action("uploadSAPFiles", "Consultant")' + "?InstanceID=" + $("#ProjInstance").val() + "&ProjectID=" + $("#drpProject").val(),
+        maxFileSize: 3000000, // 3 Megs
+        auto: false,
+        //params: {
+        //    InstanceID: $("#ProjInstance").val(),
+        //    date: new Date()
+        //},
+        //data: {},
+        extFilter: ["pdf","xlsx","xls","doc","docx"],
+        queue: true,
+        onDragEnter: function () {
+            // Happens when dragging something over the DnD area
+            this.addClass('active');
+        },
+        onDragLeave: function () {
+            //debugger;
+            // Happens when dragging something OUT of the DnD area
+            this.removeClass('active');
+            $('#btnReset1').show();
+        },
+        onInit: function () {
+            $('#btnReset1').hide();
+            // Plugin is ready to use
+            ui_add_log('Penguin initialized :)', 'info');
+        },
+        onComplete: function () {
+             $('#btnReset1').hide();
+            // All files in the queue are processed (success or error)
+            ui_add_log('All pending tranfers finished');
+            console.log(Count);
+            var url = '@Url.Action("ReadinessCheck", "Home")';
+            if (Count == 6) {
+                Notiflix.Notify.Success('All Files <Strong> Uploaded </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                setTimeout(function () {
+                    window.location.href = url;
+                }, 5000);
+
+                var PhId = "";
+                var PrjId = 0;
+                var InsId = 0;
+                var CustId = 0;
+
+                SessionStorage(CustId, PhId, PrjId, InsId);
+            }
+
+        },
+        onNewFile: function (id, file) {
+            // When a new file is added using the file selector or the DnD area
+            ui_add_log('New file added #' + id);
+            ui_multi_add_file_SAP(id, file);
+        },
+        onBeforeUpload: function (id) {
+
+            // about tho start uploading a file
+            ui_add_log('Starting the upload of #' + id);
+            ui_multi_update_file_status(id, 'uploading', 'Uploading...');
+            ui_multi_update_file_progress(id, 0, '', true);
+        },
+        onUploadCanceled: function (id) {
+            // Happens when a file is directly canceled by the user.
+            ui_multi_update_file_status(id, 'warning', 'Canceled by User');
+            ui_multi_update_file_progress(id, 0, 'warning', false);
+        },
+        onUploadProgress: function (id, percent) {
+            //debugger
+            // Updating file progress
+            ui_multi_update_file_progress(id, percent);
+        },
+        onUploadSuccess: function (id, data) {
+            
+             $('#btnReset1').hide();
+            // A file was successfully uploaded
+            ui_add_log('Server Response for file #' + id + ': ' + JSON.stringify(data));
+            ui_add_log('Upload of file #' + id + ' COMPLETED', 'success');
+
+            var text = data.FileName.toLocaleUpperCase();
+            var New_id = text.substring(0, 3);
+            if (data.Status) {
+                $('#' + New_id).removeClass('bg-primary').addClass('bg-success');
+                ui_multi_update_file_status(id, 'success', 'Upload Complete');
+                ui_multi_update_file_progress(id, 100, 'success', false);
+                Count = Count + 1;
+            }
+            else {
+                $('#btnReset1').show();
+                $('#' + New_id).removeClass('bg-primary').addClass('bg-danger');
+                ui_multi_update_file_status(id, 'danger', 'Upload Failed');
+                ui_multi_update_file_progress(id, 100, 'danger', false);
+                Notiflix.Report.Info('Upload Failed', 'Kindly Check the <Strong>error file highlighted </strong> and try again..!', 'OK', function () { $("#btnReset1").click(); });// ,{ cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                //$('#btnApiCancel').click();
+                //$("#drag-and-drop-zone1").dmUploader("destroy");
+                $('#drag-and-drop-zone1').dmUploader('cancel');
+                Count = 0;
+            }
+
+        },
+        onUploadError: function (id, xhr, status, message) {
+            console.log("In Error...!");
+            ui_multi_update_file_status(id, 'danger', message);
+            ui_multi_update_file_progress(id, 0, 'danger', false);
+        },
+        onFallbackMode: function () {
+            // When the browser doesn't support this plugin :(
+            ui_add_log('Plugin cant be used here, running Fallback callback', 'danger');
+        },
+        onFileSizeError: function (file) {
+            ui_add_log('File \'' + file.name + '\' cannot be added: size excess limit', 'danger');
+        }
+    });
+
+
+    
+</script>
+
+<script>
+    function openfileDialog() {
+        $("#fileLoader1").click();
+    }
+    $(document).ready(function () {
+        //$('#btnUpload_SAP').prop('disabled', true);
+    });
+
+     $('.btnSAPApiStart').on('click', function (evt) {
+        evt.preventDefault();
+        $('#drag-and-drop-zone1').dmUploader('start',6);
+    });
+
+    $('#btnReset1').on('click', function (evt) {
+        //alert("Inside Reset1");    
+        $("#drag-and-drop-zone1").dmUploader("cancel");       
+        $("#drag-and-drop-zone1").dmUploader("reset");       
+        $('.media').remove();
+        $('#files1').find('li.empty').fadeIn();
+         $('#btnReset1').hide();
+        
+    });
+    // $('#files1').on('click', 'button.start', function (evt) {
+    //     evt.preventDefault();
+    //     debugger
+    //    var id = $(this).closest('li.media').data('file-id');
+    //    $('#drag-and-drop-zone1').dmUploader('start', id);
+    // });
+    //$('#files1').on('click', 'button.cancel', function (evt) {
+    //    evt.preventDefault();
+
+    //    var id = $(this).closest('li.media').data('file-id');
+    //    $('#drag-and-drop-zone1').dmUploader('cancel', id);
+    //});
+</script>

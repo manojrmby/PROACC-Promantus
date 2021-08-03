@@ -1,0 +1,797 @@
+﻿
+@{
+    ViewBag.Title = "HomePage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/assets/js/Chart/Chart.bundle.min.js"></script>
+<script src="~/assets/js/HomeScript.js"></script>
+<style>
+    .DashCard {
+        height: calc(100vh - 280px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .title-pro {
+        border-radius: 10px 10px 0px 0px;
+        color: white;
+        width: 13%;
+        padding: .4% 0% 0% 0.4%;
+    }
+</style>
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up flip-card">
+    <!---Top Dashboard Start-->
+    <div class="row py-1">
+        <div class="col-lg-12">
+            <div class="ibox sec-project-consultants bg-transparent">
+                <div class="form-row project-ibox-details ibox-body p-0 pb-4 position-relative">
+                    <div class="col-lg-3 ibox bg-transparent sec-projects">
+
+                        <!-- <div class=""> -->
+                        <div class="ibox-body pl-15 box-projects">
+                            <div class="row align-items-center justify-content-between p-3">
+                                <div class="project-number">
+                                    <h1 class="number mb-0">@ViewBag.DashTop.proj</h1>
+                                    <span>Projects</span>
+                                </div>
+                                @if (Session != null && Session["UserType"] != null)
+                                {
+                                    if (User.IsInRole("Admin"))
+                                    {
+                                        <div class="btn-projects">
+                                            <button type="button" class="btn btn-primary order-1 ml-2 pointer opacity" id="btnAddProject" data-toggle="modal" data-target="#createModal2"> <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Create Project</button>
+                                        </div>
+                                        <div class="modal fadeIn" id="createModal2" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-url='@Url.Action("_CreateProject", "Home")'></div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-lg-3 ibox bg-transparent sec-clients">
+                        <!-- <div class=""> -->
+                        <div class="ibox-body pl-15 box-task">
+                            <div class="row align-items-center justify-content-between p-3">
+
+                                <div class="project-tasks">
+                                    <h1 class="number mb-0">@ViewBag.DashTop.TotalTaskComp</h1>
+                                    <span>Total Tasks done</span>
+                                </div>
+                                <div class="">
+                                    <canvas id="myChart" style="max-height:60px;max-width:120px;"></canvas>
+                                </div>
+
+                                @*<canvas id="myChart"></canvas>*@
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-lg-3 ibox bg-transparent">
+                        <div class="ibox-body pl-15 box-task">
+                            <div class="row align-items-center justify-content-between p-3">
+                                <div class="project-tasks project-client">
+                                    <h1 class="number mb-0">@ViewBag.DashTop.client</h1>
+                                    <span>Customer</span>
+                                </div>
+                                <div class="chart">
+                                    <div class="clients mt-0" id="ClientProfile_Top">
+                                        @*<a id=""></a>*@
+                                        @*<a href="javascript:;"><img src="~/assets/img/consultants/dp4.png"></a>
+                                            <a href="javascript:;"><img src="~/assets/img/consultants/event4.png"></a>
+                                            <a href="javascript:;"><img src="~/assets/img/consultants/dp2.png"></a>
+                                            <a href="javascript:;"><img src="~/assets/img/consultants/dp4.png"></a>
+                                            <a href="javascript:;"><img src="~/assets/img/consultants/dp5.png"></a>*@
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="viewall">
+                                <a href="javascript:;" id="funcViewAll">View All</a>
+                            </div>
+                            <div class="modal fade" id="ViewClient" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog" data-url='@Url.Action("__ViewAllCustomer","Home")'></div>
+
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <div class="col-lg-3 ibox bg-transparent">
+                        <div class="ibox-body pl-15 box-task">
+                            <div class="row align-items-center justify-content-between p-3">
+                                <div class="project-tasks project-client">
+                                    <h1 class="number mb-0">@ViewBag.DashTop.consult</h1>
+                                    <span>Consultants</span>
+                                </div>
+                                <div class="chart">
+                                    <div class="clients mt-0" id="ConsultProfile_Top">
+
+                                        @*<a href="javascript:;"><span class="profileImage"> </span></a>
+                                            <a href="javascript:;"><span><img src="~/assets/img/consultants/event4.png"></span></a>
+                                            <a href="javascript:;"><span class="profileImage"> </span></a>
+                                            <a href="javascript:;"><span><img src="~/assets/img/consultants/event4.png"></span></a>
+                                            <a href="javascript:;"><span class="profileImage"> </span></a>*@
+                                    </div>
+                                </div>
+
+                            </div>
+                            @*<h6>10 Consultants</h6>*@
+                            <div class="viewall">
+                                <a href="javascript:;" id="funConsultantView">View All</a>
+                            </div>
+                            <div class="modal fade" id="ViewConsultant" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog" data-url='@Url.Action("__ViewAllConsultant","Home")'></div>
+
+                        </div>
+                        <!-- </div> -->
+                    </div>
+                    <div class="btn-toggle">
+                        <i class="fa fa-list fa-1x plus-gray pointer" data-toggle="tooltip" aria-hidden="true" title="Switch View" onclick="Dash_Toggle()" id="Togg_"></i>
+                        @*<i class="fa fa-th-large fa-1x plus-gray pointer" data-toggle="tooltip" aria-hidden="true" title="List View" onclick="Dash_Toggle_th()" id="Togg_th"></i>*@
+                    </div>
+                    <!--<div class="col-lg-1 ibox bg-transparent px-0 text-right">-->
+                    <!-- <div class=""> -->
+                    <!--<div class="ibox-body pl-15">-->
+                    <!-- <h6>10 Consultants</h6> -->
+                    <!--</div>-->
+                    <!-- </div> -->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!---Top Dashboard END-->
+    <div class="flip-card-inner">
+        <div id="idDashCard" class="DashCard flip-card-front">
+            <div class="form-row">
+                <div class="col-md-3 project-cards">
+                    <div class="ibox bg-transparent widget-stat">
+                        <div class="ibox-head bg-transparent px-0">
+                            <div class="ibox-title">
+                                <i class="fa" aria-hidden="true"></i>&nbsp;&nbsp;
+                                Assessment
+                            </div>
+
+                            <div class="ibox-tools">
+                                <a class="ibox-collapse opacity">01</a>
+                            </div>
+                        </div>
+                        <hr class="hr_red" />
+                        <div class="ibox-body p-0">
+                            <div id="Assment_Cards">
+                                <a></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 project-cards">
+                    <div class="ibox bg-transparent widget-stat">
+                        <div class="ibox-head bg-transparent px-0">
+                            <div class="ibox-title">
+                                <i class="fa " aria-hidden="true"></i>&nbsp;&nbsp;
+                                Pre-Conversion
+                            </div>
+                            <div class="ibox-tools">
+                                <a class="ibox-collapse opacity">02</a>
+                            </div>
+                        </div>
+                        <hr class="hr_blue" />
+                        <div class="ibox-body p-0">
+                            <div id="Pre-Con_Cards">
+                                <a></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 project-cards">
+                    <div class="ibox bg-transparent widget-stat">
+                        <div class="ibox-head bg-transparent px-0">
+                            <div class="ibox-title">
+                                <i class="fa " aria-hidden="true"></i>&nbsp;&nbsp;
+                                Conversion
+                            </div>
+                            <div class="ibox-tools">
+                                <a class="ibox-collapse opacity">03</a>
+                            </div>
+                        </div>
+                        <hr class="hr_orange" />
+                        <div class="ibox-body p-0">
+                            <!-- <div class="assesment">
+                            <i class="fa " aria-hidden="true"></i>
+                            <h6 class="m-b-5 ml-2 font-strong d-inline">Assesment</h6>
+                            </div> -->
+                            <div id="Con_Cards">
+                                <a></a>
+                            </div>
+                            <!--<div class="card rounded-0 border-0 shadow my-3">
+                            <div class="card-body">
+                                <div class="row d-flex justify-content-between align-items-left px-2">
+                                    <span class="card-title mb-0">Acme Migration Project</span>
+
+
+                                    <div class="progress-sch">
+                                        <span class="p-0 time-sch border-0"> On Schedule&nbsp;&nbsp;<i class="fa fa-circle schedule" aria-hidden="true"></i></span>
+                                    </div>
+                                    <span class="card-text mb-2 d-block w-100 color-gray font-10">Client ACME Corp</span>
+
+                                </div>
+                                <div class="row px-2 d-flex justify-content-between align-items-left">
+                                    <div class="col-md-8">
+                                        <div class="row d-flex justify-content-between align-items-left">
+                                            <div class="">Chart</div>
+                                            <div class="">
+                                                <span class="card-text mb-3 d-block w-100">Task done <br><span class="semibold font-14">25</span>/50</span>
+                                            </div>
+                                        </div>
+                                        <div class="row px-0 color-gray">
+                                            <span class="card-text mb-0 d-block w-100 font-9"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp;1st June, 2020 - 30th Dec 2020</span>
+                                            <span class=" p-0 time-sch w-100 font-9"> Instance: C01</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-0">
+                                        <ul class="project-acme p-0 m-0 text-right">
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp2.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp4.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp5.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <div class="card-plus">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>-->
+                            <!-- <div class="progress mb-1">
+                            <div class="progress-bar " style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                            <!--</div>
+                                </div>
+
+                            </div>
+                            <div class="card rounded-0 border-0 shadow my-3">
+                                <div class="card-body">
+                                    <div class="row d-flex justify-content-between align-items-left px-2">
+                                        <span class="card-title mb-0">Acme Migration Project</span>
+
+
+                                        <div class="progress-sch">
+                                            <span class="p-0 time-sch border-0"> On Delay&nbsp;&nbsp;<i class="fa fa-circle delay" aria-hidden="true"></i></span>
+                                        </div>
+                                        <span class="card-text mb-2 d-block w-100 color-gray font-10">Client ACME Corp</span>
+
+                                    </div>
+                                    <div class="row px-2 d-flex justify-content-between align-items-left">
+                                        <div class="col-md-8">
+                                            <div class="row d-flex justify-content-between align-items-left">
+                                                <div class="">Chart</div>
+                                                <div class="">
+                                                    <span class="card-text mb-3 d-block w-100">Task done <br><span class="semibold font-14">25</span>/50</span>
+                                                </div>
+                                            </div>
+                                            <div class="row px-0 color-gray">
+                                                <span class="card-text mb-0 d-block w-100 font-9"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp;1st June, 2020 - 30th Dec 2020</span>
+                                                <span class=" p-0 time-sch w-100 font-9"> Instance: C01</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 px-0">
+                                            <ul class="project-acme p-0 m-0 text-right">
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp2.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp4.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp5.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <div class="card-plus">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>-->
+                            <!-- <div class="progress mb-1">
+                            <div class="progress-bar " style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                            <!--</div>
+                                </div>
+
+                            </div>-->
+                            @*<div class="add-card">
+                                    <a href="javascript:;"><i class="fa fa-plus-circle fa-1x" aria-hidden="true"></i>&nbsp;&nbsp; Add Card</a>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 project-cards">
+                    <div class="ibox bg-transparent widget-stat">
+                        <div class="ibox-head bg-transparent px-0">
+                            <div class="ibox-title">
+                                <i class="fa " aria-hidden="true"></i>&nbsp;&nbsp;
+                                Post-Conversion
+                            </div>
+                            <div class="ibox-tools">
+                                <a class="ibox-collapse opacity">04</a>
+                            </div>
+                        </div>
+                        <hr class="hr_green" />
+                        <div class="ibox-body p-0">
+                            <!-- <div class="assesment">
+                            <i class="fa " aria-hidden="true"></i>
+                            <h6 class="m-b-5 ml-2 font-strong d-inline">Assesment</h6>
+                            </div> -->
+                            <div id="Post-Con_Cards">
+                                <a></a>
+                            </div>
+                            <!--<div class="card rounded-0 border-0 shadow my-3">
+                            <div class="card-body">
+                                <div class="row d-flex justify-content-between align-items-left px-2">
+                                    <span class="card-title mb-0">Acme Migration Project</span>
+
+
+                                    <div class="progress-sch">
+                                        <span class="p-0 time-sch border-0"> On Schedule&nbsp;&nbsp;<i class="fa fa-circle schedule" aria-hidden="true"></i></span>
+                                    </div>
+                                    <span class="card-text mb-2 d-block w-100 color-gray font-10">Client ACME Corp</span>
+
+                                </div>
+                                <div class="row px-2 d-flex justify-content-between align-items-left">
+                                    <div class="col-md-8">
+                                        <div class="row d-flex justify-content-between align-items-left">
+                                            <div class="">Chart</div>
+                                            <div class="">
+                                                <span class="card-text mb-3 d-block w-100">Task done <br><span class="semibold font-14">25</span>/50</span>
+                                            </div>
+                                        </div>
+                                        <div class="row px-0 color-gray">
+                                            <span class="card-text mb-0 d-block w-100 font-9"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp;1st June, 2020 - 30th Dec 2020</span>
+                                            <span class=" p-0 time-sch w-100 font-9"> Instance: C01</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-0">
+                                        <ul class="project-acme p-0 m-0 text-right">
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp2.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp4.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <img src="~/assets/img/consultants/dp5.png">
+                                            </li>
+                                            <li class="float-none">
+                                                <div class="card-plus">
+                                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>-->
+                            <!-- <div class="progress mb-1">
+                            <div class="progress-bar " style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                            <!--</div>
+                                </div>
+
+                            </div>
+                            <div class="card rounded-0 border-0 shadow my-3">
+                                <div class="card-body">
+                                    <div class="row d-flex justify-content-between align-items-left px-2">
+                                        <span class="card-title mb-0">Acme Migration Project</span>
+
+
+                                        <div class="progress-sch">
+                                            <span class="p-0 time-sch border-0"> On Delay&nbsp;&nbsp;<i class="fa fa-circle delay" aria-hidden="true"></i></span>
+                                        </div>
+                                        <span class="card-text mb-2 d-block w-100 color-gray font-10">Client ACME Corp</span>
+
+                                    </div>
+                                    <div class="row px-2 d-flex justify-content-between align-items-left">
+                                        <div class="col-md-8">
+                                            <div class="row d-flex justify-content-between align-items-left">
+                                                <div class="">Chart</div>
+                                                <div class="">
+                                                    <span class="card-text mb-3 d-block w-100">Task done <br><span class="semibold font-14">25</span>/50</span>
+                                                </div>
+                                            </div>
+                                            <div class="row px-0 color-gray">
+                                                <span class="card-text mb-0 d-block w-100 font-9"><i class="fa fa-calendar" aria-hidden="true"></i> &nbsp;1st June, 2020 - 30th Dec 2020</span>
+                                                <span class=" p-0 time-sch w-100 font-9"> Instance: C01</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 px-0">
+                                            <ul class="project-acme p-0 m-0 text-right">
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp2.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp4.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <img src="~/assets/img/consultants/dp5.png">
+                                                </li>
+                                                <li class="float-none">
+                                                    <div class="card-plus">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>-->
+                            <!-- <div class="progress mb-1">
+                            <div class="progress-bar " style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div> -->
+                            <!--</div>
+                                </div>
+
+                            </div>-->
+                            @*<div class="add-card">
+                                    <a href="javascript:;"><i class="fa fa-plus-circle fa-1x" aria-hidden="true"></i>&nbsp;&nbsp; Add Card</a>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="idDashPrograssBar" class="DashCard flip-card-back">
+
+            <div class="assesment-projects">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="title-pro bg-darkgray">
+                        <a class="pointer" id="Ass_Toggle">
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>&nbsp;&nbsp;
+                            Assessment
+                        </a>
+                    </div>
+
+                </div>
+                <div class="form-row pro-list-table-resource" id="Ass_Div">
+                    <table class="table table-borderless mb-0 project-assign-details">
+                        <thead>
+                            <tr>
+                                <td scope="col"></td>
+                                <td scope="col">Instance</td>
+                                <td scope="col">Project</td>
+                                <td scope="col">Task done</td>
+                                <td scope="col">Date</td>
+                                <td scope="col">Readiness Check</td>
+                                <td scope="col">Team</td>
+                                <td scope="col">status</td>
+                                <td scope="col">Customer</td>
+                                <td scope="col"></td>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white" id="Assment_Prograss">
+                            <tr></tr>
+
+                        </tbody>
+                    </table>
+                    <div class="add-card text-right w-100 py-3">
+                        @*<a href="javascript:;"><i class="fa fa-plus-circle font-16" aria-hidden="true"></i></a>*@
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <br />
+            <!-- pre-conversion -->
+            <div class="preconversion-projects">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="title-pro bg-darkgray">
+                        <a class=" pointer" id="pre_Toggle">
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>&nbsp;&nbsp;
+                            Pre-Conversion
+                        </a>
+                    </div>
+                    <div class="btn-projects d-none">
+                        <button type="button" class="btn btn-primary order-1 ml-2 pointer opacity"><small><i class="fa fa-plus" aria-hidden="true"></i></small> &nbsp;&nbsp;Create Project</button>
+                    </div>
+                </div>
+                <div class="form-row pro-list-table-resource" id="pre_Div">
+                    <table class="table table-borderless mb-0 project-assign-details">
+                        <thead>
+                            <tr>
+                                <td scope="col"></td>
+                                <td scope="col">Instance</td>
+                                <td scope="col">Project</td>
+                                <td scope="col">Task done</td>
+                                <td scope="col">Date</td>
+
+                                <td scope="col">Team</td>
+                                <td scope="col">status</td>
+                                <td scope="col">Customer</td>
+                                <td scope="col"></td>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white" id="Pre_Prograss">
+                            <tr></tr>
+
+                        </tbody>
+                    </table>
+                    <div class="add-card text-right w-100 py-3">
+                        @*<a href="javascript:;"><i class="fa fa-plus-circle font-16" aria-hidden="true"></i></a>*@
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <br />
+            <!-- pre-conversion-ends -->
+            <!-- conversion-starts -->
+            <div class="conversion-projects">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="title-pro bg-darkgray">
+                        <a class="pointer" id="con_Toggle">
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>&nbsp;&nbsp;
+                            Conversion
+                        </a>
+                    </div>
+                    <div class="btn-projects d-none">
+                        <button type="button" class="btn btn-primary order-1 ml-2 pointer opacity"><small><i class="fa fa-plus" aria-hidden="true"></i></small> &nbsp;&nbsp;Create Project</button>
+                    </div>
+                </div>
+                <div class="form-row pro-list-table-resource" id="con_Div">
+                    <table class="table table-borderless mb-0 project-assign-details">
+                        <thead>
+                            <tr>
+                                <td scope="col"></td>
+                                <td scope="col">Instance</td>
+                                <td scope="col">Project</td>
+                                <td scope="col">Task done</td>
+                                <td scope="col">Date</td>
+
+                                <td scope="col">Team</td>
+                                <td scope="col">status</td>
+                                <td scope="col">Customer</td>
+                                <td scope="col"></td>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white" id="Conv_Prograss">
+                            <tr></tr>
+
+                        </tbody>
+                    </table>
+                    <div class="add-card text-right w-100 py-3">
+                        @*<a href="javascript:;"><i class="fa fa-plus-circle font-16" aria-hidden="true"></i></a>*@
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <br />
+            <!-- conversion-ends -->
+            <!-- post-conversion-starts -->
+            <div class="conversion-projects">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="title-pro bg-darkgray">
+                        <a class="pointer" id="post_Toggle">
+                            <i class="fa fa-chevron-down" aria-hidden="true"></i>&nbsp;&nbsp;
+                            Post-Conversion
+                        </a>
+                    </div>
+                    <div class="btn-projects d-none">
+                        <button type="button" class="btn btn-primary order-1 ml-2 pointer opacity"><small><i class="fa fa-plus" aria-hidden="true"></i></small> &nbsp;&nbsp;Create Project</button>
+                    </div>
+                </div>
+                <div class="form-row pro-list-table-resource" id="post_Div">
+                    <table class="table table-borderless mb-0 project-assign-details">
+                        <thead>
+                            <tr>
+                                <td scope="col"></td>
+                                <td scope="col">Instance</td>
+                                <td scope="col">Project</td>
+                                <td scope="col">Task done</td>
+                                <td scope="col">Date</td>
+
+                                <td scope="col">Team</td>
+                                <td scope="col">status</td>
+                                <td scope="col">Customer</td>
+                                <td scope="col"></td>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white" id="Post_Prograss">
+                            <tr></tr>
+
+                        </tbody>
+                    </table>
+                    <div class="add-card text-right w-100 py-3">
+                        @*<a href="javascript:;"><i class="fa fa-plus-circle font-16" aria-hidden="true"></i></a>*@
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <br />
+            <!-- post-conversion-ends -->
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+
+</div>
+<!-- END PAGE CONTENT-->
+<script>
+    function Dash_Toggle() {
+        var a = $('.flip-card-inner');
+        if (a.hasClass("Rotate")) {
+            a.addClass("_Rotate").removeClass("Rotate");
+
+            $('#Togg_').removeClass("fa-th-large").addClass("fa-list");
+        } else {
+            a.addClass("Rotate").removeClass("_Rotate");
+            $('#Togg_').removeClass("fa-list").addClass("fa-th-large");
+
+        }
+
+
+    }
+
+    $("#Ass_Toggle").click(function () {
+        var A = this;
+        Switch_Class(A);
+
+        $('#Ass_Div').toggle("slide");
+    });
+    $('#pre_Toggle').click(function () {
+        var A = this;
+        Switch_Class(A);
+        $('#pre_Div').toggle("slide");
+    });
+    $('#con_Toggle').click(function () {
+        var A = this;
+        Switch_Class(A);
+        $('#con_Div').toggle("slide");
+    });
+    $('#post_Toggle').click(function () {
+        var A = this;
+        Switch_Class(A);
+        $('#post_Div').toggle("slide");
+    });
+    function Switch_Class(A) {
+
+        if ($(A).find('i').hasClass("fa-chevron-down")) {
+            $(A).find('i').removeClass("fa-chevron-down").addClass("fa-chevron-up");
+        }
+        else {
+            $(A).find('i').removeClass("fa-chevron-up").addClass("fa-chevron-down");
+        }
+
+    }
+    //$('#Toggle_Click').addClass()
+    $(document).ready(function () {
+        $('#btnAddProject').click(function () {
+            var modal = $("#createModal2").data();
+            $.get(modal, function (data) {
+                $("#createModal2").html(data);
+                $("#createModal2").modal('show');
+            });
+        });
+        $("#createModal2").on('hide.bs.modal', function () {
+            console.log("MMMMMMMMMMMMM");
+            location.reload();
+        });
+        var cc = @Html.Raw(Json.Encode(ViewBag.Donut_Dash));
+
+
+
+        var Client_Top_Ids =@Html.Raw(Json.Encode(ViewBag.DashTop.ClientIDs));
+        var Client_Top_Image =@Html.Raw(Json.Encode(ViewBag.DashTop.ClientIDs_Image));
+        var Client_Top_Names =@Html.Raw(Json.Encode(ViewBag.DashTop.ClientNames));
+
+
+        var Client_All =@Html.Raw(Json.Encode(ViewBag.DashTop.All_ClientIDs));
+        var User_All =@Html.Raw(Json.Encode(ViewBag.DashTop.All_UserIDs));
+
+        var Consu_Top_Ids =@Html.Raw(Json.Encode(ViewBag.DashTop.ConsuIDs));
+        var Consu_Top_Image =@Html.Raw(Json.Encode(ViewBag.DashTop.ConsuIDs_Image));
+        var Consu_Top_Names =@Html.Raw(Json.Encode(ViewBag.DashTop.ConsuNames));
+
+        var Total_Task =@ViewBag.DashTop.TotalTask;
+        var Total_Task_Comp =@ViewBag.DashTop.TotalTaskComp;
+
+
+        if (Total_Task > 0) {
+            $('#myChart').show();
+            Chat_Top_Fun(Total_Task, Total_Task_Comp);
+            Build_DontCard(cc);
+            if (Client_Top_Ids != "") {
+                Top_Profile(Client_Top_Ids, Client_Top_Image, Client_Top_Names, Consu_Top_Ids, Consu_Top_Image, Consu_Top_Names);
+            }
+            Build_Dynamic_Charts(cc);
+        }
+        else {
+            $('#myChart').hide();
+        }
+
+
+        //$('#Ass_Toggle').click(function () {
+        //    $('#Ass_Div').toggle("slide");
+        //});
+        //$('#pre_Toggle').click(function () {
+        //    $('#pre_Div').toggle("slide");
+        //});
+        //$('#con_Toggle').click(function () {
+        //    $('#con_Div').toggle("slide");
+        //});
+        //$('#post_Toggle').click(function () {
+        //    $('#post_Div').toggle("slide");
+        //});
+
+
+        $("#funcViewAll").click(function () {
+            var modal = $("#ViewClient").data('url');
+            @*var id = '@Session["loginid"]';*@
+            var Usertype = '@Session["UserType"]';
+            if (Usertype == "Admin") {
+                var id2 = Client_All.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewClient").html(data);
+                    $("#ViewClient").modal('show');
+                });
+            }
+            else if (Usertype == "Project Manager") {
+                var id2 = Client_Top_Ids.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewClient").html(data);
+                    $("#ViewClient").modal('show');
+                });
+            }
+            else if (Usertype == "Consultant" || Usertype=="Customer") {
+                var id2 = Client_Top_Ids.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewClient").html(data);
+                    $("#ViewClient").modal('show');
+                });
+            }
+        });
+
+        $("#funConsultantView").click(function () {
+            var modal = $("#ViewConsultant").data('url');
+            var Usertype = '@Session["UserType"]';
+            if (Usertype == "Admin") {
+                var id2 = User_All.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewConsultant").html(data);
+                    $("#ViewConsultant").modal('show');
+                });
+            }
+            else if (Usertype == "Project Manager") {
+                var id2 = User_All.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewConsultant").html(data);
+                    $("#ViewConsultant").modal('show');
+                });
+            }
+            else if (Usertype == "Consultant" || Usertype=="Customer") {
+                var id2 = User_All.split(',');
+                var url = modal + "?id=" + id2;
+                $.get(url, function (data) {
+                    $("#ViewConsultant").html(data);
+                    $("#ViewConsultant").modal('show');
+                });
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $('#idDashCard,#idDashPrograssBar').bind('mousewheel DOMMouseScroll', function (e) {
+        var scrollTo = null;
+
+        if (e.type == 'mousewheel') {
+            scrollTo = (e.originalEvent.wheelDelta * -1);
+        }
+        else if (e.type == 'DOMMouseScroll') {
+            scrollTo = 50 * e.originalEvent.detail;
+        }
+
+        if (scrollTo) {
+            e.preventDefault();
+            $(this).scrollTop(scrollTo + $(this).scrollTop());
+        }
+    });
+</script>

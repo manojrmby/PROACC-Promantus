@@ -1,0 +1,1468 @@
+﻿
+<style>
+
+    .td_colour {
+        background-color: white;
+    }
+
+    .td_color {
+        background-color: #04dc14;
+        color: floralwhite;
+    }
+
+    #td_col {
+        background-color: darkgray;
+        color: floralwhite;
+    }
+
+    #td_co {
+        background-color: darkturquoise;
+        color: floralwhite;
+    }
+
+    #td_c {
+        background-color: forestgreen;
+        color: floralwhite;
+    }
+
+    #td_l {
+        background-color: darkslateblue;
+        color: floralwhite;
+    }
+
+    .td_cl {
+        background-color: gray;
+        color: floralwhite;
+    }
+
+    th, td {
+        padding: 6px 4px;
+        /*background-color: lightgray;*/
+    }
+
+    .td_gray {
+        background-color: lightgray;
+    }
+</style>
+<style>
+    .class_50 {
+        height: calc(100vh - 360px);
+    }
+
+    .S_no {
+        width: 52px;
+    }
+
+    .For_Height {
+        height: calc(98vh - 260px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+<div class="form-row py-2 duration progress-monitor">
+    <!-- <div class="col-lg-12 "> -->
+    <div class="col-lg-11">
+        <ul class="p-0 m-0 localClass nav nav-tabs" data-tabs="tabs">
+            <li data-ref="Landscape1">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#Landscape1" role="tab" aria-controls="Landscape" id="Tab_Landscape1">
+                    Landscape Assessment
+                </button>
+            </li>
+            <li data-ref="Business_Process">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#BusinessProcess1" role="tab" aria-controls="BusinessProcess1" id="Tab_BusinessProcess1">
+                    Business Process Assessment
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-1" id="Tab_Reload">
+        <ul class="p-0 m-0 localClass" data-tabs="">
+            <li>
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="" role="tab" aria-controls="Landscape">
+                    Pull Data
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- </div> -->
+</div>
+
+<div class="tab-content For_Height">
+
+
+    <div class="tab-pane fade-in-up" id="BusinessProcess1" role="tabpanel">
+
+        <div class="form-row py-0 pt-1">
+
+
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head" style=" height:78px">
+                        <div class="ibox-title">
+                            <div>
+                                <input type="checkbox" id="Breakdown_Extractor" value="Breakdown by LOB" checked />&nbsp;<label>Breakdown by LOB</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Analysis_Extractor" value="Complexity Analysis" />&nbsp;<label>Complexity Analysis</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Order_Extractor" value="Enterprise Order" />&nbsp;<label>Enterprise Structure Mining -Order Documents</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Billing_Extractor" value="Enterprise Billing" />&nbsp;<label>Enterprise Structure Mining -Billing Documents</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Sales_Extractor" value="Enterprise Sales" />&nbsp;<label>Sales Documents</label>&nbsp;&nbsp;
+                            </div>
+                            <div>
+                                @*<input type="checkbox" id="Billing" value="Enterprise Billing" />&nbsp;<label>Enterprise Structure Mining -Billing Documents</label>&nbsp;&nbsp;*@
+                                <input type="checkbox" id="Purchase_Extractor" value=" Enterprise Purchase" />&nbsp;<label> Enterprise Structure Mining -Purchase Documents</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Scenario_Extractor" value="Training Scenario" />&nbsp;<label>Training Scenario Recommendations</label>&nbsp;&nbsp;
+                                @*<input type="checkbox" id="Business_Extractor" value="Compatibilty Check" />&nbsp;<label>Business Function - Compatibility checks</label>&nbsp;*@
+                                @*<input type="checkbox" id="MaterialityScore_Extractor" value="Materiality score"/>&nbsp;<label>Materiality Score</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="BreakdownLob_Extractor">
+            <div class="col-lg-12" style="min-height:calc(100% + 100px)">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Breakdown by LOB
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-3" id="Breakdown_Lob">
+                                @*<h6>Summary</h6>
+                                    <div><a>Total no. of modules: <b>14</b></a></div>
+                                    <div><a>No. of modules with high usage: <b>5</b></a></div>
+                                    <div><a>No. of modules with low usage: <b>9</b></a></div>*@
+
+                            </div>
+                            <div class="col-lg-8">
+                                <div id="chartdiv_BusinessProcess" style="height:300px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="ComplexAnalysis_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Complexity Analysis
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                            <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                <thead>
+                                    <tr>
+                                        <td scope="col" width=5% data-toggle="tooltip" title="">S.No</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Company Code">Company Code</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="New G/L (Active)">New G/L (Active)</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Leading ledger 0L Active">Leading ledger 0L Active</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Special Purpose Ledger">Special Purpose Ledger</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Treasury (SWF5_FSCM_CLM)">Treasury (SWF5_FSCM_CLM)</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Treasury (SWF5_FSCM_BNK)">Treasury (SWF5_FSCM_BNK)</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Multi-currency model">Multi-currency model</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="New Asset Accounting">New Asset Accounting</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Business Partner">Business Partner</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="BP Active">BP Active</td>
+                                        <td scope="col" width=8% data-toggle="tooltip" title="Material Ledger">Material Ledger</td>
+                                        <td scope="col" width=5% data-toggle="tooltip" title="Active">Active</td>
+                                    </tr>
+                                </thead>
+                                @*<tbody id="Id_ComplexityAnalysis">
+                                        <tr>
+                                            <td colspan="13" style="text-align:center">
+                                                NO Record found
+                                            </td>
+                                        </tr>
+                                    </tbody>*@
+                                <tbody>
+                                    <tr id="" class="tr_Effect">
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">1</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">FIN_FSCM_BNK</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">1000</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">30</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">BUPA</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">1000</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                    </tr>
+                                    <tr id="" class="tr_Effect">
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">2</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="X">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">FIN_FSCM_BNK</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">3700</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">30</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">BUPA</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">X</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">3700</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="StructureOrder_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Enterprise Structure Mining -Order Documents
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6>Summary</h6>
+                                <div><a>Year of enterprise structure mining <b>2020</b></a></div>
+                                <div><a>No. of company codes used <b>7</b></a></div>
+                                <div><a>No. of Orders created <b>155</b></a></div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" width=10%>S.No</td>
+                                                <td scope="col" width=25%>Company Code</td>
+                                                <td scope="col" width=25%>Controlling Area</td>
+                                                <td scope="col" width=20%>Plant</td>
+                                                <td scope="col" width=20%>Order Category</td>
+                                                <td scope="col" width=20%>No. Of Orders</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_StructureOrder">
+                                            <tr>
+                                                <td colspan="6" style="text-align:center">
+                                                    NO Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="StructureBilling_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Enterprise Structure Mining -Billing Documents
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6>Summary</h6>
+                                <div><a>Year of enterprise structure mining <b>2020</b></a></div>
+                                <div><a>No. of company codes used <b>2</b></a></div>
+                                <div><a>No. of Billing documents created  <b>145</b></a></div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" width=20%>S.No</td>
+                                                <td scope="col" width=20%>Company Code</td>
+                                                <td scope="col" width=20%>Currency</td>
+                                                <td scope="col" width=25%>Billing Category</td>
+                                                <td scope="col" width=20%>Created By user</td>
+                                                <td scope="col" width=30%>No. of Billing Documents</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_StructureBilling">
+                                            <tr>
+                                                <td colspan="6" style="text-align:center">
+                                                    NO Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="StructureSales_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Enterprise Structure Mining -Sales Documents
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6>Summary</h6>
+                                <div><a>Year of enterprise structure mining <b>2020</b></a></div>
+                                <div><a>No. of company codes used <b>7</b></a></div>
+                                <div><a>No. of Sales documents created  <b>131</b></a></div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col">S.No</td>
+                                                <td scope="col">CC to be billed</td>
+                                                <td scope="col">Sales Org.</td>
+                                                <td scope="col">Dist.Channel</td>
+                                                <td scope="col">Division</td>
+                                                <td scope="col">Plant</td>
+                                                <td scope="col">No. of Documents</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_StructureSales">
+                                            <tr>
+                                                <td colspan="7" style="text-align:center">
+                                                    NO Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="StructurePurchase_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Enterprise Structure Mining -Purchase Documents
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <h6>Summary</h6>
+                                <div><a>Year of enterprise structure mining <b>2020</b></a></div>
+                                <div><a>No. of company codes used <b>1</b></a></div>
+                                <div><a>No. of purchase documents created <b>5412</b></a></div>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" width=18% data-toggle="tooltip" title="Company Code">S.No</td>
+                                                <td scope="col" width=18% data-toggle="tooltip" title="Company Code">Company Code</td>
+                                                <td scope="col" width=25% data-toggle="tooltip" title="Purchasing Organization">Purchasing Organization</td>
+                                                <td scope="col" width=10% data-toggle="tooltip" title="Plant">Plant</td>
+                                                <td scope="col" width=20% data-toggle="tooltip" title="Storage Location">Storage Location</td>
+                                                <td scope="col" width=22% data-toggle="tooltip" title="Purchasing Group">Purchasing Group</td>
+                                                <td scope="col" width=25% data-toggle="tooltip" title="No. Of Purchase Documents">No. Of Purchase Documents</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="1000">1000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="1000">1000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="CP01">CP01</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="MS01">MS01</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="006">006</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="1405">1405</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="005">005</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="924">924</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="010">010</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="813">813</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="011">011</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="800">800</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">5</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="008">008</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="620">620</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="007">007</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="300">300</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">7</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="004">004</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="450">450</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">8</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title=""></span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="006">006</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="100">100</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="ScenarioRecomend_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Training Scenario Recommendations
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h6>Summary</h6>
+                                <div><a>Total no. of training  plans recommended <b>18</b></a></div>
+                                <div><a>Total no. of scenario recommended <b>24</b></a></div>
+                                <div><a>Module with most no. of scenarios<b>MM</b></a></div>
+                            </div>
+                            <div class="col-lg-8">
+                                @*<img src="~/Assets/img/Training_Scenario_Recommendations.JPG" />*@
+                                <div id="chartdiv_TrainingScenario"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div class="form-row py-0 pt-1" id="CheckCompatibile_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Business Function - Compatibility checks
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                            <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                <thead>
+                                    <tr>
+                                        <td scope="col" width=10% class="S_no">S.NO.</td>
+                                        <td scope="col" width=25%>Type</td>
+                                        <td scope="col" width=20%>Business Function</td>
+                                        <td scope="col" width=20%>Description</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="" class="tr_Effect">
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_CI_1">HCM_ESS_CI_1</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title=" HCM, ESS for Personal Information">HCM, ESS for Personal Information</span></td>
+                                    </tr>
+                                    <tr id="" class="tr_Effect">
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_WDA_1">HCM_ESS_WDA_1</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="Employee Self Services on WebDynpro ABAP">Employee Self Services on WebDynpro ABAP</span></td>
+                                    </tr>
+                                    <tr id="" class="tr_Effect">
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_WDA_2">HCM_ESS_WDA_2</span></td>
+                                        <td><span class="text-capitalize" data-toggle="tooltip" title="HCM, ESS on Web Dynpro ABAP 2">HCM, ESS on Web Dynpro ABAP 2</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+        <div class="form-row py-0 pt-1" id="StructureMaterialityScore_Extractor">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Materiality Score
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" width=10%>S.No</td>
+                                                <td scope="col" width=25%>Functional Area</td>
+                                                <td scope="col" width=25%>Count</td>
+                                                <td scope="col" width=20%>Percentage</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_StructureMateriality">
+                                            <tr>
+                                                <td colspan="4" style="text-align:center">
+                                                    NO Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="Landscape1" role="tabpanel">
+
+        <div class="form-row py-0 pt-1" id="SystemScan">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            System Scan Report
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <ul class="nav navbar-toolbar sec-left-resource">
+                                    <li><strong>System Information :</strong></li>
+                                    <li>
+                                        <div class="ibox mb-0" style="height:40px">
+                                            @*dropdown-resources*@
+                                            <select name="" id="Drp_Sys_ScanReport" class="form-control" style="max-width:100%">
+                                                <option value="0">--Select--</option>
+                                                <option value="1">CORE SYSTEM DETAILS</option>
+                                                <option value="2">INSTALLED SOFTWARE COMPONENT</option>
+                                                <option value="3">INSTALLED PRODUCT VERSIONS</option>
+                                                <option value="4">SFW5 REPORT OUTPUT</option>
+                                            </select>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-lg-6"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 classcheck" id="sys_details">
+                                @*<h6>Summary</h6>
+                                    <div><a>SID: <b>G10</b></a></div>
+                                    <div><a>SAP ECC Source System Version: <b>SAP ECC EhP7</b></a></div>
+                                    <div><a> NetWeaver Version and SP: <b>740 SPS 16</b></a></div>
+                                    <div><a>Type: <b>Unicode</b></a></div>
+                                    <div><a>Database: <b>MSSQL</b></a></div>
+                                    <div><a>OS: <b>Windows Server 2012</b></a></div>
+                                    <div><a>No. of CPUs: <b>16</b></a></div>
+                                    <div><a>Database Size: <b>512 GB (Used Space:400 GB  Free Space:112 GB)</b></a></div>
+                                    <div><a>Clients: <b>000, 001, 066, 100</b></a></div>*@
+                            </div>
+                            <div class="col-lg-8 classcheck1">
+                                <div class="d-flex pro-list-table" style="height:calc(72vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="SYSTEM_DETAILS" style="display:none">
+                                        <thead id="Id_SAPDirect_head">
+                                            <tr>
+                                                <td scope="col" width=10%>S.No</td>
+                                                <td scope="col" width=25%>Parameter</td>
+                                                <td scope="col" width=25%>Value</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_SAPDirect">
+                                            <tr>
+                                                <td colspan="3" style="text-align:center">
+                                                    NO Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script src="~/assets/js/ReadinessReport_AmChart.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#Tab_Landscape1').click();
+        $('#Tab_Landscape1').addClass("btn-primary");
+
+    });
+
+    $('.localClass li').click(function () {
+
+        var url = $(this).data('ref');
+
+        $('.localClass li button').removeClass('btn-primary');
+        $(this).children("button").addClass("btn-primary");
+
+    });
+
+    async function Tables1(ID, sys_LandScape) {
+        //$("#SYSTEM_DETAILS").hide();
+        //systemScanReport1(ID, sys_LandScape);
+        //BillingDocumentswithRFC(ID, sys_LandScape);
+        //OrderDocumentswithRFC(ID, sys_LandScape);
+        //StructureSaleswithRFC(ID, sys_LandScape);
+
+        //BillingDocuments(ID);
+        //OrderDocuments(ID);
+        //StructureSales(ID);
+
+        //ComplexityAnalysis(ID);
+
+    }
+
+    async function systemScanReport1(ID, sys_LandScape) {
+        
+        $('#load').css("display", "block");
+        $("#SYSTEM_DETAILS").show();
+
+        if (sys_LandScape == true) {
+            Table_SAPDirect_DB(ID,sys_LandScape, '@Url.Action("GetSAPData_Table")', '@Url.Action("summery_sys_report","Home")');
+        } else if (sys_LandScape == false) {
+            SAPDirect(ID, '@Url.Action("GetData","SAP")');
+        }
+    }
+
+    async function BillingDocumentswithRFC(ID, sys_LandScape) {
+        $('#load').css("display", "block");
+        BillingDocuments(ID,sys_LandScape, '@Url.Action("BillingDocuments")');
+        @*if (sys_LandScape == true) {
+             //BillingDocuments(ID);
+            BillingDocuments(ID, '@Url.Action("BillingDocuments")');
+        } else if (sys_LandScape == false) {
+             BillingDocuments(ID, '@Url.Action("GetBillingDocumentsData","SAP")');
+        }*@
+    }
+
+    async function OrderDocumentswithRFC(ID, sys_LandScape) {
+        $('#load').css("display", "block");
+        OrderDocuments(ID,sys_LandScape, '@Url.Action("OrderDocuments")');
+        @*if (sys_LandScape == true) {
+            OrderDocuments(ID, '@Url.Action("OrderDocuments")');
+        } else if (sys_LandScape == false) {
+             OrderDocuments(ID, '@Url.Action("GetOrderDocumentsData","SAP")');
+        }*@
+    }
+
+    async function StructureSaleswithRFC(ID, sys_LandScape) {
+        $('#load').css("display", "block");
+        StructureSales(ID,sys_LandScape,'@Url.Action("SalesDocuments")');
+         @*if (sys_LandScape == 'Manual') {
+             StructureSales(ID, sys_LandScape,'@Url.Action("SalesDocuments")');
+         } else if (sys_LandScape == 'Automation') {
+             StructureSales(ID, '@Url.Action("GetSalesDocumentsData","SAP")');
+        }*@
+    }
+
+    async function StructureMaterialityScorewithRFC(ID, sys_LandScape) {
+         $('#load').css("display", "block");
+         if (sys_LandScape == true) {
+             MaterialityScore(ID, '@Url.Action("MaterialityScoreDocuments")');
+         } else if (sys_LandScape == false) {
+             MaterialityScore(ID, '@Url.Action("GetMaterialityScoreData","SAP")');
+        }
+    }
+
+    async function StructureBreakdownbyLob(ID, sys_LandScape) {
+        $('#load').css("display", "block");
+        BreakdownbyLob(ID, sys_LandScape,'@Url.Action("GetBreakdownbyLob_Bar")');
+         @*if (sys_LandScape == true) {
+             BreakdownbyLob(ID, '@Url.Action("GetBreakdownbyLob_Bar")');
+         } else if (sys_LandScape == false) {
+             BreakdownbyLob(ID, '@Url.Action("GetSAPBreakdownbyLob_Bar","SAP")');
+        }*@
+    }
+
+    function BillingDocuments(ID, sys_LandScape,URL) {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            //async: false,
+            url: URL,
+            data: { Ins: ID,sys_LandScape:sys_LandScape },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+                $("#Id_StructureBilling").empty();
+                var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + S_No + '">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.CompanyCode + '">' + value.CompanyCode + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Currency + '">' + value.Currency + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.FKREL + '">' + value.FKREL + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.BillingCreatedBy + '">' + value.BillingCreatedBy + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.NoofDocuments + '">' + value.NoofDocuments + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_StructureBilling').append(table);
+                });
+            }
+        });
+    }
+
+
+    function OrderDocuments(ID,sys_LandScape,URL) {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            //async: false,
+            url: URL,
+            data: { Ins: ID ,sys_LandScape:sys_LandScape},
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+                $("#Id_StructureOrder").empty();
+                var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + S_No + '">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.ControllingArea + '">' + value.ControllingArea + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.CCbilled + '">' + value.CCbilled + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Plant + '">' + value.Plant + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.DocCategory + '">' + value.DocCategory + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.NoofDocuments + '">' + value.NoofDocuments + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_StructureOrder').append(table);
+                });
+            }
+        });
+
+        //$.ajax({
+        //    cache: false,
+        //    type: "GET",
+        //    url: URL,
+        //    data: { Ins: ID },
+        //    dataType: "json",
+        //    contentType: "application/json; charset=utf-8",
+        //    success: function (Data) {
+
+        //    }
+        //})
+    }
+
+
+    function StructureSales(ID,sys_LandScape,URL) {
+
+         $.ajax({
+            cache: false,
+            type: "GET",
+            //async: false,
+             url: URL,
+             data: { Ins: ID, sys_LandScape:sys_LandScape},
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+             success: function (Data) {
+                 $("#Id_StructureSales").empty();
+                 var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + S_No + '">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.CCbilled + '">' + value.CCbilled + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.SalesOrg + '">' + value.SalesOrg + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.DistChannel + '">' + value.DistChannel + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Division + '">' + value.Division + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Plant + '">' + value.Plant + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.NoofDocuments + '">' + value.NoofDocuments + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_StructureSales').append(table);
+                });
+            }
+         });
+    }
+
+     function ComplexityAnalysis(ID) {
+
+         $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: '@Url.Action("ComplexityAnalysis")',
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+             success: function (Data) {
+                 $("#Id_ComplexityAnalysis").empty();
+                 var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="CompanyCode">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="CompanyCode">' + value.CompanyCode + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="NewGL">' + value.NewGL + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="Leadingledger">' + value.Leadingledger + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="SpecialPurposeLedger">' + value.SpecialPurposeLedger + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="Treasury_SWF5_FSCM_CLM">' + value.Treasury_SWF5_FSCM_CLM + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="Treasury_SWF5_FSCM_BNK">' + value.Treasury_SWF5_FSCM_BNK + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="Multicurrencymodel">' + value.Multicurrencymodel + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="NewAssetAccounting">' + value.NewAssetAccounting + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="BusinessPartner">' + value.BusinessPartner + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="BPActive">' + value.BPActive + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="MaterialLedger">' + value.MaterialLedger + '</span></td>';
+                    table += '<td><span class="" data-placement="top" data-toggle="tooltip" title="Active">' + value.Active + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_ComplexityAnalysis').append(table);
+                });
+            }
+         });
+    }
+
+     function MaterialityScore(ID,URL) {
+
+         $.ajax({
+            cache: false,
+            type: "GET",
+            //async: false,
+            url: URL,
+            data: { Ins: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+             success: function (Data) {
+                 $("#Id_StructureMateriality").empty();
+                 var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + S_No + '">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.FunctionalArea + '">' + value.FunctionalArea + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Count + '">' + value.Count + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Percentage + '">' + value.Percentage + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_StructureMateriality').append(table);
+                });
+            }
+         });
+    }
+
+    function BreakdownbyLob(ID,sys_LandScape,URL) {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: URL,
+            data: { Ins: ID,sys_LandScape:sys_LandScape },
+            success: function (Data) {
+
+                if (Data._List != null) {
+
+                    var Output = Data._List;
+                    var inpName = [];
+                    var inpVal = [];
+                    var inp_percent = [];
+                    var C = 0;
+                    for (var i = 0; i < Output.length; i++) {
+                        inpName.push(Output[i].Name);
+                        //inpVal.push(Output[i]._Value);
+                        inp_percent.push(Output[i].percent);
+                    }
+
+                    labels = inpName;
+                    data_ = inp_percent;
+                    let Data_ = ConvertToJSON(data_, labels);
+
+                    var high_usage = 0;
+                    var low_usage = 0;
+                    for (var i = 0; i < Data_.length; i++) {
+                        if (Data_[i].count > 10) {
+                            high_usage += 1;
+                        }
+                        else {
+                            low_usage += 1;
+                        }
+                    }
+                    $("#Breakdown_Lob").empty();
+                    var summ = '<h6>Summary</h6>';
+                    summ += '<div><a>Total no. of modules: <b>' + Data_.length + '</b></a></div>';
+                    summ += '<div><a>No. of modules with high usage: <b>' + high_usage + '</b></a></div>';
+                    summ += '<div><a>No. of modules with low usage: <b>' + low_usage + '</b></a></div>';
+                    $("#Breakdown_Lob").append(summ);
+
+                    BreakdownbyLob_Bar_Chart(Data_);
+                }
+            },
+            error: function () {
+                alert("Error while Fetching Breakdown by Lob data");
+            }
+        }).done(function (response) {
+            //chart.data = response;
+
+        });
+    }
+
+    function systemScanReport(ID, URL) {
+        $('#load').css("display", "block");
+        var sys_LandScape;
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: URL,
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+                sys_LandScape = Data;
+                @*if (Data == 'Manual') {
+                    Table_SAPDirect_DB(ID, '@Url.Action("GetSAPData_Table")')
+                } else if (Data == 'Automation') {
+                    SAPDirect(ID,'@Url.Action("GetData","SAP")');
+                }*@
+            }
+        });
+
+        Table_SAPDirect_DB(ID,sys_LandScape, '@Url.Action("GetSAPData_Table")','@Url.Action("summery_sys_report","Home")')
+    }
+
+    $("#Drp_Sys_ScanReport").on("change", function () {
+
+        $('#load').css("display", "block");
+        $("#SYSTEM_DETAILS").show();
+        var ID = $('#ProjInstance').val();
+        var val = $("#Drp_Sys_ScanReport").val();
+        if (val == 0) {
+            $("#SYSTEM_DETAILS").hide();
+            $('#load').css("display", "none");
+        }
+        else {
+            systemScanReport(ID, '@Url.Action("GetInstance_LandScape")');
+        }
+
+         //$('#load').css("display", "none");
+    });
+</script>
+
+@*<script>
+
+    am4core.ready(function() {
+
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+
+    // Create chart instance
+    var chart = am4core.create("chartdiv_BusinessProcess", am4charts.XYChart);
+
+    // Add data
+    chart.data = [{
+      "Name": "Financial Accounting - FI",
+      "count": 15
+    }, {
+      "Name": "Sales and Distribution - SD",
+      "count": 13
+    }, {
+      "Name": "Materials Management - MM",
+      "count": 11
+    }, {
+      "Name": "Business Whearehouse - BW ",
+      "count": 10
+    }, {
+      "Name": "Controlling - CO",
+      "count": 8
+    }, {
+      "Name": "Quality Management - QM",
+      "count": 7
+    }, {
+      "Name": "Logistics - General - LO",
+      "count": 7
+    }, {
+      "Name": "Logistics - Execution - LO",
+      "count": 7
+    }, {
+      "Name": "Production Planning and Control - PP",
+      "count": 5
+    }, {
+      "Name": "Cross-Application Components - CA",
+      "count": 5
+    }, {
+      "Name": "Plant Maintenance - PM",
+      "count": 5
+    }, {
+      "Name": "Basis Components - BASIS",
+      "count": 4
+    }, {
+      "Name": "Enterprise Controlling - EC",
+      "count": 3
+    },{
+      "Name": "Service - SV",
+       "count": 2
+    }];
+
+    // Create axes
+
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "Name";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+    //columnTemplate.width = am4core.percent(50)
+
+    categoryAxis.renderer.labels.template.adapter.add("dy", function(dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.calculateTotals = true;
+            valueAxis.min = 0;
+            valueAxis.max = 20;
+            valueAxis.strictMinMax = true;
+            valueAxis.renderer.labels.template.adapter.add("text", function (text) {
+                return text + "%";
+            });
+
+         let label = categoryAxis.renderer.labels.template;
+        label.truncate = true;
+        label.maxWidth = 120;
+        label.tooltipText = "{Name}";
+
+    // Create series
+    var series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "count";
+    series.dataFields.categoryX = "Name";
+    //series.name = "count";
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/]";
+    series.columns.template.fillOpacity = .8;
+
+        //series.calculatePercent = true;
+        //series.dataFields.valueYShow = "changePercent";
+
+    var columnTemplate = series.columns.template;
+    columnTemplate.strokeWidth = 2;
+        columnTemplate.strokeOpacity = 1;
+        columnTemplate.stroke = am4core.color("#FFFFFF");
+
+         columnTemplate.adapter.add("fill", function (fill, target) {
+            return chart.colors.getIndex(target.dataItem.index);
+        })
+
+        columnTemplate.adapter.add("stroke", function (stroke, target) {
+            return chart.colors.getIndex(target.dataItem.index);
+        })
+
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.lineX.strokeOpacity = 0;
+    }); // end am4core.ready()
+    </script>*@
+
+<script>
+    am4core.ready(function () {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("chartdiv_TrainingScenario", am4charts.PieChart);
+
+        // Add data
+        chart.data = [{
+            "country": "Quality Management - QM",
+            "litres": 6
+        }, {
+            "country": "Materials Management - MM",
+            "litres": 12
+        }];
+
+        // Add and configure Series
+        var pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "litres";
+        pieSeries.dataFields.category = "country";
+        pieSeries.slices.template.stroke = am4core.color("#fff");
+        pieSeries.slices.template.strokeWidth = 2;
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+    }); // end am4core.ready()
+</script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#ComplexAnalysis_Extractor").hide();
+        $("#StructurePurchase_Extractor").hide();
+        $("#StructureOrder_Extractor").hide();
+        $("#StructureBilling_Extractor").hide();
+        $("#StructureSales_Extractor").hide();
+        $("#ScenarioRecomend_Extractor").hide();
+        $("#CheckCompatibile_Extractor").hide();
+        $("#StructureMaterialityScore_Extractor").hide();
+    });
+
+     $("#Breakdown_Extractor").on("click", function () {
+         $("#BreakdownLob_Extractor").toggle(this.clicked);
+    });
+    $("#Analysis_Extractor").on("click", function () {
+        $("#ComplexAnalysis_Extractor").toggle(this.clicked);
+    });
+
+    $("#Purchase_Extractor").on("click", function () {
+        $("#StructurePurchase_Extractor").toggle(this.clicked);
+    });
+    $("#Order_Extractor").on("click", function () {
+        $("#StructureOrder_Extractor").toggle(this.clicked);
+
+        if ($("#Order_Extractor").is(':checked')) {
+            var ID = $("#ProjInstance").val();
+            var sys_LandScape;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: ID },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    sys_LandScape = Data;
+                    //if (Data == 'Manual') {
+                    //    sys_LandScape = true;
+                    //}
+                    //else if (Data == 'Automation') {
+                    //    sys_LandScape = false;
+                    //}
+                }
+            });
+            OrderDocumentswithRFC(ID, sys_LandScape);
+        }
+
+    });
+    $("#Billing_Extractor").on("click", function () {
+        $("#StructureBilling_Extractor").toggle(this.clicked);
+
+        if ($("#Billing_Extractor").is(':checked')) {
+            var ID = $("#ProjInstance").val();
+            var sys_LandScape;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: ID },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    sys_LandScape = Data;
+                    //if (Data == 'Manual') {
+                    //    sys_LandScape = true;
+                    //}
+                    //else if (Data == 'Automation') {
+                    //    sys_LandScape = false;
+                    //}
+
+                }
+            });
+            BillingDocumentswithRFC(ID, sys_LandScape);
+        }
+
+    });
+    $("#Sales_Extractor").on("click", function () {
+        $("#StructureSales_Extractor").toggle(this.clicked);
+
+        if ($("#Sales_Extractor").is(':checked')) {
+            var ID = $("#ProjInstance").val();
+            var sys_LandScape;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: ID },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    sys_LandScape = Data;
+                    //if (Data == 'Manual') {
+                    //    sys_LandScape = true;
+                    //}
+                    //else if (Data == 'Automation') {
+                    //    sys_LandScape = false;
+                    //}
+
+                }
+            });
+            StructureSaleswithRFC(ID, sys_LandScape);
+        }
+
+    });
+    $("#Scenario_Extractor").on("click", function () {
+        $("#ScenarioRecomend_Extractor").toggle(this.clicked);
+    });
+    //$("#Business_Extractor").on("click", function () {
+    //    $("#CheckCompatibile_Extractor").toggle(this.clicked);
+    //});
+    $("#MaterialityScore_Extractor").on("click", function () {
+        $("#StructureMaterialityScore_Extractor").toggle(this.clicked);
+
+        if ($("#MaterialityScore_Extractor").is(':checked')) {
+            var ID = $("#ProjInstance").val();
+            var sys_LandScape;
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: ID },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    if (Data == 'Manual') {
+                        sys_LandScape = true;
+                    }
+                    else if (Data == 'Automation') {
+                        sys_LandScape = false;
+                    }
+
+                }
+            });
+            StructureMaterialityScorewithRFC(ID, sys_LandScape);
+        }
+
+
+    });
+
+</script>
+
+<script>
+    $("#Tab_BusinessProcess1").on("click", function () {
+        var ID = $("#ProjInstance").val();
+        breakdownbyLob(ID);
+    });
+    async function breakdownbyLob(ID) {
+        var sys_LandScape;
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: '@Url.Action("GetInstance_LandScape")',
+            data: { Instance: ID },
+            success: function (Data) {
+                sys_LandScape = Data;
+                //if (Data == 'Manual') {
+                //    sys_LandScape = true;
+                //}
+                //else if (Data == 'Automation') {
+                //    sys_LandScape = false;
+                //}
+            },
+            error: function () {
+                alert("Error while Getting data");
+            }
+        }).done(function (response) {
+            //chart.data = response;
+
+        });
+        StructureBreakdownbyLob(ID, sys_LandScape);
+    }
+
+    function BreakdownbyLob_Bar_Chart(Data_) {
+
+        // Create chart instance
+        var chart = am4core.create("chartdiv_BusinessProcess", am4charts.XYChart);
+        // Add data
+        chart.data = Data_;
+
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "Name";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 30;
+        //columnTemplate.width = am4core.percent(50)
+
+        categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+            if (target.dataItem && target.dataItem.index & 2 == 2) {
+                return dy + 25;
+            }
+            return dy;
+        });
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.calculateTotals = true;
+        valueAxis.min = 0;
+        valueAxis.max = 100;
+        valueAxis.strictMinMax = true;
+        valueAxis.renderer.labels.template.adapter.add("text", function (text) {
+            return text + "%";
+        });
+
+        let label = categoryAxis.renderer.labels.template;
+        label.truncate = true;
+        label.maxWidth = 120;
+        label.tooltipText = "{Name}";
+
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+        series.dataFields.valueY = "count";
+        series.dataFields.categoryX = "Name";
+        //series.name = "count";
+        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/]";
+        series.columns.template.fillOpacity = .8;
+
+        //series.calculatePercent = true;
+        //series.dataFields.valueYShow = "changePercent";
+
+        var columnTemplate = series.columns.template;
+        columnTemplate.strokeWidth = 2;
+        columnTemplate.strokeOpacity = 1;
+        columnTemplate.stroke = am4core.color("#FFFFFF");
+
+        columnTemplate.adapter.add("fill", function (fill, target) {
+            return chart.colors.getIndex(target.dataItem.index);
+        })
+
+        columnTemplate.adapter.add("stroke", function (stroke, target) {
+            return chart.colors.getIndex(target.dataItem.index);
+        })
+
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.lineX.strokeOpacity = 0;
+
+    }
+
+
+</script>
+<script>
+    $("#Tab_Reload").on("click", function () {
+        var URL = '@Url.Action("GetSAPTables")';
+        var ID = $("#ProjInstance").val();
+        Notiflix.Confirm.Show(
+            'Alert',
+            'Are you sure want to Pull SAP files',
+            'Yes',
+            'No',
+            function () {
+                ReloadSAPTables(ID, URL);
+            },
+            function () {
+
+            }
+        );       
+
+    });
+    async function ReloadSAPTables(ID, URL) {   
+        $("#load").css("display", "block");
+        $.ajax({
+            //cache: false,
+            type: "POST",
+            //async: false,
+            url: URL,
+            data: { Ins: ID },
+            dataType: "json",
+            //contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response == 'success') {
+                    $("#load").css("display", "none");
+                    Notiflix.Report.Success(
+                        'Alert',
+                        'Data pulled from sever successfully',
+                        'Close',
+                        function () {
+                            location.reload();
+                        },
+                    );                    
+                }                
+            },
+            error: function (e) {
+                alert(e.responseText);
+            }
+        });
+    };
+</script>

@@ -1,0 +1,54 @@
+﻿
+
+<div class="form-row py-1">
+    <div class="col-lg-7">
+        <div class="d-flex">
+            <div class="search-field px-2 w-40">
+                <div class="ibox">
+                    <!-- <div class="ibox-body"> -->
+                    <form class="navbar-search" action="javascript:;">
+                        <div class="rel">
+                            <span class="search-icon"><i class="fa fa-search"></i></span>
+                            <input class="form-control" placeholder="Search Role">
+                        </div>
+                    </form>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            @*<button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnAddPM">Add new PM</button>*@
+        </div>
+    </div>
+</div>
+<div class="d-flex pro-list-table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion Projectbody" id="accordion2">
+        <thead>
+            <tr>
+                <td scope="col" width=25%>Category</td>
+                <td scope="col" width=20%>Estd Hours</td>
+                <td scope="col" width=20%>Task Name</td>
+                <td scope="col" width=10%>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.PmDetail)
+            {
+                <tr>
+
+                    <td><span class="card-title">@item.PMTaskCategory</span></td>
+                    <td><span class="card-title">@item.EST_Hours</span></td>
+                    <td><span class="card-title">@item.PMTaskName</span></td>
+                    <td>
+                        <span class="card-title">
+                            <i class="fa fa-pencil getPMID" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
+                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash" id="delProj" style="cursor:pointer" aria-hidden="true" onclick="DelPM('@item.PMTaskId')"></i><input type="hidden" value="" id="hiddenID" />
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

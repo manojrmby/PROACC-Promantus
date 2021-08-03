@@ -1,0 +1,867 @@
+﻿
+<script src="~/assets/js/Chart/Chart.bundle.min.js"></script>
+<script src="~/assets/js/HomeScript.js"></script>
+<link href="~/Assets/js/summernote/summernote.css" rel="stylesheet" />
+<script src="~/Assets/js/summernote/summernote.js"></script>
+
+
+<style>
+    .chatbox {
+        height: calc(10vh - -120px);
+        overflow-y: scroll;
+    }
+
+        .chatbox::-webkit-scrollbar {
+            display: none;
+        }
+
+    .chatbox {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .scrollGradient {
+        background: linear-gradient(#efeef2 33%, rgba(239,238,242, 0)), linear-gradient(rgba(239,238,242, 0), #efeef2 66%) 0 100%, radial-gradient(farthest-side at 50% 0, rgba(97,86,108, 0.5), rgba(0,0,0,0)), radial-gradient(farthest-side at 50% 100%, rgba(97,86,108, 0.5), rgba(0,0,0,0)) 0 100%;
+        background-repeat: no-repeat;
+        background-attachment: local, local, scroll, scroll;
+        background-size: 100% 42px, 100% 42px, 100% 14px, 100% 14px;
+    }
+
+    
+     /*.modal-body {
+        height: 70vh;
+        overflow-y: auto;
+    }*/
+</style>
+<!-- START PAGE CONTENT-->
+
+<div class="form-row py-1">
+    <div class="col-lg-7">
+
+    </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            <button type="button" class="btn btn-primary  pointer" id="AddIssue" style="display:none" onclick="AddIssue()">Add Issue</button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex pro-list-table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 IssueTrackTable" id="IssueTrackTable">
+        <thead>
+            <tr>
+                <td scope="col">Issue Id</td>
+                <td scope="col">Task</td>
+                <td scope="col">Issue Name</td>
+                <td scope="col">Customer</td>
+                <td scope="col">Project</td>
+                <td scope="col">Instance</td>
+                <td scope="col">Phase</td>
+                <td scope="col">Assignee</td>
+                <td scope="col">Assigned to</td>
+                <td scope="col">Status</td>
+                <td scope="col">Action</td>
+                @*<td scope="col">Issue Id</td>
+                <td scope="col">Status</td>
+                <td scope="col">Issue Description</td>
+                <td scope="col">Category</td>
+                <td scope="col">Priority</td>
+                <td scope="col">Assignee</td>
+                <td scope="col">Raised By</td>
+                <td scope="col">Application Area</td>
+                <td scope="col">Open</td>
+                <td scope="col">Close</td>
+                <td scope="col">Resolution</td>
+                <td scope="col">Action</td>*@
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<div id="addIssueTrack" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addIssue">Add New Issue</h4>
+                <h4 class="modal-title text-center w-100 semibold" id="h4UpdateIssue" style="display:none">Update Issue</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 70vh;overflow-y: auto;">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="hidden" id="txtIssue_ID" />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Issue Name<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="txtIssueName" aria-describedby="">
+                                            <span class="" id="lblIssueName" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Assigned To<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpAssignedTo" name="">
+                                                <option value="0">--Select--</option>
+                                            </select>
+                                            <span class="" id="lblAssignedTo" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Phase<span style="color:red">*</span></label>
+                                            <input id="drphiddenPhase" type="hidden" />
+                                            <select class="form-control drpTextHeight" id="drpPhase" name="">
+                                                <option value="0">--Select--</option>
+                                                @foreach (var item in ViewBag.Phaselist)
+                                                {
+                                                    <option value="@item.Id">@item.PhaseName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblPhase" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Task<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpTaskList" name="">
+                                                <option value="0">--Select--</option>
+                                            </select>
+                                            <span class="" id="lblTaskList" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Comments<span style="color:red">*</span></label>
+                                            @*<textarea class="form-control" id="txtIssueComments" name="" rows="4" cols="50"></textarea>*@
+                                            <textarea class="form-control" id="txtIssueComments" name="editor1"></textarea>
+                                            <span id="lblIssueComments" style="color:red"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnIssueCreate">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="Issuecancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END POPUP-->
+<!--Start Edit POPUP-->
+<div id="EditIssueTrackmodel" class="modal fade" role="dialog">
+    <div class="modal-dialog" id="contentManage">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4UpdateIssue">Update Issue</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <div class="row py-1 ">
+                                <div class="col-lg-12">
+                                    <ul class="m-0 p-0 sec-project">
+                                        <li class="resource-planning">
+                                            <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link  title-project active" data-toggle="tab" href="#details" role="tab" aria-controls="details" id="tab_ITMdetails">Details</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link title-project comments-bdg" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" id="comments-bdg">Comments<sup class="badge badge-primary table-badge"></sup></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bottom-line"></div>
+                            </div>
+
+                            <div class="d-flex">
+                                <div class="tab-content w-100">
+                                    <div class="tab-pane active" id="details" role="tabpanel">
+                                        <div class="d-flex details-tabel">
+                                            <div class="col-lg-12 form-details">
+                                                <form>
+                                                    <input type="hidden" id="txtIssuetrack_Id" />
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="">Issue Name<span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="txtIssueNameEdit" disabled aria-describedby="">
+                                                                <span class="" id="lblIssueName" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Assigned To<span style="color:red">*</span></label>
+                                                                <select class="form-control drpTextHeight" id="SelectAssignedTo" name="">
+                                                                    <option id="drpAssignedToEdit">Select</option>
+                                                                </select>
+                                                                <span class="" id="lblAssignedTo" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Phase<span style="color:red">*</span></label>
+                                                                <input id="drphiddenPhase" type="hidden" />
+                                                                <input type="text" class="form-control" id="drpPhaseEdit" disabled aria-describedby="">
+
+                                                                <span class="" id="lblPhase" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Task<span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="drpTaskListEdit" disabled aria-describedby="">
+                                                                <span class="" id="lblTaskList" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Status<span style="color:red">*</span></label>
+                                                                <select class="form-control drpTextHeight" id="SelectStatus" name="">
+                                                                    <option id="drpStatusEdit">Select</option>
+                                                                </select>
+                                                                <span class="" id="lblStatus" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="bottom-line"></div>
+                                                    <div class="submit d-flex justify-content-center w-100">
+                                                        <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnIssueUpdate">Update</button>
+                                                        <button type="button" class="btn btn-secondary pointer" id="IssueUpdatecancel">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="comments" role="tabpanel">
+                                        <div class="chatbox scrollGradient" id="Chatbox_Id">
+                                        </div>
+                                        <div class="dropdown-divider col-md-6"></div>
+                                        <div class="col-md-12">
+                                            <form class="needs-validation" novalidate>
+                                                <label for="comment">Add Comments:</label>
+                                                @*<textarea class="form-control" rows="3" name="IssueTrackComments" id="IssueTrackComments"></textarea>*@
+                                                <textarea name="editor2" id="IssueTrackComments"></textarea>
+                                                <span class="" id="lblComments" style="color:red;display:none">&nbsp;</span>
+                                                <div class="row" style="margin-left:0px!important">
+                                                    <div class="form-row submit d-flex justify-content-left w-100 py-2">
+                                                        <button type="button" class="btn btn-outline-secondary pointer ml-2" id="IssueTrackComment_Cancel">Cancel</button>
+                                                        <button type="button" class="btn btn-primary ml-2 py-2" id="btnIssueTrackComments">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            @*<label for="comment">Add Comments:</label>
+                                                <textarea class="form-control" rows="3" id="IssueTrackComments"></textarea>
+                                                <div class="bottom-line"></div>
+                                                <div class="d-flex py-2">
+                                                    <button type="button" class="btn btn-primary ml-2" id="btnIssueTrackComments">Save</button>
+                                                </div>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div class="modal-footer">
+                    <div class="submit d-flex justify-content-center w-100">
+                        <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnIssueUpdate">Update</button>
+                        <button type="button" class="btn btn-secondary pointer" id="IssueUpdatecancel">Cancel</button>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+<!--End Edit POPUP-->
+
+<script>
+    //$(document).ready(function () {
+        
+    //    $(document).on('show.bs.modal', '.modal', function (event) {
+            
+    //        var zIndex = 1040 + (10 * $('.modal:visible').length);
+    //        $(this).css('z-index', zIndex);
+    //        setTimeout(function () {
+    //            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+    //        }, 0);
+    //    });
+    //    $(document).on('hidden.bs.modal', '.modal', function () {
+    //        debugger
+    //        var a = ($('.modal:visible').length - 1);
+    //        a && $(document.body).addClass('modal-open');
+    //    });
+    //});
+
+                //$(document).ready(function () {
+                //    var executed = true;
+                //    $(document).on({
+                //        'hidden.bs.modal': function () {
+                //            debugger
+                //            executed = false;
+                //            if ($('.modal:visible').length > 0 && executed == true) {
+
+                //                // restore the modal-open class to the body element, so that scrolling works
+                //                // properly after de-stacking a modal.
+                //                setTimeout(function () {
+                //                    $(document.body).addClass('modal-open');
+                //                }, 0);
+                //            }
+                //        }
+                //    }, '.modal');
+                //});
+                
+
+    $('#IssueTrackComments').summernote({        
+        height: 100,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            //['fontsize', ['fontsize']],
+            //['color', ['color']],
+            //['para', ['ul', 'ol', 'paragraph']],
+            //['height', ['height']],
+            ['insert', ['picture']],
+        ],
+        callbacks: {
+            onImageUpload: function (files) {
+                for (let i = 0; i < files.length; i++) {
+                    UploadImage(files[i],'IssueTrackComments');  
+                }  
+            }  
+        }
+    });
+
+    $('#txtIssueComments').summernote({        
+        height: 100,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['insert', ['picture']],
+        ],
+        callbacks: {
+            onImageUpload: function (files) {
+                for (let i = 0; i < files.length; i++) {
+                    UploadImage(files[i],'txtIssueComments');  
+                }
+            }
+        }
+     });
+
+    $("div.note-editing-area div.note-editable").keypress(function (evt) {
+       var kc = evt.keyCode;
+       var qbQuestion = $('#txtIssueComments').summernote('code');
+       if (kc === 32 && (qbQuestion.length == 0 || qbQuestion == '<p><br></p>')) {
+          event.preventDefault();
+       }
+    });
+
+    function UploadImage(file,id) {
+        var url = '@Url.Action("UploadFile", "IssueTrack")';
+        
+         formData = new FormData();  
+        formData.append("aUploadedFile", file);  
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (FileUrl) {
+                // alert(FileUrl);  
+                var imgNode = document.createElement('img');
+                imgNode.src = FileUrl;
+                $('#'+ id).summernote('insertNode', imgNode);
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $("#AddIssue").hide();
+        IssueTrackTableData();
+        var ins = $("#ProjInstance").val();
+        if (ins != 0) {
+            $("#AddIssue").show();
+        }
+
+    });
+
+    function AddIssue() {
+        $('#addIssueTrack').modal('show');
+        ResetIssue();
+    }
+    $("#ProjInstance").change(function () {
+        var id = $(this).val();
+        if (id != 0) {
+            $("#AddIssue").show();
+        } else {
+            $("#AddIssue").hide();
+        }
+
+    });
+    $("#drpProject,#drpCustomer").change(function () {
+        $("#AddIssue").hide();
+        RefreshIssueTrack();
+    });
+
+    $("#AddIssue").on("click", function () {
+
+         var id = $("#drpProject").val();
+        $.ajax({
+            type:"GET",
+                url: '@Url.Action("AssignedTo","IssueTrack")',
+                data: { 'Pid' : id},
+                success: function (data) {
+                    var select = $("#drpAssignedTo");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: 0,
+                        text: "-Select-"
+                    }));
+
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.UserId,
+                            text: itemData.Name
+                        }));
+                    });
+                },
+                error: function (a) {
+                    alert(a);
+                }
+        });
+    });
+
+    $("#drpPhase").change(function () {
+       // debugger;
+            var PhaseID = $(this).val();
+            var Instance_Id = $("#ProjInstance").val();
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTask", "IssueTrack")',
+                data: { PhaseID: PhaseID,Instance_Id:Instance_Id },
+                success: function (data) {
+                    var TaskMaster = $("#drpTaskList");
+                    TaskMaster.empty();
+                    TaskMaster.append($('<option/>', {
+                        value: 0,
+                        text: "---Select Task List---"
+                    }));
+                    $.each(data, function (index, item) {
+                        TaskMaster.append($('<option/>', {
+                            value: item.Activity_ID,
+                            text: item.Task
+                        }));
+                    });
+                }
+             });
+    });
+
+      $("#btnIssueCreate").on("click", function () {
+
+          var IssueName = $("#txtIssueName").val().trim();
+          IssueName = IssueName.replace(",", " ");
+          var PhaseMaster = $("#drpPhase").val().trim();
+          var TaskList = $("#drpTaskList").val().trim();
+          var AssignedTo = $("#drpAssignedTo").val().trim();
+          // var Assigned = $("#drpAssignedTo option:selected").text();
+          var Status = 'Yet To Start';
+          //var Comments = $("#txtIssueComments").val().trim();
+          //var Comments = CKEDITOR.instances['txtIssueComments'].getData().trim();
+          var Comments = $('#txtIssueComments').summernote('code');
+          Comments = Comments.replace(",", " ");
+
+          
+
+          var ProjectInstance_Id = $("#ProjInstance").val().trim();
+
+          //var Description = 'AssignedTo:' + Assigned + ', Status:' + Status;
+
+          var IssueName_ = PhaseMaster_ = TaskList_ = AssignedTo_ = Comments_ = false;
+          if (IssueName == "") {
+              IssueName_ = true;
+              $("#lblIssueName").html("Please enter the Issue Name").show();
+          }
+          else {
+              $("#lblIssueName").html("").show();
+          }
+          if (PhaseMaster == 0) {
+              PhaseMaster_ = true;
+              $("#lblPhase").html("Please select the Phase").show();
+          }
+          else {
+              $("#lblPhase").html("").show();
+          }
+
+          if (TaskList == 0) {
+              TaskList_ = true;
+              $("#lblTaskList").html("Please select the Task").show();
+          }
+          else {
+              $("#lblTaskList").html("").show();
+          }
+
+          if (AssignedTo == 0) {
+              AssignedTo_ = true;
+              $("#lblAssignedTo").html("Please select the Assigned To").show();
+          }
+          else {
+              $("#lblAssignedTo").html("").show();
+          }
+
+          if (Comments == "") {
+              Comments_ = true;
+              $("#lblIssueComments").html("Please enter the Comments").show();
+          }
+          else {
+              $("#lblIssueComments").html("").show();
+          }
+
+          if (IssueName_ == false && PhaseMaster_ == false && TaskList_ == false && AssignedTo_ == false && Comments_ == false) {
+
+              $.ajax({
+                  //type: "POST",
+                  url: '@Url.Action("Create","IssueTrack")',
+                  async: false,
+                  data: { IssueName: IssueName, PhaseID: PhaseMaster, TaskId: TaskList, ProjectInstance_Id: ProjectInstance_Id, Status: Status, AssignedTo: AssignedTo, Comments: Comments }, //, Description: Description
+                  success: function (response) {
+                      if (response == "success") {
+                          $('#addIssueTrack').modal('hide');
+                          $('.modal-backdrop').remove();
+                           RefreshIssueTrack();
+                          Notiflix.Notify.Success('Issue Created successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                          ResetIssue();
+                      }
+                  },
+                  failure: function (response) {
+                      alert(response.responseText);
+                  },
+                  error: function (response) {
+                      alert(response.responseText);
+                  }
+              });
+          }
+
+      });
+
+     $(document).on('click', '#EditIssueTrack', function () {
+
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+
+         $.ajax({
+            url: '@Url.Action("_GetIssueTrackById","IssueTrack")',
+            type: "GET",
+            data: { id: tr_Id },
+            async: false,
+            success: function (result) {
+                $('#EditIssueTrackmodel').modal('show');
+                $("#tab_ITMdetails").click();
+                $("#txtIssueNameEdit").val(result.IssueName);
+                $("#drpPhaseEdit").val(result.Phase);
+                $("#drpTaskListEdit").val(result.Task);
+
+                if (result.AssigneeCount == true) {
+
+                    $('#drpStatusEdit').replaceWith('<option value="">'+result.Status+'</option>');
+                    $('#drpAssignedToEdit').replaceWith('<option value="">' + result.Assigned + '</option>');
+                    $('#SelectStatus').prop("disabled", true);
+                    $("#SelectAssignedTo").prop("disabled", true);
+                    $("#btnIssueUpdate").hide();
+                    $("#details").hide();
+                    $("#tab_ITMdetails").hide();
+                    $("#comments-bdg").click();
+                }
+                else {
+                    $('#tab_ITMdetails').prop('disabled', false);
+                    $('#comments-bdg').prop('disabled', true);
+                    StatusMaster(result.Status);
+                    EditAssignedTo(result.AssignedTo, result.ProjectInstance_Id, result.Issuetrack_Id);
+                }
+                $("#txtIssuetrack_Id").val(result.Issuetrack_Id);
+
+                $("#IssueTrackComments").change(Scroll());
+                LoadIssueTrackComments();
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+     });
+
+    $("#btnIssueUpdate").on("click", function () {
+
+        var Issuetrack_Id = $("#txtIssuetrack_Id").val();
+        var AssignedTo = $("#SelectAssignedTo").val();
+        var Status = $("#SelectStatus option:selected").text();
+
+        var AssignedTo_ = Status_ = false;
+
+        if (AssignedTo == 0) {
+            AssignedTo_ = true;
+            $("#lblAssignedTo").html("Please select the Assigned To").show();
+        }
+        else {
+             $("#lblAssignedTo").html("").show();
+        }
+        if (Status == 0) {
+            Status_ = true;
+            $("#lblStatus").html("Please select the status").show();
+        }
+        else {
+             $("#lblStatus").html("").show();
+        }
+
+        if (AssignedTo_ == false && Status_ == false) {
+             $.ajax({
+                   // type: "POST",
+                url: '@Url.Action("SubmitIssueTrack","IssueTrack")',
+                data: { Issuetrack_Id:Issuetrack_Id,Status:Status,AssignedTo:AssignedTo}, //,Description:Description
+                    success: function (response) {
+                        if (response == "success") {
+                            //$('#EditIssueTrackmodel').modal('hide');
+                            // $('.modal-backdrop').remove();
+                            //RefreshIssueTrack();
+                            Notiflix.Notify.Success('Issue Updated successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                            $('#comments-bdg').prop('disabled', false);
+                            $('#comments-bdg').click();
+                            $('#tab_ITMdetails').prop('disabled', true);
+                        }
+                    },
+                    failure: function (response) {
+                       alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+            });
+        }
+    });
+    function StatusMaster(st) {
+
+        $.ajax({
+            url: '@Url.Action("GetStatusMaster","IssueTrack")',
+            async: false,
+            type: 'GET',
+            success: function (Data) {
+                var Design_ = '<option value="_value">_Name</option>';
+                var Design1_ = '<option value="_value" selected>_Name</option>';
+                var End_Result = '';
+                for (var i = 0; i < Data.length; i++) {
+                    var local = '';
+
+                    if (Data[i].Status == st) {
+                        local = Design1_.replace('_value', Data[i].StatusId);
+                    }
+                    else {
+                        local = Design_.replace('_value', Data[i].StatusId);
+                    }
+                    local = local.replace("_Name", Data[i].Status);
+                    End_Result = End_Result + local;
+                }
+                $('#drpStatusEdit').replaceWith(End_Result);
+            }
+        });
+    }
+
+    function EditAssignedTo(AssignedTo,ProjectInstance_Id,id) {
+
+        $.ajax({
+            url: '@Url.Action("EditAssignedTo","IssueTrack")',
+            data: {Iid:ProjectInstance_Id, id:id},
+            async: false,
+            type: 'GET',
+            success: function (Data) {
+                var Design_ = '<option value="_value">_Name</option>';
+                var Design1_ = '<option value="_value" selected>_Name</option>';
+                var End_Result = '';
+                for (var i = 0; i < Data.length; i++) {
+                    var local = '';
+
+                    if (Data[i].UserId == AssignedTo) {
+                        local = Design1_.replace('_value', Data[i].UserId);
+                    }
+                    else {
+                        local = Design_.replace('_value', Data[i].UserId);
+                    }
+                    local = local.replace("_Name", Data[i].Name);
+                    End_Result = End_Result + local;
+                }
+                $('#drpAssignedToEdit').replaceWith(End_Result);
+            }
+        });
+    }
+
+     function LoadIssueTrackComments() {
+        var id = $("#txtIssuetrack_Id").val();
+         var Result = '';
+
+         var d = new Date();
+         var timezoneOffset = d.getTimezoneOffset();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetIssueTrackComments", "IssueTrack")",
+            async: false,
+            data: { id: id ,timezoneOffset:timezoneOffset},
+            success: function (response) {
+                var res = response;
+                var Local = '';
+                var content = '<div class="clients-src">';
+                content = content + '&nbsp;&nbsp;&nbsp;Profile__ ';
+                content = content + '&nbsp;&nbsp;&nbsp;<span class="justify-content-left card-title text-uppercase">FullName</span>';
+                content = content + '<a class="col-md-1"></a>';
+                content = content + '<span class="text-left font-9 color-gray">Date</span>';
+                content = content + '<p class="ml-5">comments</p>';
+                content = content + '</div> <hr />';
+
+                for (var i = 0; i < res.length; i++) {
+                    Local = '';
+                    Local = content;
+                    var Design_ = '<a href="javascript:;">';
+                    var ImageId = res[i].Image;
+                    ImageId = ImageId.replace(",", "");
+                    if (ImageId != undefined) {
+                        if (ImageId.toString().trim() != "") {
+                            Design_ = Design_ + '<span class="" data-toggle="tooltip" title="_title" id=' + ImageId.toString().trim() + '><img src="../assets/PhotoUpload/' + ImageId.toString().trim() + '.jpg" class="profileImage" style="padding:0px !important"></span>';
+                        } else {
+                            Design_ = Design_ + '<span class="profileImage _cla" data-toggle="tooltip" title="_title" id=_id>_Data</span>';
+                        }
+                    }
+                    else {
+                        Design_ = Design_ + '<span class="profileImage _cla" data-toggle="tooltip" title="_title" id=_id>_Data</span>';
+                    }
+                    Design_ = Design_ + '</a>';
+
+                    Local = Local.replace("Profile__", Design_)
+                    Local = Local.replace('_id', res[i].UserID);
+                    Local = Local.replace("_cla", getSColor(random(1, 7)));
+                    Local = Local.replace('_Data', GetTwoLetters(res[i].Name.trim()));
+                    Local = Local.replace('_title', res[i].Name.trim());
+
+
+
+                    Local = Local.replace("FullName", res[i].Name);
+                    Local = Local.replace("Date", res[i].Cre_on_str);
+                    Local = Local.replace("comments", res[i].Comments);
+                    Result = Result + Local;
+                }
+            }
+        });
+        $("#Chatbox_Id").html("");
+        $("#Chatbox_Id").html(Result);
+        Scroll();
+    }
+
+    function Scroll() {
+        $("#Chatbox_Id").animate({
+            scrollTop: $('#Chatbox_Id')[0].scrollHeight - $('#Chatbox_Id')[0].clientHeight
+        }, 1000);
+    }
+
+    $("#btnIssueTrackComments").on("click", function () {
+        var id = $("#txtIssuetrack_Id").val();
+        //var Comments = $("#IssueTrackComments").val();
+        debugger
+        var Comments = $('#IssueTrackComments').summernote('code');
+        Comments = Comments.replace(",", " ");
+        //Comments = Comments.replace(/^(<p><br><\/p>$)/, '');    
+
+        debugger
+        //alert(Comments);
+        var Comments_ = false;
+        if (Comments == '') {
+            $('#txtIssueComments').summernote('reset');
+            Comments_ = true;
+            $("#lblComments").html("Please Enter the Comments").show();
+        }
+
+        //if (Comments == "") {
+        //    Comments_ = true;
+        //    $("#lblComments").html("Please Enter the Comments").show();
+        //}
+        else {
+            $("#lblComments").html("").show();
+        }
+        if (Comments_ == false) {
+            $.ajax({
+                async: false,
+                url: '@Url.Action("SubmitIssueTrackComments","IssueTrack")',
+                data: { Comments: Comments, id: id },
+                success: function (response) {
+                    if (response == true) {
+                        LoadIssueTrackComments();
+                        Notiflix.Notify.Success('Comments Added Successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                         $('.modal-backdrop').remove();
+                        $("#IssueTrackComments").val("");
+                        $('#EditIssueTrackmodel').modal('hide');
+                        RefreshIssueTrack();
+                        IssueTrackTableData();
+                    }
+                    else {
+                        Notiflix.Notify.Failure('Not Saved!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+    $("#IssueTrackComment_Cancel").on("click", function () {
+        $('.modal-backdrop').remove();
+        $("#IssueTrackComments").val("");
+        $('#EditIssueTrackmodel').modal('hide');
+        RefreshIssueTrack();
+        IssueTrackTableData();
+    });
+
+    $("#searchIssue").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#IssueTrackTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $("#SAPIssueTrackTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    function ResetIssue() {
+        $("#txtIssueName").val("");
+        $("#drpPhase").val(0);
+        $("#drpTaskList").val(0);
+        $("#drpAssignedTo").val(0);
+        $("#txtIssueComments").val("");
+
+        $("#lblIssueName").html("").show();
+        $("#lblPhase").html("").show();
+        $("#lblTaskList").html("").show();
+        $("#lblAssignedTo").html("").show();
+        $("#lblIssueComments").html("").show();
+    }
+
+    $("#IssueUpdatecancel,#Issuecancel,IssueTrackComment_Cancel").on("click", function () {
+        $('#txtIssueComments,#IssueTrackComments').summernote('code', '');
+         $('#addIssueTrack').modal('hide');
+         $("#EditIssueTrackmodel").modal('hide');
+    });
+
+</script>

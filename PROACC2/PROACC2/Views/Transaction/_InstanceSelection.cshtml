@@ -1,0 +1,59 @@
+﻿<ul class="nav navbar-toolbar sec-left-resource">
+    <li>
+        @if (User.IsInRole("Consultant"))
+        {
+            <div class="ibox dropdown-resources mb-0">
+                <select class="form-control border-0" id="drpCustomer">
+                    <option value="0">Select Customer</option>
+                    @foreach (var item in ViewBag.CustomerName)
+                    {
+                        <option value="@item.Value">@item.Name</option>
+                    }
+                </select>
+            </div>
+        }
+        else
+        {
+            <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>
+        }
+
+    </li>
+    <li class="show_prj">
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </li>
+    <li class="show_prj">
+        @if (User.IsInRole("Customer") || User.IsInRole("Project Manager"))
+        {
+            <div class="ibox dropdown-resources mb-0">
+                <select class="form-control border-0" id="drpProject">
+                    <option value="0">Select Project</option>
+                    @foreach (var item in ViewBag.ProjectName)
+                    {
+                        <option value="@item.Project_ID">@item.ProjectName</option>
+                    }
+                </select>
+            </div>
+        }
+        else
+        {
+            <div class="ibox dropdown-resources mb-0">
+                <select class="form-control border-0" id="drpProject">
+                    <option value="0">Select Project</option>
+                </select>
+            </div>
+        }
+
+    </li>
+    <li class="show_ins">
+        <i class="fa fa-angle-right" aria-hidden="true"></i>
+    </li>
+    <li class="show_ins">
+        <div class="ibox dropdown-resources mb-0">
+            <select class="form-control border-0" id="ProjInstance">
+                <option value="0">Select Instance</option>
+            </select>
+        </div>
+    </li>
+    <li>
+    </li>
+</ul>

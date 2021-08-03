@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "ProjectHome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row py-1 ">
+        <div class="col-lg-8">
+            <ul class="m-0 p-0 sec-project">
+                <li class="">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <span class="title-project">Projects<span>
+                        </div>
+                    </div>
+                </li>
+                <li class="">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <span class="title-project acme-mig active">ACME Migration &nbsp;<i class="fa fa-ellipsis-h ellipsis" aria-hidden="true"></i>&nbsp;<i class="fa fa-thumb-tack pin" aria-hidden="true"></i>&nbsp;<i class="fa fa-times close" aria-hidden="true"></i><span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-4">
+            <div class="i-box">
+                <div class="ibox-body">
+                    <form class="navbar-search" action="javascript:;">
+                        <div class="rel">
+                            <span class="search-icon"><i class="fa fa-search"></i></span>
+                            <input class="form-control" placeholder="Search by project title,customer,project manager...">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-line"></div>
+    </div>
+    <div class="form-row py-0 pt-2">
+        <div class="col-lg-3">
+            <div class="ibox acme-assessment">
+                <div class="ibox-body">
+                    <div class="d-flex justify-content-between align-items-left">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <td scope="col">ASSESSMENT</td>
+                                    <td scope="col"><i class="fa fa-circle schedule" aria-hidden="true"></i>&nbsp;ON SCHEDULE</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row"><small>PHASE</small></td>
+                                    <td><small>STATUS</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox acme-assessment">
+                <div class="ibox-body">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td scope="col">100</td>
+                                <td scope="col">60</td>
+                                <td scope="col">60</td>
+                                <td scope="col">0</td>
+                                <td scope="col">0</td>
+                                <td scope="col">C01&nbsp;<i class="fa fa-chevron-down" aria-hidden="true"></i></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row"><small>COMPLETION</small></td>
+                                <td><small>TOTAL TASK</small></td>
+                                <td><small>COMPLETED</small></td>
+                                <td><small>IN PROGRESS</small></td>
+                                <td><small>YET TO START</small></td>
+                                <td><small>CURRENT INSTANCE</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="ibox btn-widget">
+                <div class="ibox-body">
+                    <div class="d-flex justify-content-between align-items-left align-middle">
+                        <span><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                        <span><i class="fa fa-download" aria-hidden="true"></i></span>
+                        <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                        <div class="add-widget">
+                            <button type="button" class="btn btn-primary order-1 ml-2 pointer">Add Widget</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row py-0">
+        <div id="read-left" class="col-lg-3">
+            <div class="ibox sec-readiness">
+                <div class="ibox-head">
+                    <div class="ibox-title">
+                        Readiness Check
+                    </div>
+                    <div class="ibox-tools">
+                        <a class="ibox-collapse"><i class="fa fa-refresh refresh"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-body">
+                    <div class="sec-content">
+                        <h5><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;100% Ready</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="ibox sec-image">
+                <div class="ibox-head">
+                    <div class="ibox-title">
+                        Image
+                    </div>
+                    <div class="ibox-tools">
+                        <a class="ibox-collapse"><i class="fa fa-refresh refresh"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-body">
+                    <div class="sec-content">
+                        <h5><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp;100% Ready</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="read-right" class="col-lg-9">
+            <div class="ibox planned">
+                <div class="ibox-head">
+                    <div class="ibox-title">
+                        Planned Vs Completion
+                    </div>
+                    <div class="ibox-tools">
+                        <a class="ibox-collapse"><i class="fa fa-refresh refresh"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row py-0">
+        <div class="col-lg-6">
+            <div class="ibox acme-assessment">
+                <div class="ibox-head">
+                    <div class="ibox-title">
+                        Building Blocks
+                    </div>
+                    <div class="ibox-tools">
+                        <a class="ibox-collapse"><i class="fa fa-refresh refresh"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-body building-list">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td scope="col">No</td>
+                                <td scope="col">Building Block</td>
+                                <td scope="col">Task</td>
+                                <td scope="col">owner(s)</td>
+                                <td scope="col">Status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="row">1</td>
+                                <td>Application Overview</td>
+                                <td>3</td>
+                                <td>
+                                    <div class="owners-list">
+                                        <img src="~/assets/img/consultants/dp2.png">
+                                        <img src="~/assets/img/consultants/dp4.png">
+                                        <img src="~/assets/img/consultants/dp5.png">
+                                    </div>
+                                </td>
+                                <td><span class="bulding-cmpt">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">2</td>
+                                <td>Application Overview</td>
+                                <td>8</td>
+                                <td>
+                                    <div class="owners-list">
+                                        <img src="~/assets/img/consultants/dp2.png">
+                                        <img src="~/assets/img/consultants/dp5.png">
+                                        <img src="~/assets/img/consultants/dp4.png">
+                                    </div>
+                                </td>
+                                <td><span class="bulding-cmpt">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">3</td>
+                                <td>Application Overview</td>
+                                <td>2</td>
+                                <td>
+                                    <div class="owners-list">
+                                        <img src="~/assets/img/consultants/dp2.png">
+                                        <img src="~/assets/img/consultants/dp5.png">
+                                        <img src="~/assets/img/consultants/dp5.png">
+                                    </div>
+                                </td>
+                                <td><span class="bulding-cmpt">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td scope="row">4</td>
+                                <td>Application Overview</td>
+                                <td>4</td>
+                                <td>
+                                    <div class="owners-list">
+                                        <img src="~/assets/img/consultants/dp5.png">
+                                        <img src="~/assets/img/consultants/dp4.png">
+                                        <img src="~/assets/img/consultants/dp2.png">
+                                    </div>
+                                </td>
+                                <td><span class="bulding-cmpt">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox projectplan">
+                <div class="ibox-head">
+                    <div class="ibox-title">
+                        project plan
+                    </div>
+                    <div class="ibox-tools">
+                        <a class="ibox-collapse"><i class="fa fa-refresh refresh"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                        <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-body">
+                    <!-- <div>
+                    <canvas id="bar_chart" style="height:260px;"></canvas>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+

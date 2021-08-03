@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/packages
+/PROACC2/bin
+/PROACC2/obj
+/PROACC2/Properties/PublishProfiles
+/PROACC2/assets/Log/
+/PROACC2/assets/PhotoUpload
+/PROACC2/assets/UploadedFiles
+/PROACC2/IssueTrackpexels-photo-17044883e6d06a5-26eb-41e6-80ab-6c36413b1ed7.jpeg
+/PROACC2/IssueTrackpexels-photo-1704488c79a5f15-92c3-4d2f-afbe-ed9d0416bc04.jpeg

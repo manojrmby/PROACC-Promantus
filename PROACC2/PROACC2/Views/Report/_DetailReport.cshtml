@@ -1,0 +1,343 @@
+﻿
+<script src="~/assets/js/CustomSelect.js"></script>
+<style>
+    /*.exportpdf:before {
+        content: url('https://img.icons8.com/officel/80/000000/export-pdf.png');
+    }
+
+    #export {
+        border: none;
+        cursor: pointer;
+    }*/
+
+    /*  Setting Of Multiselect   */
+   
+    /************** Display DropDown Start*****************/
+
+    .show_ins, .show_drpChk, .show_prj {
+        display: none;
+    }
+
+    .show_data {
+        display: block;
+    }
+    /************** Display DropDown End *****************/
+    .sec-left-resource span {
+        color: black;
+        padding: 38px;
+    }
+
+    .multiselect-option {
+        height: 34px;
+    }
+
+    .btn-group, .btn-group-vertical {
+        position: relative;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        vertical-align: middle;
+        margin-top: 0px;
+    }
+
+    .multiselect-container {
+        position: absolute;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 0px;
+        border-radius: 9px;
+    }
+    .dropdown-menu {
+        background-color:lightgray;
+    }
+    .pro-list-table {
+        height: calc(98vh - 235px);
+    }
+</style>
+
+
+@Scripts.Render("~/bundles/Scripts/multiselect")
+@Styles.Render("~/Content/css/multiselect")
+
+
+<div class="col-lg-12">
+    <ul class="nav navbar-toolbar sec-left-resource">
+        <li>
+            @if (User.IsInRole("Consultant"))
+            {
+                <div class="ibox dropdown-resources mb-0">
+                    <select class="form-control border-0 text-capitalize" id="drpCustomer">
+                        <option value="0">Select Customer</option>
+                        @foreach (var item in ViewBag.CustomerName)
+                        {
+                            <option class="text-capitalize" value="@item.Value">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>//&nbsp; &nbsp;
+            }
+
+        </li>
+        <li class="show_prj">
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+        </li>
+        <li class="show_prj">
+            @if (User.IsInRole("Customer") || User.IsInRole("Project Manager")||User.IsInRole("Admin"))
+            {
+                <div class="ibox dropdown-resources mb-0">
+                    <select class="form-control border-0 text-capitalize" id="drpProject">
+                        <option value="0">Select Project</option>
+                        @foreach (var item in ViewBag.ProjectName)
+                        {
+                            <option class="text-capitalize" value="@item.Project_ID">@item.ProjectName</option>
+                        }
+                    </select>
+                </div>
+            }
+            else
+            {
+                <div class="ibox dropdown-resources mb-0">
+                    <select class="form-control border-0 text-capitalize" id="drpProject">
+                        <option value="0">Select Project</option>
+                    </select>
+                </div>
+            }
+            @*<div class="ibox dropdown-resources mb-0">
+                <select class="form-control border-0" id="drpProject">
+                    <option value="0">Select Project</option>
+                    @foreach (var item in ViewBag.ProjectName)
+                    {
+                        <option value="@item.Project_ID">@item.ProjectName</option>
+                    }
+                </select>
+            </div>*@
+        </li>
+        <li class="show_ins">
+            <!-- <a href="javascript:;"> -->
+            <i class="fa fa-angle-right" aria-hidden="true"></i>
+            <!-- </a> -->
+        </li>
+        <li class="show_ins">
+            <!-- <a href="javascript:;"> -->
+            <div class="ibox dropdown-resources mb-0">
+                <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                    <option>Instance</option>
+                </select>
+            </div>
+            <!-- </a> -->
+        </li>
+        <li class="show_drpChk">
+            <div class="col-lg-12">
+                <div class="show-hide">
+                    <div class="form-group" id="DrpCheckBox">
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <i class="fa fa-file-pdf-o fa-3x" id="export" style="" data-toggle="tooltip" title="Download" onclick="exportPDF();"></i>
+        </li>
+
+    </ul>
+</div>
+<div class="d-flex pro-list-table" id="DwnldDetailResource">
+    <table class="table table-borderless mb-0 reportTable" id="rprtTable">
+        <thead>
+            <tr>
+                @*
+                    <td scope="col" class="addSelect">building block&nbsp;&nbsp;&nbsp;<small><i class="fa fa-plus" aria-hidden="true"></i></small></td>*@
+
+                <td scope="col" class="" data-toggle="tooltip" title="Building Block" data-placement="top">building block</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Phase">phase</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Activity/Task">activity/task</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Application Area">application area</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Delay">delay</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Owner">owner</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Status">status</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Est.(Hrs)">est.(hrs)</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Planned Start Date">planned start date</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Actual Start Date">actual start date</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Planned End Date">planned end date</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Actual End Date">actual end date</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr> <td colspan="12" class="text-center">No Records</td></tr>
+            @*
+                <tr>
+                    <td id="BB"></td>
+                    <td id="PH"></td>
+                    <td id="AT"></td>
+                    <td id="AA"></td>
+                    <td id="DL"></td>
+                    <td id="OW"></td>
+                    <td>
+                        <div class="ibox mb-0">
+                            <span class="yettostart-label" id="ST"></span>
+                        </div>
+                    </td>
+                    <td id="EST"></td>
+                    <td id="PSD"></td>
+                    <td id="ASD"></td>
+                    <td id="PED"></td>
+                    <td id="AED"></td>
+
+
+                </tr>*@
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+
+    $("#DwnldDetailResource").hide();
+
+    $("#drpCustomer,#drpProject,#ProjInstance").change(function () {
+        $("#testselect").multiselect("clearSelection");
+        $(".reportTable").find('tr td:hidden').show();
+    });
+
+    $("#drpCustomer").change(function () {
+        var CustId = $("#drpCustomer").val();
+        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+        BindingProject_Detail(CustId, CustUrl);
+        $("#rprtTable").hide();
+    });
+
+
+    $("#drpProject").change(function () {
+        var Id = $("#drpProject").val();
+        var url = '@Url.Action("GetInstancesByProject", "Report")';
+        GlobalBindInstance(Id, url);
+        
+        $("#rprtTable").hide();
+    });
+
+    $('#ProjInstance').change(function () {
+        var InsId = $('#ProjInstance').val();
+        var PrjId = $('#drpProject').val();
+        var PhId = "";
+        var CustId = $("#drpCustomer").val();
+        var UserType = "@Session["UserType"].ToString()";
+
+        if (UserType == "Project Manager") {
+            CustId = "";
+        }
+        else {
+            CustId = $("#drpCustomer").val();
+
+        }
+        SessionStorage(CustId, PhId, PrjId, InsId);
+        $("#rprtTable").show();
+        var url = '@Url.Action("GetRportdata","Report")';
+        DetailReport_Load(InsId, url);
+    });
+
+        function exportPDF() {
+            var _ProjectName = $("#drpProject option:selected").text();
+            var _InstanceName = $("#ProjInstance option:selected").text();
+            var _InstanceId = $("#ProjInstance option:selected").val();
+            console.log("_ProjectName>>" + _ProjectName);
+            console.log("_InstanceName>>" + _InstanceName);
+            console.log("_InstanceId>>" + _InstanceId);
+            $.ajax({
+                type: 'POST',
+                async: false,
+                url: '@Url.Action("Exportpdf", "Report")',
+                data: {
+                    ProjName: _ProjectName,
+                    InsName: _InstanceName,
+                    InsId: _InstanceId
+                },
+                success: function (response) {
+                    console.log("response>>" + response);
+                    if (response.fileName != "") {
+                        //use window.location.href for redirect to download action for download the file
+                        window.location.href = "@Url.RouteUrl(new
+            { Controller = "Report", Action = "Download"})/?file=" + response.fileName;
+                    }
+
+                    Notiflix.Notify.Success('File <Strong>successfully </strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                }, error: function (re) {
+                    console.log(re);
+                    Notiflix.Notify.Info('File <Strong>Not</strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+                }
+
+            });
+        }
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#export").hide();
+        var UserType = "@Session["UserType"].ToString()";
+        if (UserType == 'Project Manager' || UserType == 'Customer'||UserType == 'Admin') {
+            $('.show_prj').addClass('show_data').removeClass('show_prj');
+        }
+        //var TableWithHeaderId = $("#rprtTable");
+        //var DivId = $("#DrpCheckBox");
+        //var DropdDownId = $("#testselect");
+        //var DynamicTableClassName = $(".reportTable");
+        //Select(TableWithHeaderId, DivId, DropdDownId, DynamicTableClassName);
+
+        var table = $("#rprtTable");
+        var header = table.find('thead tr td');
+        var select = '<select id="testselect" multiple>';
+        var option = [];
+        var headerObj = [];
+        var className = [];
+        var headerName = [];
+        for (var i = 0; i < header.length; i++) {
+            className[i] = header[i].className;
+            headerObj[i] = header[i].innerText.trim();
+            if (className[i] == "addSelect") {
+                option[i] = '<option value="' + i + '" class="' + className[i] + '" scope="col">' + headerObj[i].toUpperCase() + '</option>';
+            }
+        }
+        select = select + option + "</select>";
+        $("#DrpCheckBox").append(select);
+        $("#testselect").attr('disabled', 'disabled');
+        $("#testselect").multiselect({
+            disableIfEmpty: true,
+            includeResetOption: true,
+            resetText: "Reset all",
+            maxHeight: 200,
+           numberDisplayed: 1,
+            //enableFiltering: true,
+            onChange: function (option, checked, select) {
+                //debugger;
+                if (checked) {
+                    var val = $(option).text().toUpperCase();
+                    $.each(headerObj, function (data, item) {
+                        var val2 = headerObj[data].trim().toUpperCase();
+                        if (val2 == val) {
+                            var originalindex = data;
+                            $(".reportTable").find('tr :nth-child(' + (originalindex + 1) + ')').toggle();
+                        }
+                    });
+                }
+                else {
+                    for (var i = 0; i < header.length; i++) {
+                        headerName[i] = header[i].innerText.trim().toUpperCase();
+                        var val2 = $(option).text().toUpperCase();
+                        if (headerName[i] == val2) {
+                            var hiddenIndex = i;
+                            $(".reportTable").find('tr :nth-child(' + (hiddenIndex + 1) + ')').show();
+
+                            //$(".ProgressMonitor").find('tr td:hidden').show();
+                        }
+                    }
+                }
+            }
+        });
+        $(".btn-block").click(function () {
+            $(".reportTable").find('tr td:hidden').show();
+        });
+    });
+</script>
+

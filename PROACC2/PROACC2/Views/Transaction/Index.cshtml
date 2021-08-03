@@ -1,0 +1,526 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@Scripts.Render("~/bundles/Scripts/DatePicker")
+@Styles.Render("~/Content/css/DatePicker")
+
+@Scripts.Render("~/bundles/Scripts/multiselect")
+@Styles.Render("~/Content/css/multiselect")
+
+<style>
+    /***************************Slidding Data Start************************************/
+    .modal.right .modal-content {
+        height: 82%;
+        overflow-y: auto;
+        top: 9%;
+    }
+
+    .modal.right .modal-body {
+        padding: 15px 15px 80px;
+    }
+
+    .modal.right .modal-dialog {
+        position: fixed;
+        margin: auto;
+        width: 320px;
+        height: 100%;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+    }
+
+    .modal.right.fade .modal-dialog {
+        right: 0px;
+        -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+        -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+        transition: opacity 0.3s linear, right 0.3s ease-out;
+        animation: myfirst 1s 1;
+        animation-direction: normal;
+        animation-fill-mode: forwards;
+        width: 36%;
+    }
+
+    @@-webkit-keyframes myfirst {
+        from {
+            right: -400px;
+        }
+
+        to {
+            right: 0px;
+        }
+    }
+
+    .popover{
+        
+    }
+    .popover-title {
+        padding: 8px 14px;
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 18px;
+        color: #3a3a3a;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+        background-color: #f7f7f7;
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#d2d2d2));
+        background-image: -webkit-linear-gradient(top, #ffffff, #d2d2d2);
+        background-image: -moz-linear-gradient(top, #ffffff, #d2d2d2);
+        background-image: -ms-linear-gradient(top, #ffffff, #d2d2d2);
+        background-image: -o-linear-gradient(top, #ffffff, #d2d2d2);
+        border-bottom: 1px solid #a7a7a7;
+        -webkit-border-radius: 5px 5px 0 0;
+        -moz-border-radius: 5px 5px 0 0;
+        border-radius: 5px 5px 0 0;
+    }
+    /***************************Slidding Data End************************************/
+</style>
+<style>
+    .show_ins, .show_prj {
+        display: none;
+    }
+
+    .show_data {
+        display: block;
+    }
+</style>
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row">
+        <div class="col-lg-9">
+            <ul class="nav navbar-toolbar sec-left-resource">
+                <li>
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpCustomer">
+                                <option value="0">Select Customer</option>
+                                @foreach (var item in ViewBag.CustomerName)
+                                {
+                                    <option class="text-capitalize" value="@item.Value">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>//&nbsp; &nbsp;
+                    }
+
+                </li>
+                <li class="show_prj">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_prj">
+                    @if (User.IsInRole("Customer") || User.IsInRole("Project Manager"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option class="text-capitalize" value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                            </select>
+                        </div>
+                    }
+                    @*<div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>*@
+                </li>
+                <li class="show_ins">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_ins">
+                    <div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                            <option value="0">Select Instance</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-3">
+            @*<div class="sec-left-resource d-flex justify-content-end shadow">
+                <marquee behavior="scroll" direction="left">
+                Current Phase:&nbsp;&nbsp;                <strong id="CurrentPhase" class="color-blue-light"></strong>&nbsp;&nbsp;
+                <a id="Unassigned_c">Unassigned Count:&nbsp; &nbsp;<strong id="Unassigned_ct" class="color-blue-light">--</strong></a>
+            </marquee>    
+            </div>*@
+            <div class="sec-left-resource d-flex">
+            <div class="ibox current-projects mb-0"><span>Current Phase:&nbsp;&nbsp;<strong class="badge badge-info h-100" id="CurrentPhase"></strong></span></div>
+        </div>
+        </div>
+    </div>
+    <div class="row py-1 ">
+        <div class="col-lg-6">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            @*<ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link  title-project active" data-toggle="tab" href="#rp" role="tab" aria-controls="rp">Resource Planning</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#pm" role="tab" aria-controls="pm">Progress Monitoring</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#rc" role="tab" aria-controls="rc">Readiness Check</a>
+                                    </li>
+                                </ul>*@
+
+                            <ul class="nav nav-tabs nav-justified">
+                                @if (Session["UserType"].ToString() == "Project Manager")
+                                {
+                                    <li class="nav-item" data-ref="@Url.Action("Index", "Transaction", new { name = "_ResourceAllocation" })">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#resourceAllocation" role="tab" aria-controls="resourceAllocation" id="Tab_Resource">Resource Allocation</a>
+                                    </li>
+                                }
+                                <li class="nav-item" data-ref="@Url.Action("Index","Transaction", new { name = "_ProgressMonitoring" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#progressMonitoring" role="tab" aria-controls="progressMonitoring" id="Tab_ProgressMonitor">Progress Monitoring</a>
+                                </li>
+                                @*<li class="nav-item" data-ref="@Url.Action("Index","Transaction", new { name = "_ReadinessCheck" })">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#readinessCheck" role="tab" aria-controls="readinessCheck">Readiness Check</a>
+                                    </li>*@
+                            </ul>
+                            <!-- <span class="title-project active">Resource Planning<span> -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-row phase-label justify-content-end">
+                <div class="projects-dropdown w-40">
+                    <!-- <div class="ibox"> -->
+                    <!-- <div class="ibox-body"> -->
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label align-middle label-phase">Phase:&nbsp;&nbsp; </label>
+                        <div class="col-sm-10">
+                            <select class="form-control border-0" id="drpPhase">
+                                @foreach (var item in ViewBag.Phaselist)
+                                {
+                                    <option value="@item.Id">@item.PhaseName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- </div> -->
+                </div>
+                <div class="search-field pl-2 w-40">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <form class="navbar-search" action="javascript:;">
+                                <div class="rel">
+                                    <span class="search-icon"><i class="fa fa-search"></i></span>
+                                    <input class="form-control" id="searchTask" placeholder="Search">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom-line"></div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade-in-up" id="resourceAllocation" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="progressMonitoring" role="tabpanel">
+        </div>
+
+    </div>
+
+
+    <div class="modal right fade" id="ShowProgressMonitor" tabindex="-1" aria-labelledby="myModalLabel2"  aria-hidden="true" role="dialog" data-url='@Url.Action("__ProgressShowMoreDetail","Transaction")'></div>
+
+    @*<div class="d-flex">
+            <div class="tab-content w-100">
+                <div class="tab-pane active HideResource" id="rp" role="tabpanel">
+                   @Html.Partial("_ResourceAllocation")
+                </div>
+
+                <div class="tab-pane" id="pm" role="tabpanel">
+                    @Html.Partial("_ProgressMonitoring")
+
+                </div>
+                <div class="tab-pane" id="rc" role="tabpanel">
+                    @Html.Partial("_ReadinessCheck")
+                </div>
+            </div>
+        </div>*@
+</div>
+<!-- END PAGE CONTENT-->
+<script>
+    $(document).ready(function () {
+        var UserType = "@Session["UserType"].ToString()";
+        var PrjId = sessionStorage.getItem("Proj");
+        var CustId = sessionStorage.getItem("CustId");
+
+        if (UserType == 'Project Manager') {
+            if (PrjId == null) {
+                $('#Tab_Resource').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+                var msg = "Kindly select Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                $("#Unassigned_c").show();
+
+            }
+            else {
+                $('#Tab_Resource').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+            }
+        }
+        else if (UserType == 'Customer') {
+            if (PrjId == null || CustId == null) {
+                $('#Tab_ProgressMonitor').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+                var msg = "Kindly select Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                $("#Unassigned_c").hide();
+
+            }
+            else {
+                $('#Tab_ProgressMonitor').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+            }
+        }
+        else if (UserType == 'Consultant') {
+            if (PrjId == null || CustId == null) {
+                $('#Tab_ProgressMonitor').click();
+                var msg = "Kindly select Customer,Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                $("#Unassigned_c").hide();
+
+            }
+            else {
+                $('#Tab_ProgressMonitor').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+            }
+        }
+        //if (UserType == 'Project Manager' || UserType == 'Customer') {
+        //      $('.show_prj').addClass('show_data').removeClass('show_prj');
+        //  }
+
+        var result = $("#drpPhase :selected").text();
+        $("#CurrentPhase").text(result);
+    });
+
+
+    //$("#Tab_Resource").on('click', function () {
+    //    RefreshResourceAllocation()
+    //})
+     $("#drpPhase").change(function () {
+        var result = $("#drpPhase :selected").text();
+        $("#CurrentPhase").text(result);
+    });
+
+    $("#drpCustomer").change(function () {
+        var CustId = $("#drpCustomer").val();
+        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+        BindingProject_Detail(CustId, CustUrl);
+        $("#progressMonitoring").html("");
+        $("#resourceAllocation").html("");
+    });
+
+    $("#drpProject").change(function () {
+        var PrjId = $("#drpProject").val();
+        var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+        GlobalBindInstance(PrjId, InsTranurl);
+        $("#progressMonitoring").html("");
+        $("#resourceAllocation").html("");
+    });
+
+    $(".nav-tabs li").click(function (e) {
+        //e.preventDefault();
+        var url = $(this).data('ref');
+        var PrjId = sessionStorage.getItem("Proj");
+        var InsId = sessionStorage.getItem("Ins");
+        var PhId = sessionStorage.getItem("PhId");
+        var CustId = sessionStorage.getItem("CustId");
+
+        var PhaseId = $("#drpPhase").val();
+        var UserType = "@Session["UserType"].ToString()";
+
+
+        var InsTranurl = '@Url.Action("GetInstancesByProject", "Transaction")';
+        var DataResourceurl = '@Url.Action("__GetDataByResourceAllocation","Transaction")';
+        var GetUserurl = '@Url.Action("_GetUserRole","Transaction")' + "?InstanceId=" + InsId;
+        var PullUrl = '@Url.Action("PullTaskButton","Transaction")';
+        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+
+        var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+
+        $.ajax({
+            url: url,
+            //async: false,
+            //data: { pageId: pageId },
+            success: function (response) {
+                if (url.includes("_ResourceAllocation")) {
+                    $(this).addClass("active");
+                    
+                    if (InsId=='')
+                    {
+                        $("#resourceAllocation").html(response);
+                        $("#drpProject").val(0);
+                        //GlobalBindInstance(PrjId, InsTranurl);
+                        $("#ProjInstance").val(0);
+
+                    }
+                    else if (InsId != null && PhaseId != '') {
+                        $("#resourceAllocation").html(response);
+
+                        $("#drpProject").val(PrjId);
+                        GlobalBindInstance(PrjId, InsTranurl);
+                        $("#ProjInstance").val(InsId);
+
+                        $("#drpPhase").val(PhaseId);
+                        PullActivityTask(PhaseId, InsId, PullUrl);
+                        LoadResource_Allocation(PhaseId, InsId, DataResourceurl, GetUserurl);
+                        
+                        e.preventDefault();
+
+                    }
+                    else {
+                        $("#resourceAllocation").html(response);
+                    }
+
+                }
+                else if (url.includes("_ProgressMonitoring")) {
+                    $(this).addClass("active")
+                   
+                    if (CustId != null && CustId != '' && UserType=='Consultant') {
+                        
+                        $("#progressMonitoring").html(response);
+                        $("#drpCustomer").val(CustId);
+                        BindingProject_Detail(CustId, CustUrl);
+                        $("#drpProject").val(PrjId);
+                        GlobalBindInstance(PrjId, InsTranurl);
+                        $("#ProjInstance").val(InsId);
+                        $("#drpPhase").val(PhaseId);
+                        PulltaskTrans(PhaseId, InsId, UserType, PullUrl, GetTaskCountUrl);
+
+                        e.preventDefault();
+                    }
+                    else if (InsId != null && PhaseId != "") {
+                       
+                        $("#progressMonitoring").html(response);
+                        $("#drpProject").val(PrjId);
+                        GlobalBindInstance(PrjId, InsTranurl);
+                        $("#ProjInstance").val(InsId);
+                        $("#drpPhase").val(PhaseId);
+                        PulltaskTrans(PhaseId, InsId, UserType, PullUrl, GetTaskCountUrl);
+
+                        e.preventDefault();
+                    }
+                    else {
+                        $("#progressMonitoring").html(response);
+                    }
+                }
+
+
+
+            }
+        });
+    });
+
+
+    $("#searchTask").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#ResourceTable tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $("#ProgressMonitor tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    function RefreshResourceAllocation() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Transaction", new { name = "_ResourceAllocation" })',
+            success: function (data) {
+                $("#resourceAllocation").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+
+    function RefreshProjectMonitor() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Transaction", new { name = "_ProgressMonitoring" })',
+            success: function (data) {
+                $("#progressMonitoring").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+
+    function ResetInstProject() {
+
+        $('#ProjInstance').val(0);
+        $('#drpPhase').val(1);
+        RefreshResourceAllocation();
+    }
+
+    function ShowModal_Tran(Id,value) {
+        var modal2 = value.data('url');
+        var url2 = modal2 + "?id=" + Id
+    $.get(url2, function (data) {
+            value.html(data);
+        }).done(function () {
+            value.modal('show');
+        });
+    }
+
+    function ShowModal_Tran1(Id, value) {
+        var modal2 = value.data('url');
+        var url2 = modal2 + "?id=" + Id
+        $.get(url2, function (data) {
+            value.html(data);
+        }).done(function () {
+            value.modal('show');
+        });
+    }
+
+    //$(".CloseResource").click(function () {
+    //    console.log("We are in");
+    //    //$("#ShowProgressMonitor").modal('hide');
+    //    //$("#ShowResourceMonitor").modal('hide');
+    //    $('.modal-backdrop').remove();
+    //});
+    //$("#Model_Close").click(function () {
+    //    console.log("i Am in");
+    //});
+</script>

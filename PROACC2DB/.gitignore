@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/PROACC2DB/bin/Debug
+/PROACC2DB/Import Schema Logs
+/PROACC2DB/obj/Debug
+/PROACC2DB/PROACC2DB.jfm
+/PROACC2DB/PROACC2DB.dbmdl
+/PROACC2DB/.editorconfig
+/SqlSchemaCompare1.scmp

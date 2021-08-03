@@ -1,0 +1,315 @@
+﻿
+<div class="form-row py-1">
+    <div class="col-lg-7">
+        <label id="IssueHeading" style="display:none"><b>Upload S/4 Project Issues dump from Customer ITSM tool</b></label>
+    </div>
+    <div class="col-lg-5">
+        <div class="new-project-submit d-flex justify-content-end">
+            <div>
+                @*<i class="fa fa-download" data-toggle="tooltip" title="Download Template" id="DwnTemplate" style="display:none" aria-hidden="true" onclick="location.href='@Url.Action("DownloadTemplate", "IssueTrack")'"></i>*@
+            </div>            
+            <button type="button" class="btn btn-primary  pointer" id="DumpIssue" style="display:none" onclick="">Upload</button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex pro-list-table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 SAPIssueTrackTable" id="SAPIssueTrackTable">
+        <thead>
+            <tr>
+
+                <td scope="col" style="width:3%" data-toggle="tooltip" title="IssueNo">#</td>
+                <td scope="col" style="width:10%">Issue Description</td>
+                <td scope="col">Category</td>
+                <td scope="col">Priority</td>
+                <td scope="col">Assignee</td>
+                <td scope="col">Assigned By</td>
+                <td scope="col" style="width:10%">Application Area</td>
+                <td scope="col">Start date</td>
+                <td scope="col">End date</td>
+                <td scope="col">Status</td>
+                <td scope="col">Resolution</td>
+                <td scope="col">Comments</td>
+                @*<td scope="col">Action</td>*@
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="colspan">
+                <td colspan="12" style="text-align:center">
+                    No Records Found
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="UploadDumpIssue" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">S/4 Project Issues dump</h4>
+                <button type="button" class="close btnDumpIssuecancel" aria-label="Close" id="">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">SAP Issue Dump File Upload<span id="UpldPic" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="file" id="DumpIssuefileUpload" name="files" accept=".xls, .xlsx" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblDumpIssueFileUpload" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnDumpIssueFile">Upload</button>
+                    <button type="button" class="btn btn-secondary pointer btnDumpIssuecancel" id="">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Start Edit POPUP-->
+<div id="EditSAPIssueDumpModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <input type="hidden" id="PrId" />
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Update SAP Issue Dump</h4>
+                <button type="button" class="close cancelSAPIssueDump" data-dismiss="modal" aria-label="Close" id="EditSAPIssueDump">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input hidden id="SAPIssuetrack_Id" />
+                                <div class="form-group">
+                                    <label for="">Issue Name<span id="star" style="color:red;">*</span></label>
+                                    <input type="text" class="form-control" id="txtSAPIssueName" name="" disabled />
+                                    <span id="lblIssueName" style="color:red"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Status</label>
+                                    <select class="form-control" id="drpSAPStatus" name="">
+                                        @foreach (var item in ViewBag.SAPStatus)
+                                        {
+                                            <option value="@item.Status_Id">@item.status</option>
+                                        }
+                                    </select>
+                                    <span id="lblSAPStatus" style="color:red"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">Comments<span id="star" style="color:red;">*</span></label>
+                                    <textarea type="text" class="form-control" id="txtSAPIssueComments" name="" />
+                                    <span id="lblIssueComments" style="color:red"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnSAPIssueDumpUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary pointer cancelSAPIssueDump" id="cancelSAPIssueDump" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--End Edit POPUP-->
+<script>
+
+    $("#DumpIssue").on("click", function () {
+
+        $("#UploadDumpIssue").modal("show");
+
+    });
+
+    $("#btnDumpIssueFile").on("click", function () {
+
+        var instance = $("#ProjInstance").val();
+        var ProjectId=$("#drpProject").val();
+        var DumpIssue = $("#DumpIssuefileUpload").val();
+       
+
+        if (DumpIssue == '') {
+            $("#lblDumpIssueFileUpload").html("Please Enter the file").show();
+        }
+        //else if (DumpIssue != '') {
+        //    $("#lblDumpIssueFileUpload").html("").hide();
+        //}
+        else {
+            $("#lblDumpIssueFileUpload").html("").hide();
+             var fileUpload = $("#DumpIssuefileUpload").get(0);
+            var files = fileUpload.files;
+
+            var fileData = new FormData();
+            fileData.append(files[0].name, files[0]);
+
+            for (var i = 0; i < files.length; i++) {
+                if (files[i][0] != null)
+                    fileData.append(i, files[i][0]);
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SAPIssueTrackFileUpload","IssueTrack")?ProjectId=' + ProjectId + '',
+                data: fileData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response == true) {
+                        Notiflix.Notify.Success('SAP Issue File Uploaded successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        $("#DumpIssuefileUpload").val('');
+                        $(".btnDumpIssuecancel").click();
+
+                        LoadSAPIssuetrackUpload();
+                    }
+                    else if (response == false) {
+                        Notiflix.Notify.Failure('Upload the file properly..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        $("#DumpIssuefileUpload").val('');
+                    }
+                }
+            });
+        }
+    });
+    function LoadSAPIssuetrackUpload() {
+        
+        var instance = $("#ProjInstance").val();
+        var ProjectId=$("#drpProject").val();
+        if (ProjectId != 0) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("LoadSAPIssueTrack","IssueTrack")?ProjectId=' + ProjectId + '',
+                //data: fileData,
+                contentType: false,
+                processData: false,
+                async: false,
+                success: function (response) {
+
+                    $('.SAPIssueTrackTable tbody').remove();
+                    var tbody = '<tbody>';
+                    var tr = '<tr>';
+
+                    var Count = response.length;
+                    $("#Issuetrack_Count").text(Count);
+
+                    if (response.length > 0) {
+                        $.each(response, function (key, val) {
+                            var tr2 = '<tr id="' + val.SAPIssuetrack_Id + '">';
+                            var bb = '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.IssueNo + '">' + val.IssueNo + '</span></td>';
+                            bb += '<td><span class="card-title" data-toggle="tooltip" title="' + val.IssueName + '"data-placement="left">' + val.IssueName + '</span ></td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Category + '">' + val.Category + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title text-capitalize" data-toggle="tooltip" title="' + val.Priority + '">' + val.Priority + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Assignee + '">' + val.Assignee + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.RaisedBy + '">' + val.RaisedBy + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.ApplicationArea + '">' + val.ApplicationArea + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.OpenDt + '">' + val.OpenDt + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.CloseDt + '">' + val.CloseDt + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.status + '">' + val.status + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Resolution + '">' + val.Resolution + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Comments + '">' + val.Comments + '</td>';
+                            //if (val.status != "Fixed") {
+                            //    bb += '<td><i class="fa fa-pencil edit_' + val.SAPIssuetrack_Id + '" id="EditSAPIssueTrack" style="cursor:pointer"></td>';
+                            //}
+                            //else {
+                            //    bb += '<td></td>';
+                            //}
+                            tr = tr + tr2 + bb + '</tr>' + '</tr>';
+                        });
+                    }
+                    else {
+                        var tr2 = '<tr class="colspan">';
+                        var bb = '<td colspan="12" style="text-align:center">No Records Found</td>';
+                        tr = tr + tr2 + bb + '</tr>' + '</tr>';
+                        $("#Issuetrack_Count").text('0');
+                       
+                    }
+                    tbody = tbody + tr + '</tbody>';
+                    $('.SAPIssueTrackTable').append(tbody);
+                }
+            });
+        }
+        else {
+            $("#DumpIssue").hide();
+             var tbody = '<tbody><tr class="colspan"><td colspan="12" style="text-align:center">No Records Found</td></tr></tbody>';
+             $('.SAPIssueTrackTable').append(tbody);
+        }
+    }
+
+    $(".btnDumpIssuecancel").on("click", function () {
+        $("#UploadDumpIssue").modal("hide");
+        $("#DumpIssuefileUpload").val('');
+    });
+
+    $(".cancelSAPIssueDump").on("click", function () {
+        $("#EditSAPIssueDumpModal").modal("hide");
+    });
+
+    $(document).on('click', '#EditSAPIssueTrack', function () {
+        
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+
+        $.ajax({
+            url: '@Url.Action("_GetSAPIssueTrack","IssueTrack")',
+            type: "GET",
+            data: { id: tr_Id },
+            async: false,
+            success: function (result) {
+                
+                $('#EditSAPIssueDumpModal').modal('show');
+                $("#txtSAPIssueName").val(result.IssueName);
+                $('#drpSAPStatus').val(result.status)
+                $("#SAPIssuetrack_Id").val(result.SAPIssuetrack_Id);
+                $("#txtSAPIssueComments").val(result.Comments);
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    });
+
+    $("#btnSAPIssueDumpUpdate").on("click", function () {
+        
+        var Id=$("#SAPIssuetrack_Id").val();
+        var SAPStatus = $('#drpSAPStatus').val();
+        var Comments = $("#txtSAPIssueComments").val();
+
+        $.ajax({
+            url: '@Url.Action("UpdateSAPIssueTrack","IssueTrack")',
+            type: "POST",
+            data: { Id: Id, SAPStatus:SAPStatus,Comments:Comments},
+            async: false,
+            success: function (result) {                
+                if (result == "success") {
+                    Notiflix.Notify.Success('SAP Issue Updated successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    $(".cancelSAPIssueDump").click();
+                    LoadSAPIssuetrackUpload();
+                }               
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,100 @@
+﻿<style>
+    p.lead {
+        margin-left: 31%;
+        margin-top: -8%;
+        word-break: break-word;
+    }
+    .para {
+        position: relative;
+        left: 1%;
+        font-size: 1.5em;
+        box-shadow: 5px 5px 5px grey;
+        top: 1%;
+        background: #EEEEEE;
+    }
+    ::-webkit-scrollbar {
+        background: aliceblue
+    }
+</style>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title text-center w-100 semibold">Task Detail</h4>
+            <button type="button" class="close CloseResource" data-dismiss="modal" aria-label="Close" id="Model_Close">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @foreach (var item2 in ViewBag.GetMoreDetail)
+            {
+                <blockquote class="para p-3 lead font-weight-bold" data-toggle="tooltip" title="" data-placement="top">
+                    Activity/Task:&nbsp;&nbsp;<p class=" lead" data-toggle="tooltip" title="">@item2.Task&nbsp;</p>
+                </blockquote>
+            }
+            <div class="row bg-white">
+                <div class="ibox w-100">
+                    <div class="ibox-body">
+                        <div class="page-content fade-in-up">
+                            <div class="bg-white section-lt">
+                                <div class="form-row py-0">
+                                    <div class="col-lg-12">
+                                        <div class="ibox task-detail ">
+                                            <div class="ibox-body m-0 p-0 pm">
+                                                <table class="table table-borderless mb-0">
+                                                    @foreach (var item in ViewBag.GetMoreDetail)
+                                                    {
+                                                        <tr></tr>
+                                                        <tr></tr>
+                                                        <tr>
+                                                            <th scope="col" class="" data-toggle="tooltip" title="" data-placement="top">Building Block</th>
+                                                            <td scope="row" class="p-3" data-toggle="tooltip" title="">@item.BuildingBlock</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="col" class="" data-placement="top" data-toggle="tooltip" title="">Role</th>
+                                                            <td scope="row" class="p-3" data-toggle="tooltip" title="">@item.Role</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="">Planned Start Date</th>
+                                                            <td class="p-3" data-toggle="tooltip" title="">@item.PlanedDate&nbsp;</td> @*<i class="fa fa-circle schedule" aria-hidden="true"></i>*@
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="">Planned End Date</th>
+                                                            <td scope="row" class="p-3" data-toggle="tooltip" title="">@item.PlanedEn_Date&nbsp;</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="">Actual Start Date</th>
+                                                            <td scope="row" class="p-3" data-toggle="tooltip" title="">@item.ActualDate&nbsp;</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <th scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="">Actual End Date</th>
+                                                            <td scope="row" class="p-3" data-toggle="tooltip" title="">@item.ActualEn_Date&nbsp;</td>
+
+                                                        </tr>
+
+                                                    }
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+<script>
+    //$(document).ready(function () {
+    //    $(".CloseResource").on("click", resource);
+    //    var resource = function () {
+    //        debugger;
+    //        $("#ShowProgressMonitor").modal('hide');
+    //        $('.modal-backdrop').remove();
+    //    }
+    //});
+
+</script>

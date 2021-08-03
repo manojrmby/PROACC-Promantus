@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    
+    <hgroup>
+        <h1>Error.</h1>
+        <h2>An error occurred while processing your request.</h2>
+        <button type="button" class="btn btn-primary pointer " onclick="LogOut();">Login Again</button>
+        
+    </hgroup>
+</body>
+</html>
+<script>
+    function LogOut() {
+         var Url = '@Url.Action("Logout", "Login")';
+                    window.location.href = Url;
+    }
+</script>

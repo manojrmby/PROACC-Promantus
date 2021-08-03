@@ -1,0 +1,115 @@
+﻿
+<style>
+    #EditIssueTrackmodel #contentManage {
+        width: 1123px;
+        left: -30%;
+        border-radius: 5px;
+    }
+</style>
+
+<!--Start Edit POPUP-->
+<div id="EditIssueTrackmodel" class="modal fade" role="dialog">
+    <div class="modal-dialog" id="contentManage">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4UpdateIssue">Update Issue</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <div class="row py-1 ">
+                                <div class="col-lg-12">
+                                    <ul class="m-0 p-0 sec-project">
+                                        <li class="resource-planning">
+                                            <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link  title-project active" data-toggle="tab" href="#details" role="tab" aria-controls="details" id="tab_ITMdetails">Details</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link title-project comments-bdg" data-toggle="tab" href="#comments" role="tab" aria-controls="comments" id="comments-bdg">Comments<sup class="badge badge-primary table-badge"></sup></a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="bottom-line"></div>
+                            </div>
+
+                            <div class="d-flex">
+                                <div class="tab-content w-100">
+                                    <div class="tab-pane active" id="details" role="tabpanel">
+                                        <div class="d-flex details-tabel">
+                                            <div class="col-lg-12 form-details">
+                                                <form>
+                                                    <input type="hidden" id="txtIssue_ID" />
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-group">
+                                                                <label for="">Issue Name<span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="txtIssueNameEdit" aria-describedby="">
+                                                                <span class="" id="lblIssueName" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Assigned To<span style="color:red">*</span></label>
+                                                                <select class="form-control" id="drpAssignedToEdit" name="">
+                                                                    @foreach (var item in ViewBag.AssignedTo)
+                                                                    {
+                                                                        <option value="@item.UserId">@item.Name</option>
+                                                                    }
+                                                                </select>
+                                                                <span class="" id="lblAssignedTo" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Phase<span style="color:red">*</span></label>
+                                                                <input id="drphiddenPhase" type="hidden" />
+                                                                <input type="text" class="form-control" id="drpPhaseEdit" aria-describedby="">
+                                                                <span class="" id="lblPhase" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Task<span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="drpTaskListEdit" aria-describedby="">
+                                                                <span class="" id="lblTaskList" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="">Status<span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="drpStatusEdit" aria-describedby="">
+                                                                <span class="" id="lblStatus" style="color:red;display:none">&nbsp;</span>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="comments" role="tabpanel">
+                                        <div class="chatbox scrollGradient" id="Chatbox_Id">
+                                        </div>
+                                        <div class="dropdown-divider col-md-6"></div>
+                                        <div class="col-md-6">
+                                            <label for="comment">Add Comments:</label>
+                                            <textarea class="form-control" rows="3" id="Comments"></textarea>
+                                            <button type="button" class="btn btn-primary ml-2" id="btnComments">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnIssueUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary pointer" id="IssueUpdatecancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--End Edit POPUP-->

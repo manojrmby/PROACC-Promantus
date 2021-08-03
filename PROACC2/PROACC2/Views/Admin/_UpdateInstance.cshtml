@@ -1,0 +1,172 @@
+﻿@{ 
+    var insta = ViewBag.Instance;
+}
+<input type="hidden" value="@insta.Instance_id" name="InstaID" />
+<div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title text-center w-100 semibold">Update Instance</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row bg-white">
+                <div class="ibox w-100">
+                    <div class="ibox-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="">Instane Name*</label>
+                                <input type="text" class="form-control" id="txtUpdateInstanceName" name="InstaName" value="@insta.InstanceName" />
+                                <span id="lblUpdtInstanceName" style="color:red"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Project Name*</label>
+                                <select class="form-control" id="drpUpdateProj" name="Project">
+                                    @foreach (var item in ViewBag.ProjectName)
+                                    {
+                                        if (insta.Project_ID == item.ProjectId)
+                                        {
+                                            <option value="@item.ProjectId" selected>@item.ProjectName</option>
+                                        }
+                                        
+                                    }
+                                </select>
+                                <span id="lblUpdtProject" style=" color:red;"></span>
+                                @*<small id="" class="form-text text-muted">Maximum Characters 3.</small>*@
+                            </div>
+                            <div class="form-group">
+                                <label for="">Description</label>
+                                <input type="text" class="form-control" id="Updatedescription" name="Descript" value="@insta.Description" />
+                                <span id="lblUpdtDescription" style="color:red"></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="submit d-flex justify-content-center w-100">
+                <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnInstanceUpdate">Save</button>
+                <button type="button" class="btn btn-secondary pointer" id="cancel" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+
+    function CheckInstanceUpdtAvailabiltiy(InstanceName,Project) {
+        var _InstaName = InstanceName;
+        var _Pid = Project;
+        var _status = true;
+
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("CheckInsatanceAvailabilty", "Admin")',
+                data: {
+                    InstaName: _InstaName,
+                    ProjectId: _Pid
+                },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        _status = false;
+                    }
+                },
+                error: function () {
+                },
+            });
+        
+        return _status;
+    }
+
+    function ResetUpdateInstance() {
+        $('.Projectbody').load(' .Projectbody');
+        $("#txtUpdateInstanceName").val('')
+        $("#drpUpdateProj").val(0)
+        $("#Updatedescription").val('')
+        $('#lblUpdtInstanceName').html("").show();
+        $('#lblUpdtDescription').html("").show();
+        $('#lblUpdtProject').html("").show();
+        $("#EditModal").modal('hide');
+        $('.modal-backdrop').remove();
+    }
+
+    $('button[data-dismiss="modal"]').click(function () {
+        $(this).parent().parent().parent().parent().modal('hide');
+        ResetUpdateInstance();
+    })
+
+    $("#drpUpdateProj").prop("disabled", true);
+    $("#btnInstanceUpdate").on("click", function () {
+        var InstanceName = $("input[name='InstaName']").val();
+        var Description = $("input[name='Descript']").val();
+        var Project = $("#drpUpdateProj").children("option:selected").val();
+        var InstaId = $("input[name='InstaID']").val();
+
+        var _InstanceName = _Project = _Description = false;
+
+        if (InstanceName == "") {
+            _InstanceName = true;
+            $("#lblUpdtInstanceName").html("Please enter the Instance Name").show();
+        }
+        else {
+            $("#lblUpdtInstanceName").html("").show();
+
+        }
+        if (Project == 0) {
+            _Project = true;
+            $("#lblUpdtProject").html("Please Select the project").show();
+        }
+        else {
+            $("#lblUpdtProject").html("").show();
+        }
+        if (Description == "") {
+            _Description = true;
+            $("#lblUpdtDescription").html("Please Select the Description").show();
+        }
+        else {
+            $("#lblUpdtDescription").html("").show();
+        }
+        if (CheckInstanceUpdtAvailabiltiy(InstanceName,Project)==false) {
+            $("#lblUpdtInstanceName").html("Please re-enter the Instance Name").show();
+        }
+        else {
+            if (InstanceName == "") {
+                $("#lblUpdtInstanceName").html("Please enter the Instance Name").show();
+            }
+            else {
+                $("#lblUpdtInstanceName").html("").show();
+            }
+        }
+        if (_InstanceName == false && _Project == false && _Description == false && CheckInstanceUpdtAvailabiltiy(InstanceName, Project) == true) {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateInstance", "Admin")',
+                data: {
+                    Name: InstanceName,
+                    ProjectID: Project,
+                    Description: Description,
+                    ID: InstaId
+                },
+                success: function (response) {
+                    if (response == "success") {
+                        ResetUpdateInstance();
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
+     });
+
+
+</script>

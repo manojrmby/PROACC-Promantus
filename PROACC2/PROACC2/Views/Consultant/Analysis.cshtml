@@ -1,0 +1,658 @@
+﻿
+@{
+    ViewBag.Title = "Analysis";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #partialView, #partialView1 {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: calc(100vh - 225px);
+    }
+
+    .show_ins, .show_prj {
+        display: none;
+    }
+
+    .show_data {
+        display: block;
+    }
+
+    .row {
+        margin-right: -5px;
+    }
+</style>
+<script src="~/assets/js/Upload/jquery.dm-uploader.min.js"></script>
+<script src="~/assets/js/Upload/UploadScript.js"></script>
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row">
+        <div class="col-lg-7">
+            <ul class="nav navbar-toolbar sec-left-resource">
+                <li>
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpCustomer">
+                                <option value="0">Select Customer</option>
+                                @foreach (var item in ViewBag.CustomerName)
+                                {
+                                    <option class="text-capitalize" value="@item.Value">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>//&nbsp; &nbsp;
+                    }
+
+                </li>
+                <li class="show_prj">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_prj">
+                    @if (User.IsInRole("Customer") || User.IsInRole("Project Manager"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option class="text-capitalize" value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                            </select>
+                        </div>
+                    }
+                    @*<div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>*@
+                </li>
+                <li class="show_ins">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_ins">
+                    <div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                            <option value="0">Select Instance</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-5">
+            <div class="sec-left-resource d-flex justify-content-end">
+                <div class="ibox current-projects mb-0"><span class="">Current Phase:&nbsp;&nbsp;<strong id="CurrentPhase">Assessment</strong></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="row py-1 ">
+        <div class="col-lg-6">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                <li class="nav-item" data-ref="@Url.Action("Analysis","Consultant", new { name = "_SAPFileUpload" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#PartialView1" role="tab" aria-controls="SAPFileUpload" id="Tab_SAPFileUpload">SAP File Upload</a>
+                                </li>
+                                <li class="nav-item" data-ref="@Url.Action("Analysis", "Consultant", new { name = "_CreateAnalysis" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#PartialView" role="tab" aria-controls="CreateAnalysis" id="Tab_CreateAnalysis">Create Analysis</a>
+                                </li>
+
+                            </ul>
+                            <!-- <span class="title-project active">Resource Planning<span> -->
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-6">
+            @*<div class="form-row phase-label justify-content-end">
+                <div class="projects-dropdown w-40">
+                    <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label align-middle label-phase">Phase:&nbsp;&nbsp; </label>
+                        <div class="col-sm-10">
+                            <select class="form-control border-0" id="drpPhase">
+                                @foreach (var item in ViewBag.Phaselist)
+                                {
+                                    <option value="@item.Id">@item.PhaseName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="search-field pl-2 w-40">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <form class="navbar-search" action="javascript:;">
+                                <div class="rel">
+                                    <span class="search-icon"><i class="fa fa-search"></i></span>
+                                    <input class="form-control" placeholder="Search by project title,customer,project manager...">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+    <div class="bottom-line"></div>
+
+</div>
+@*<div class="row">
+        <div class="tab-content w-100">
+            <div class="tab-pane active" id="rp" role="tabpanel">
+                <div id="partialView">
+                </div>
+            </div>
+            <div class="tab-pane active" id="rp" role="tabpanel">
+                <div id="partialView">
+                </div>
+            </div>
+        </div>
+    </div>*@
+<div class="tab-content">
+    <div class="tab-pane fade-in-up" id="partialView1" role="tabpanel">
+    </div>
+    <div class="tab-pane fade-in-up" id="partialView" role="tabpanel">
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+       //$('#Tab_CreateAnalysis').click();
+       $('#Tab_SAPFileUpload').click();
+        Notiflix.Report.Info('Notification Info', '"Kindly Select Customer,Project and Instance."- To Proceed', 'Click');
+        @*$("#partialView").load('@Url.Content("/Consultant/_CreateAnalysis")');*@
+    });
+    $("#drpPhase").click(function () {
+        $(this).find("option[value='2']").prop("disabled", true);
+        $(this).find("option[value='3']").prop("disabled", true);
+        $(this).find("option[value='4']").prop("disabled", true);
+    });
+    $("#drpCustomer").change(function () {
+        var Id = $("#drpCustomer").val();
+        $("#partialView1").html("");
+        $("#partialView").html("");
+        if (Id == 0) {
+            var Proj = $('#drpProject');
+            Proj.empty();
+            Proj.append($('<option/>', {
+                value: 0,
+                text: 'Select Project'
+            }));
+
+             var insta = $('#ProjInstance');
+            insta.empty();
+            insta.append($('<option/>', {
+                value: 0,
+                text: 'Select Instance'
+            }));
+        }
+        else {
+            $.ajax({
+                url: '@Url.Action("GetProjectByCustomer", "Transaction")',
+                dataType: "json",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: { id: Id },
+                success: function (data) {
+                    var state = $('#drpProject');
+                    state.empty();
+                    state.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Project'
+                    }));
+
+                    var insta = $('#ProjInstance');
+                    insta.empty();
+                    insta.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Instance'
+                    }));
+
+                    $.each(data, function (item, value) {
+                        $('#drpProject').append($("<option class='text-capitalize' value='" + value.ProjectId + "'>" + value.ProjectName + "</option>"));
+                    })
+                    $('.show_prj').addClass('show_data').removeClass('show_prj');
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        }
+    });
+
+    $("#drpProject").change(function () {
+        var Id = $("#drpProject").val();
+        $("#partialView1").html("");
+        $("#partialView").html("");
+        if (Id == 0) {
+            var insta = $('#ProjInstance');
+            insta.empty();
+            insta.append($('<option/>', {
+                value: 0,
+                text: 'Select Instance'
+            }));
+        }
+        else {
+
+            $.ajax({
+                url: '@Url.Action("GetInstancesByProject", "Transaction")',
+                dataType: "json",
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: { id: Id },
+                success: function (data) {
+                    var state = $('#ProjInstance');
+                    state.empty();
+                    state.append($('<option/>', {
+                        value: 0,
+                        text: 'Select Instance'
+                    }));
+                    $.each(data, function (item, value) {
+                        $('#ProjInstance').append($("<option class='text-capitalize' value='" + value.Instance_id + "'>" + value.InstanceName + "</option>"));
+                    })
+                    $('.show_ins').addClass('show_data').removeClass('show_ins');
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+            @*$.ajax({
+                type: "POST",
+                url: '@Url.Action("LoadCreateAnalysisInstance", "Consultant")',
+                data: { 'ProjectId': Id, 'pagename': 'Analysis' },
+                success: function (data) {
+                    var select = $("#ProjInstance");
+                    select.empty();
+                    select.append($('<option/>', {
+                        value: 0,
+                        text: "Select Instance"
+                    }));
+
+                    $.each(data, function (index, itemData) {
+                        select.append($('<option/>', {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                    $('.show_ins').addClass('show_data').removeClass('show_ins');
+                    //$("#IDInstance").prop("disabled", false);
+                },
+                error: function (a) {
+                    Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    //alert(a);
+                }
+            });*@
+        }
+    });
+
+    function test(ID) {
+
+        var status=false;
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: '@Url.Action("GetInstance_LandScape","Home")',
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+
+                if (Data == 'Manual') {
+                   status = true;
+                } else if (Data == 'Automation') {
+                  status = false;
+                }
+            }
+        });
+        return status
+    }
+
+    function LoadAnalysisCompletedInstance(PrjId,InsId) {
+        var LoadAnalysisCompleted;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("LoadAnalysisCompletedInstance", "Consultant")',
+            data: { 'ProjectId': PrjId, 'pagename': 'Readiness', Instance_Id: InsId },
+            success: function (data) {
+                LoadAnalysisCompleted = data;
+            },
+            error: function (a) {
+                Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+        });
+        return LoadAnalysisCompleted;
+    }
+
+    function AssessmentCompletedInstance(PrjId, InsId) {
+        var AssessmentDone;
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: '@Url.Action("LoadAnalysisCompletedInstance", "Consultant")',
+            data: { 'ProjectId': PrjId, 'pagename': 'Analysis', Instance_Id: InsId },
+            success: function (data) {
+                AssessmentDone = data;
+            },
+            error: function (a) {
+                Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+            }
+        });
+        return AssessmentDone;
+    }
+
+    $(".nav-tabs li").click(function (e) {
+        
+        var url = $(this).data('ref');
+        var InsId = $("#ProjInstance").val();
+        var PrjId = $("#drpProject").val();
+
+        //var test1 = test(InsId);
+       
+
+        if (InsId != 0) {
+            
+             var GetInstance_LandScape = test(InsId);
+            var LoadAnalysisCompleted = LoadAnalysisCompletedInstance(PrjId, InsId);
+            var AssessmentDone = AssessmentCompletedInstance(PrjId, InsId);
+            
+            $.ajax({
+                url: url,
+                //async: false,
+                //data: { pageId: pageId },
+                success: function (response) {
+                    
+                    if (url.includes("_SAPFileUpload") && GetInstance_LandScape == true) {
+                        SAPFileUploadTab();
+                    }
+                    else if (url.includes("_CreateAnalysis") && AssessmentDone == false && LoadAnalysisCompleted == false&& GetInstance_LandScape == false) {
+                        Notiflix.Report.Info('This is a Automation Instance', 'Please Complete the Assessment Page..!', 'OK',
+                            function () {
+                                $("#partialView").html("");
+                                $("#partialView1").html("");
+                            });
+                    }
+                    else if (url.includes("_CreateAnalysis") && AssessmentDone == false && LoadAnalysisCompleted == false && GetInstance_LandScape == true) {
+                        Notiflix.Report.Info('This is a Manual Instance', 'Please Complete the Assessment Page..!', 'OK',
+                            function () {
+                                $("#partialView").html("");
+                                $("#partialView1").html("");
+                            });
+                    }
+                    else if (url.includes("_CreateAnalysis") && LoadAnalysisCompleted == true && GetInstance_LandScape == false) {
+                        Notiflix.Report.Info('This is a Automation Instance', 'Create Analysis Page Completed..!', 'OK',
+                            function () {
+                                $("#partialView").html("");
+                                $("#partialView1").html("");
+                            });
+                    }
+                    else if (url.includes("_CreateAnalysis") && LoadAnalysisCompleted == true && GetInstance_LandScape == true) {
+                        Notiflix.Report.Info('This is a Manual Instance', 'Create Analysis Page Completed..!', 'OK',
+                            function () {
+                                $("#partialView").html("");
+                                $("#partialView1").html("");
+                            });
+                    }
+                    else if (url.includes("_CreateAnalysis") && GetInstance_LandScape == true) {                        
+                        if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                            CreateAnalysisTab();
+                        }                        
+                    }
+                    else if (url.includes("_CreateAnalysis") && GetInstance_LandScape == false) {
+                        if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                            CreateAnalysisTab();
+                        }
+                    }
+                    else if (url.includes("_SAPFileUpload") && GetInstance_LandScape == true) {
+                        if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                            SAPFileUploadTab();
+                        }
+                    }
+                    else if (url.includes("_SAPFileUpload") && GetInstance_LandScape == false) {
+                        if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                            Notiflix.Report.Info('This is a Automation Instance', 'Please fill the Create Analysis Page..!', 'OK',
+                                function () {
+                                    $('#Tab_CreateAnalysis').click();
+
+                                });
+                        }
+                        else if (AssessmentDone == false && LoadAnalysisCompleted == false) {
+                            Notiflix.Report.Info('This is a Automation Instance', 'Please Complete the Assessment Page..!', 'OK',
+                                function () {
+                                    $("#partialView").html("");
+                                    $("#partialView1").html("");
+                                });
+                        }
+                        else if (LoadAnalysisCompleted == true) {
+                            Notiflix.Report.Info('This is a Automation Instance', 'Create Analysis Page Completed..!', 'OK',
+                                function () {
+                                    $("#partialView").html("");
+                                    $("#partialView1").html("");
+                                });
+                        }
+                    }                    
+                }
+            });
+        }
+    });
+
+    $("#ProjInstance").change(function () {
+        var ID = $(this).val();
+        var PhId = "";
+        var PrjId = $("#drpProject").val();
+        var InsId = $("#ProjInstance").val();
+        var CustId = $("#drpCustomer").val();
+
+        //SessionStorage(CustId, PhId, PrjId, InsId);
+
+        var act = $("#Tab_CreateAnalysis").prop('class');
+        var SAP_act = $("#Tab_SAPFileUpload").prop('class');
+        
+        if (ID != 0) {
+            //$('#load').css("display", "block");
+            var GetInstance_LandScape = test(ID);
+            var LoadAnalysisCompleted = LoadAnalysisCompletedInstance(PrjId, InsId);
+            var AssessmentDone = AssessmentCompletedInstance(PrjId, InsId);
+
+            if (SAP_act.includes("active") && GetInstance_LandScape == true) {
+                SAPFileUploadTab();
+            }
+            else if (act.includes("active") && AssessmentDone == false && LoadAnalysisCompleted == false && GetInstance_LandScape == false) {
+                Notiflix.Report.Info('This is a Automation Instance', 'Please Complete the Assessment Page..!', 'OK',
+                    function () {
+                        $("#partialView").html("");
+                        $("#partialView1").html("");
+                    });
+            }
+            else if (act.includes("active") && AssessmentDone == false && LoadAnalysisCompleted == false && GetInstance_LandScape == true) {
+                Notiflix.Report.Info('This is a Manual Instance', 'Please Complete the Assessment Page..!', 'OK',
+                    function () {
+                        $("#partialView").html("");
+                        $("#partialView1").html("");
+                    });
+            }
+            else if (act.includes("active") && LoadAnalysisCompleted == true && GetInstance_LandScape == false) {
+                Notiflix.Report.Info('This is a Automation Instance', 'Create Analysis Page Completed..!', 'OK',
+                    function () {
+                        $("#partialView").html("");
+                        $("#partialView1").html("");
+                    });
+            }
+            else if (act.includes("active") && LoadAnalysisCompleted == true && GetInstance_LandScape == true) {
+                Notiflix.Report.Info('This is a Manual Instance', 'Create Analysis Page Completed..!', 'OK',
+                    function () {
+                        $("#partialView").html("");
+                        $("#partialView1").html("");
+                    });
+            }
+            else if (act.includes("active") && GetInstance_LandScape == true) {
+                if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                    CreateAnalysisTab();
+                }               
+            }
+            else if (act.includes("active") && GetInstance_LandScape == false) {
+                if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                    CreateAnalysisTab();
+                }
+            }
+            else if (SAP_act.includes("active") && GetInstance_LandScape == true) {
+                if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                    SAPFileUploadTab();
+                }
+            }
+            else if (SAP_act.includes("active") && GetInstance_LandScape == false) {
+                if (AssessmentDone == true && LoadAnalysisCompleted == false) {
+                    Notiflix.Report.Info('This is a Automation Instance', 'Please fill the Create Analysis Page..!', 'OK',
+                        function () {
+                            $('#Tab_CreateAnalysis').click();
+
+                        });
+                }
+                else if (AssessmentDone == false && LoadAnalysisCompleted == false) {
+                    Notiflix.Report.Info('This is a Automation Instance', 'Please Complete the Assessment Page..!', 'OK',
+                        function () {
+                            $("#partialView").html("");
+                            $("#partialView1").html("");
+                        });
+                }
+                else if (LoadAnalysisCompleted == true) {
+                     Notiflix.Report.Info('This is a Automation Instance', 'Create Analysis Page Completed..!', 'OK',
+                        function () {
+                            $("#partialView").html("");
+                            $("#partialView1").html("");
+                        });
+                }
+            }
+            else if (SAP_act.includes("active") && GetInstance_LandScape == false) {
+                if (LoadAnalysisCompleted == true) {
+                    Notiflix.Report.Info('This is a Automation Instance', 'Analysis is Completed.!', 'OK',
+                        function () {
+                            $("#partialView").html("");
+                            $("#partialView1").html("");
+                        });
+                }
+            }
+            else if (act.includes("active") && GetInstance_LandScape == true && LoadAnalysisCompleted == true) {
+                Notiflix.Report.Info('This is a Manual Instance', 'Analysis is Completed.!', 'OK',
+                    function () {
+                        $("#partialView").html("");
+                        $("#partialView1").html("");
+                    });
+            }
+        }
+    });
+
+    function CreateAnalysisTab() {
+        $("#partialView1").html("");
+        $("#partialView1").removeClass("active");
+         $('#partialView').addClass("active");
+        $.ajax({
+            url: '@Url.Action("_CreateAnalysis", "Consultant")',
+            //async: false,
+            type: "get",
+            success: function (response) {
+                $("#partialView").html(response);
+            },
+            error: function (response) {
+                alert(response);
+            }
+        });
+    }
+
+    function SAPFileUploadTab() {
+        $("#partialView").html("");
+        $("#partialView").removeClass("active");
+        $('#partialView1').addClass("active");
+        $.ajax({
+            url: '@Url.Action("_SAPFileUpload", "Consultant")',
+            //async: false,
+            type: "get",
+            success: function (response) {
+                $("#partialView1").html(response);
+            },
+            error: function (response) {
+                alert(response);
+            }
+        });
+    }
+
+    @*$("#ProjInstance").change(function () {
+        var ID = $(this).val();
+        console.log(ID);
+        var a;
+        if (ID != 0) {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                async: false,
+                url: '@Url.Action("GetInstance_LandScape")',
+                data: { Instance: ID },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (Data) {
+                    if (Data == 'Manual') {
+                        a = 1;
+                    } else if (Data == 'Automation') {
+                        a = 0;
+                    }
+                }
+            });
+            console.log(a);
+            var act = $("#Tab_CreateAnalysis").prop('class');
+            if (act.includes("active")) {
+                $('#partialView').addClass("active");
+                $.ajax({
+                    url: '@Url.Action("_CreateAnalysis", "Consultant")',
+                    async: false,
+                    type: "get",
+                    success: function (response) {
+                        $("#partialView").html(response);
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            } else if (a == 1) {
+                $('#partialView1').addClass("active");
+                $.ajax({
+                    url: '@Url.Action("_SAPFileUpload", "Consultant")',
+                    async: false,
+                    type: "get",
+                    success: function (response) {
+                        $("#partialView1").html(response);
+                    },
+                     error: function (response) {
+                        alert(response);
+                    }
+                });
+            }
+            console.log(a);
+        }
+
+    });*@
+
+
+
+</script>
+<!-- END PAGE CONTENT-->

@@ -1,0 +1,1726 @@
+﻿
+
+
+@*<script src="~/assets/js/Chart/Chart.js"></script>
+<script src="~/assets/js/Chart/chartjs-plugin-datalabels@0.2.0.js"></script>
+<script src="~/assets/js/ReadinessReports.js"></script>
+<style>
+    .chartWrapper > canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+    }
+
+    .chartAreaWrapper {
+        /*width: 50%!important;*/
+        overflow-x: scroll;
+    }
+</style>*@
+<style>
+ 
+.td_colour
+{
+    background-color: white;
+}
+.td_color
+{
+   background-color: #04dc14; 
+   color:floralwhite;
+}
+#td_col
+{
+    background-color:darkgray;
+    color:floralwhite;
+}
+#td_co
+{
+    background-color: darkturquoise;
+    color:floralwhite;
+}
+#td_c
+{
+    background-color: forestgreen;
+    color:floralwhite;
+}
+#td_l
+{
+    background-color: darkslateblue;
+    color:floralwhite;
+}
+.td_cl 
+{
+  background-color: gray;
+  color:floralwhite;
+}
+    th, td {
+        padding: 6px 4px;
+        /*background-color: lightgray;*/
+    }
+
+    .td_gray{
+        background-color: lightgray;
+    }
+</style>
+<style>
+    .class_50 {
+        height: calc(100vh - 360px);
+    }
+    .S_no{
+        width:52px;
+    }
+    .For_Height {
+        height: calc(98vh - 260px);
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+</style>
+
+<div class="form-row py-2 duration progress-monitor">
+    <!-- <div class="col-lg-12 "> -->
+    <div class="col-lg-12">
+        <ul class="p-0 m-0 localClass nav nav-tabs" data-tabs="tabs">
+            <li data-ref="Readiness_Report">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#Readiness_Report" role="tab" aria-controls="Readiness_Report" id="Tab_Readiness_Report">
+                    Readiness Report
+                </button>
+            </li>
+            <li data-ref="Landscape">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#Landscape" role="tab" aria-controls="Landscape" id="Tab_Landscape">
+                    Landscape Assessment
+                </button>
+            </li>
+            @*<li data-ref="Business_Process">
+            <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                    data-toggle="tab" href="#BusinessProcess" role="tab" aria-controls="BusinessProcess" id="Tab_BusinessProcess">
+                Business Process Assessment
+            </button>
+        </li>*@
+            <li data-ref="simplificationt">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#simplificationt" role="tab" aria-controls="simplification" id="Tab_simplification">
+                    SI-Check
+                </button>
+            </li>
+            <li data-ref="activities">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#activities" role="tab" aria-controls="activities" id="Tab_activities">
+                    SI-Check activities
+                </button>
+            </li>
+            <li data-ref="custom_code">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#custom_code" role="tab" aria-controls="custom_code" id="Tab_custom_code">
+                    custom code analysis
+                </button>
+            </li>
+            <li data-ref="fioriapps">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#fioriapps" role="tab" aria-controls="fioriapps" id="Tab_fioriapps">
+                    fioriapps report
+                </button>
+            </li>
+            <li data-ref="RoadMap_and_Effort_Estimation">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#RoadMapandEffortEstimation" role="tab" aria-controls="RoadMapandEffortEstimation" id="Tab_RoadMap_and_Effort_Estimation">
+                    S/4 Cov Roadmap
+                </button>
+            </li>
+            <li data-ref="Business_Process">
+                <button type="button" class="btn btn-secondary order-1 ml-2 pointer"
+                        data-toggle="tab" href="#Readinesschk_BusinessProcess" role="tab" aria-controls="Readinesschk_BusinessProcess" id="Tab_Readinesschk_BusinessProcess">
+                    BP Assessment
+                </button>
+            </li>
+        </ul>
+    </div>
+
+
+    <!-- </div> -->
+</div>
+
+<div class="tab-content For_Height">
+
+    <div class="tab-pane fade-in-up" id="Readiness_Report" role="tabpanel">
+        <!--<div class="form-row py-1">-->
+        @*<div class="col-lg-4">
+                <div class="ibox acme-assessment">
+                    <div class="ibox-body">
+                        <div class="d-flex justify-content-between align-items-left">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <td scope="col">ASSESSMENT</td>
+                                        <td scope="col"><i class="fa fa-circle schedule" style="color:red" aria-hidden="true"></i>&nbsp;ON SCHEDULE</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row"><small>PHASE</small></td>
+                                        <td><small>STATUS</small></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <!--<div class="col-lg-7">
+            <div class="ibox acme-assessment">
+                <div class="ibox-body">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <td scope="col">84</td>
+                                <td scope="col">60</td>
+                                <td scope="col">100%</td>
+                                <td scope="col">100%</td>
+                                <td scope="col">68%</td>-->
+        <!-- <td scope="col">C01&nbsp;<i class="fa fa-chevron-down" aria-hidden="true"></i></td> -->
+        <!--</tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td scope="row"><small>COMPLETION</small></td>
+                <td><small>SIMPLIFICATION</small></td>
+                <td><small>ACTIVITY REPORT</small></td>
+                <td><small>CUSTOM CODE ANALYSIS</small></td>
+                <td><small>FIORIAPPS REPORT</small></td>-->
+        <!-- <td><small>CURRENT INSTANCE</small></td> -->
+        <!--</tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>-->
+        <!--<div class="col-lg-1">
+            <div class="ibox btn-widget mb-0">
+                <div class="ibox-body">
+                    <div class="d-flex justify-content-between align-items-left align-middle">
+                        <div class="ibox dropdown-resources mb-0">
+                                <select class="form-control border-0" id="">
+                                    <option>current version</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            </div>-->
+        <!-- <div class="add-widget">
+        <button type="button" class="btn btn-secondary order-1 ml-2 pointer">Add Widget</button>
+        </div> -->
+        <!--<span><i class="fa fa-download" aria-hidden="true"></i></span>
+                            <span><i class="fa fa-envelope" aria-hidden="true"></i></span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="form-row py-0 pt-1">
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Simplification
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        @*<div class="w-85">
+                                <div>
+                                    <canvas id="Chart_Relevant_Donut"></canvas>
+                                </div>
+
+                            </div>*@
+                        <div class="w-100">
+                            <div>
+                                <div id="chartdiv_simp"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Custom Code Analysis
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        <div>
+                            <div id="chartdiv_Customcode"></div>
+                            @*<canvas id="Chart_CustomCode" height="128"></canvas>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row py-0">
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Activity (MOVE TO HANA)
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        <div>
+                            <div>
+                                <div id="chartdiv_Activities"></div>
+                                @*<canvas id="Chart_Activities_Bar1"></canvas>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Condition
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        <div>
+                            <div>
+                                <div id="chartdiv_Condition"></div>
+                                @*<canvas id="Chart_Activities_Donut"></canvas>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row py-0">
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Conversion
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        <div>
+                            <div>
+                                <div id="chartdiv_Convertion"></div>
+                                @*<canvas id="Chart_Activities_Bar2"></canvas>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Recommended SAP Fiori Apps
+                        </div>
+                        @*<div class="ibox-tools">
+                                <a class="ibox-collapse "><i class="fa fa-refresh refresh"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-ellipsis-h ellipsis-read"></i></a>
+                                <a class="ibox-collapse"><i class="fa fa-chevron-down ang-down"></i></a>
+                            </div>*@
+                    </div>
+                    <div class="ibox-body">
+                        <div>
+                            <div>
+                                <div id="chartdiv_Role_LOB"></div>
+                                @*<canvas id="Chart_Fiori_Bar1"></canvas>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="simplificationt" role="tabpanel">
+        <div class="ml-3 mb-3 mr-3">
+            <div class="row">
+                <div class="col-md-12 card" id="Chart123">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                        </div>
+                        <div class="col-lg-6">
+                            @Html.DropDownList("LOB", Enumerable.Empty<SelectListItem>(), "ALL", new { id = "IDLob", @class = "form-control", style = "height:auto"})
+                            @*@Html.DropDownList("LOB", (IEnumerable<SelectListItem>)ViewBag.LOB, "ALL", new { id = "IDLob", @class = "form-control" })*@
+                        </div>
+                    </div>
+                    <div id="Chart_Relevant" class="class_50">
+
+                    </div>
+                    @*<canvas class="col-md-6" id="Chart_Relevant"></canvas>*@
+                </div>
+
+            </div>
+        </div>
+        <div class="d-flex pro-list-table">
+            <table class="fixed table table-borderless bg-mediumgray mb-0 ">
+                <thead>
+                    <tr>
+                        <td scope="col" class="S_no">S.No</td>
+                        <td scope="col">title</td>
+                        <td scope="col">category</td>
+                        <td scope="col">Relevance</td>
+                        <td scope="col">LOB/Technology</td>
+                        <td scope="col">Business area</td>
+                        <td scope="col">Manual status</td>
+                        <td scope="col">SAP notes</td>
+                        <td scope="col">Relevance Summary</td>
+                    </tr>
+
+                </thead>
+                <tbody id="Id_Simp">
+                    <tr>
+                        <td colspan="9" style="text-align:center">
+                            NO Record found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="activities" role="tabpanel">
+        <div class="ml-3 mb-3 mr-3">
+            <div class="row">
+                <div class="col-md-12 card" id="ChartActivities">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label> By Phase</label>
+                            @Html.DropDownList("Phase", Enumerable.Empty<SelectListItem>(), "ALL", new { id = "ID_Phase", @class = "form-control form-inline",style = "height:auto" })
+                        </div>
+                        <div class="col-lg-6">
+                            <label> By condition</label>
+                            @Html.DropDownList("Condition", Enumerable.Empty<SelectListItem>(), "ALL", new { id = "ID_Condition", @class = "form-control form-inline",style = "height:auto" })
+                            @*@Html.DropDownList("LOB", (IEnumerable<SelectListItem>)ViewBag.LOB, "ALL", new { id = "IDLob", @class = "form-control" })*@
+                        </div>
+                    </div>
+                    <div id="Chart_Activities" class="class_50">
+
+                    </div>
+                    @*<canvas class="col-md-6" id="Chart_Activities"></canvas>*@
+                </div>
+
+            </div>
+        </div>
+        <div class="d-flex pro-list-table">
+            <table class="fixed table table-borderless bg-mediumgray mb-0 ">
+                <thead>
+                    <tr>
+                        <td scope="col" class="S_no">S.No</td>
+                        <td scope="col">Related Simplification Items</td>
+                        <td scope="col">Activities</td>
+                        <td scope="col">Phase</td>
+                        <td scope="col">Condition</td>
+                        <td scope="col">Additional Information</td>
+                    </tr>
+
+                </thead>
+                <tbody id="Id_Activities">
+                    <tr>
+                        <td colspan="7" style="text-align:center">
+                            NO Record found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="custom_code" role="tabpanel">
+        <div class="ml-3 mb-3 mr-3">
+            <div class="row">
+
+                <div class="col-md-12 card" id="">
+                    <div class="class_50" id="Chart_Custom_Code">
+
+                    </div>
+                    @*<canvas class="col-md-6" id="Chart_Custom_Code"></canvas>*@
+                </div>
+
+            </div>
+        </div>
+        <div class="d-flex pro-list-table">
+            <table class="fixed table table-borderless bg-mediumgray mb-0 ">
+                <thead>
+                    <tr>
+                        <td scope="col" class="S_no">S.No</td>
+                        <td scope="col">Custom Code Topic</td>
+                        <td scope="col">Status</td>
+                        <td scope="col">Application Component</td>
+                        <td scope="col">Custom Code Note</td>
+                    </tr>
+
+                </thead>
+                <tbody id="Id_Custom_Code">
+                    <tr>
+                        <td colspan="7" style="text-align:center">
+                            NO Record found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="fioriapps" role="tabpanel">
+        <div class="ml-3 mb-3 mr-3">
+            <div class="row">
+                <div class="col-md-12 card" id="Chart123">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                        </div>
+                        <div class="col-lg-6">
+                            @Html.DropDownList("Roles", Enumerable.Empty<SelectListItem>(), "ALL", new { id = "IDRoles", @class = "form-control" ,style = "height:auto"})
+                            @*@Html.DropDownList("LOB", (IEnumerable<SelectListItem>)ViewBag.LOB, "ALL", new { id = "IDLob", @class = "form-control" })*@
+                        </div>
+                    </div>
+                    <div id="Chart_FioriApp" class="class_50">
+
+                    </div>
+                    @*<div class="chartWrapper card" id="chartWrapper">
+                            <div class="chartAreaWrapper col-md-12">
+
+                                <div class="chartAreaWrapper2">
+                            <canvas id="chart-Test"></canvas>
+                        </div>
+                                <canvas id="axis-Test"></canvas>
+                            </div>
+
+                        </div>*@
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="d-flex pro-list-table">
+            <table class="fixed table table-borderless bg-mediumgray mb-0 ">
+                <thead>
+                    <tr>
+                        <td scope="col" class="S_no">S.No</td>
+                        <td scope="col">Role</td>
+                        <td scope="col">Name</td>
+                        <td scope="col">Application Area</td>
+                        <td scope="col">Description</td>
+                    </tr>
+
+                </thead>
+                <tbody id="Id_Fiori">
+                    <tr>
+                        <td colspan="9" style="text-align:center">
+                            NO Record found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="tab-pane fade-in-up" id="Landscape" role="tabpanel">
+
+        <div class="form-row py-0 pt-1">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head" style=" height:78px">
+                        <div class="ibox-title">
+                            <div>
+                                @*<input type="checkbox" id="System" value="System Scan Report" checked/>&nbsp;<label>System Scan Report</label>&nbsp;&nbsp;*@
+                                <input type="checkbox" id="ECC" value="ECC vs s4hana optimization" checked />&nbsp;<label>ECC vs S/4HANA License optimization</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Analytics" value="Add-on Analytics" />&nbsp;<label>Add-on Analytics</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Interface" value="Interface Overview" />&nbsp;<label>Interface Overview</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Archiving" value="Archiving Recommendations" />&nbsp;<label>Archiving Recommendations</label>&nbsp;&nbsp;<br />
+                            </div>
+                            <div>
+                                <input type="checkbox" id="Server" value="S/4HANA App Server" />&nbsp;<label>S/4HANA App Server Sizing</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Database" value="S/4HANA -HANA Database" />&nbsp;<label>S/4HANA -HANA Database Sizing</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="DatabaseTables" value="S/4HANA -HANA Database" />&nbsp;<label>HANA Database Tables</label>&nbsp;&nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-row py-0 pt-1" id="ECCS4Hana">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            ECC vs S/4Hana License Optimization
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-4" id="HanaCount_Summary">
+                                @*<h6>Summary</h6>
+                                <div><a>Total no. of named users: <b>5260</b></a></div>
+                                <div><a>Number of active named users: <b>4170</b></a></div>
+                                <div><a>Number of inactive named users: <b>1090</b></a></div>*@
+                            </div>
+                            <div class="col-lg-8">
+                                @*<img src="~/Assets/img/Ecc_Hana.JPG" />*@
+                                <div id="chartdiv_ECC" style="height:200px"></div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S No</td>
+                                                <td scope="col" width=25%>User</td>
+                                                <td scope="col" width=20%>User Type</td>
+                                                <td scope="col" width=20%>User Category</td>
+                                                <td scope="col" width=20%>System</td>
+                                                <td scope="col" width=20%>Date of Last Logon</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="Id_ECCHanaCount">
+                                            <tr>
+                                                <td colspan="6" style="text-align:center">
+                                                    No Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="Add_Analytics">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Add-on Analytics
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S.NO</td>
+                                                <td scope="col" width=25%>Add-On</td>
+                                                <td scope="col" width=20%>Version</td>
+                                                <td scope="col" width=20%>Description</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="ECC-DIMP">ECC-DIMP</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="600">600</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="DIMP">DIMP</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="LSOFE">LSOFE</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="617">617</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SAP Learning Solution Front-End">SAP Learning Solution Front-End</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="MIAPMINT">MIAPMINT</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="360_600">360_600</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Meridium APM Integration Interfaces">Meridium APM Integration Interfaces</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP7 For SAP ERP 6.0">EHP7 For SAP ERP 6.0</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP7 For SAP ERP 6.0">EHP7 For SAP ERP 6.0</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP7 For SAP ERP 6.0">EHP7 For SAP ERP 6.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">5.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP3 For SAP CRM 7.0">EHP3 For SAP CRM 7.0</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP3 For SAP CRM 7.0">EHP3 For SAP CRM 7.0</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="EHP3 For SAP CRM 7.0">EHP3 For SAP CRM 7.0</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="Interface_Overview">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Interface Overview
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S.NO</td>
+                                                <td scope="col" width=25%>Interface Name</td>
+                                                <td scope="col" width=20%>No. of Interfaces</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HTTP Connections to external server">HTTP Connections to external server</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="4">4</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="TCP/IP Connections">TCP/IP Connections</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="41">41</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="MIAPMINT">MIAPMINT</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="10">10</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Notable interfaces to G10">Notable interfaces to G10</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="5">5</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="Archiving_Recommend">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            Archiving Recommendations
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h6>Summary</h6>
+                                <div><a>Documents to be archived : <b>6240</b></a></div>
+                                <div><a>Custom programs to be archived : <b>913</b></a></div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S.NO</td>
+                                                <td scope="col" width=25%>Type</td>
+                                                <td scope="col" width=20%>No. Of Documents</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Process Orders Overdue For Deletion Flag">Process Orders Overdue For Deletion Flag</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="655">655</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Purchase Requisitions Items Open & Overdue">Purchase Requisitions Items Open & Overdue</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="4240">4240</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Open Item Of Vendors(FI-AP)">Open Item Of Vendors(FI-AP)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="413">413</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Open Item Of Customers(FI-AR)">Open Item Of Customers(FI-AR)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="1324">1324</span></td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="S4HanaServer">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            S/4HANA Infrastracture Sizing - S/4HANA App Server
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S.NO</td>
+                                                <td scope="col" width=45%>Application Server</td>
+                                                <td scope="col" width=25%>Environment</td>
+                                                <td scope="col" width=15%>SAPS</td>
+                                                <td scope="col" width=15%>Cores</td>
+                                                <td scope="col" width=15%>Memory</td>
+                                                <td scope="col" width=25%>Storage</td>
+                                                <td scope="col" width=20%>OS</td>
+                                                <td scope="col" width=20%>DataBase</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Production PAS">Production PAS</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="8000">8000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Production HA">Production HA</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="8000">8000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Production DR">Production DR</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="8000">8000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="QAS">QAS</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="4000">4000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">5.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="DEV">DEV</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="4000">4000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">6.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="S/4HANA App Server(Embeded Gateway)">S/4HANA App Server(Embeded Gateway)</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SBX">SBX</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="4000">4000</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="6">6</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="64">64</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="500GB">500GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="S4Hanadatabase">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            S/4HANA Infrastracture Sizing -HANA Database
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S.NO</td>
+                                                <td scope="col" width=25%>Memory</td>
+                                                <td scope="col" width=25%>Environment</td>
+                                                <td scope="col" width=20%>OS</td>
+                                                <td scope="col" width=20%>DataBase</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="512GB">512GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Production HA">Production HA</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="512GB">512GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="Production DR">Production DR</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="512GB">512GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="QAS/DEV">QAS/DEV</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                            <tr id="" class="tr_Effect">
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="">4.</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="512GB">512GB</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SBX">SBX</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="SLES/RHEL">SLES/RHEL</span></td>
+                                                <td><span class="text-capitalize" data-toggle="tooltip" title="HANA 2.0">HANA 2.0</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row py-0 pt-1" id="S4HanaTables">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            S4 Hana DataBase Tables
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="d-flex pro-list-table" style="height:calc(50vh - 135px);overflow-y: auto">
+                                    <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="">
+                                        <thead>
+                                            <tr>
+                                                <td scope="col" class="S_no">S No</td>
+                                                <td scope="col" width=25%>Name</td>
+                                                <td scope="col" width=20%>Store Type</td>
+                                                <td scope="col" width=20%>Data size in GB</td>
+                                                <td scope="col" width=20%>Estimated Number of Records</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="S4HanaDatabase_Tables">
+                                            <tr>
+                                                <td colspan="5" style="text-align:center">
+                                                    No Record found
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade-in-up" id="RoadMapandEffortEstimation" role="tabpanel">
+
+        <div class="form-row py-0 pt-1">
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head">
+                        <div class="ibox-title">
+                            ECC vs S/4Hana Transformation RoadMap
+                        </div>
+                    </div>
+                    <div class="ibox-body">
+                        <div class="row">
+                            @*<div class="col-lg-2">
+                                    <h6>Summary</h6>
+                                    <div><a>Project Duration: <b>22 weeks</b></a></div>
+                                    <div><a>Start Date: <b>Feb 2021</b></a></div>
+                                    <div><a>End Date: <b>June 2021</b></a></div>
+                                </div>*@
+
+                            <div>
+                                &nbsp;&nbsp;&nbsp; <a>Project Duration: <b>22 weeks</b></a>&nbsp;&nbsp;&nbsp;<a>Start Date: <b>Feb 2021</b></a>&nbsp;&nbsp;&nbsp;<a>End Date: <b>June 2021</b></a>
+                            </div>
+                            <div class="col-lg-12">
+                                @*<img src="~/Assets/img/ECC_Hana_RoadMap.JPG" />*@
+                                <table align="left" class="col-lg-10">
+                                    <tr>
+                                        <th colspan="24" style="text-align:center;background-color:gray;color:white">
+                                            SAP ECC to S/4HANA Transformation roadmap
+                                        </th>
+                                    </tr>
+                                    <tr class="tr_colour td_gray font-weight-bold">
+                                        <td>Milestone</td>
+                                        <td>HighLevelActivities</td>
+                                        <td>W1</td>
+                                        <td>W2</td>
+                                        <td>W3</td>
+                                        <td>W4</td>
+                                        <td>W5</td>
+                                        <td>W6</td>
+                                        <td>W7</td>
+                                        <td>W8</td>
+                                        <td>W9</td>
+                                        <td>W10</td>
+                                        <td>W11</td>
+                                        <td>W12</td>
+                                        <td>W13</td>
+                                        <td>W14</td>
+                                        <td>W15</td>
+                                        <td>W16</td>
+                                        <td>W17</td>
+                                        <td>W18</td>
+                                        <td>W19</td>
+                                        <td>W20</td>
+                                        <td>W21</td>
+                                        <td>W22</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M1</td> @*td_colour*@
+                                        <td class="">Project Preparation</td> @*td_colour*@
+                                        <td colspan="2" class="td_cl"> Preparation</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M2</td>
+                                        <td class="">S/4HANA Conversion of SBX System-(cycle1)</td>
+                                        <td class="td_colour"></td>
+                                        <td colspan="6" class="td_cl">SBX S/4HANA Conversion</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M3</td>
+                                        <td class="">Custom Code Remediation(tool based approach)</td>
+                                        <td class="td_colour" colspan="2"></td>
+                                        <td colspan="5" class="td_cl">Custom Remediation Tool</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M3.1</td>
+                                        <td class="">Post SUM-Manual Migration and varication</td>
+                                        <td class="td_colour" colspan="3"></td>
+                                        <td colspan="4" class="td_color">Application Mig</td>
+                                        <td class="td_color">UAT</td>
+                                        <td class="td_color">UAT</td>
+                                        <td class="td_color">UAT</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M4</td>
+                                        <td class="">S/4HANA Conversion of DEV System-(Cycle2)</td>
+                                        <td class="td_colour" colspan="7"></td>
+                                        <td colspan="3" class="td_cl">Preparation</td>
+                                        <td colspan="6" class="td_cl">DEV S/4HANA Conversion</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M4.1</td>
+                                        <td class="">Unit testing</td>
+                                        <td class="td_colour" colspan="12"></td>
+                                        <td colspan="4" id="td_col">Unit Testing</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M5</td>
+                                        <td class="">Test Plan and Test Case Preparation</td>
+                                        <td class="td_colour" colspan="10"></td>
+                                        <td colspan="6" class="td_color">Customer and S/4H Conversion Team</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M6</td>
+                                        <td class="">S/4HANA Conversion of QAS System(Cycle3)</td>
+                                        <td class="td_colour" colspan="13"></td>
+                                        <td colspan="4" class="td_cl">QAS S/4HANA Conversion</td>
+                                        <td colspan="2" class="td_color">UAT</td>
+
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M7</td>
+                                        <td class="">Go/No-Go Decision</td>
+                                        <td class="td_colour" colspan="19"></td>
+                                        <td class="td_cl">C</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M8</td>
+                                        <td class="">SAP Pre-S/4HANA Cnversion Check Session</td>
+                                        <td class="td_colour" colspan="19"></td>
+                                        <td id="td_co">SAP</td>
+
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M9</td>
+                                        <td class="">Final preparation PRD Systems</td>
+                                        <td class="td_colour" colspan="19"></td>
+                                        <td class="td_cl">CP</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M10</td>
+                                        <td class="">PRD System Cut-Over and Go-Live(cycle 5)</td>
+                                        <td class="td_colour" colspan="19"></td>
+                                        <td id="td_c">CP</td>
+                                    </tr>
+                                    <tr class="tr_colour">
+                                        <td class="td_gray">M10.1</td>
+                                        <td class="">Post Go-live Support</td>
+                                        <td class="td_colour" colspan="20"></td>
+                                        <td colspan="2" id="td_l">Hypercare</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="tab-pane fade-in-up" id="Readinesschk_BusinessProcess" role="tabpanel">
+        <div class="form-row py-0 pt-1">
+
+            <div class="col-lg-12">
+                <div class="ibox projectplan">
+                    <div class="ibox-head" style=" height:78px">
+                        <div class="ibox-title">
+                            <div>
+                                <input type="checkbox" id="BW_Extractor" value="BWExtractor" checked />&nbsp;<label>BW Extractors</label>&nbsp;&nbsp;
+                                <input type="checkbox" id="Business_Extractor" value="Compatibilty Check" />&nbsp;<label>Business Function - Compatibility checks</label>&nbsp;&nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row py-0 pt-1" id="BW_Extractor_Table">
+                <div class="col-lg-12">
+                    <div class="ibox projectplan">
+                        <div class="ibox-head">
+                            <div class="ibox-title">
+                                BW Extractors
+                            </div>
+                        </div>
+                        <div class="ibox-body">
+                            <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                                <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                    <thead>
+                                        <tr>
+                                            <td scope="col" width=10% class="S_no">S.NO.</td>
+                                            <td scope="col" width=25%>Extractor Name</td>
+                                            <td scope="col" width=20%>Application Area</td>
+                                            <td scope="col" width=20%>Related Simplification Items</td>
+                                            <td scope="col" width=20%>Additional Information</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="Id_BwExtractors">
+                                        <tr>
+                                            <td colspan="5" style="text-align:center">
+                                                NO Record found
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row py-0 pt-1" id="CheckCompatibile_Extractor">
+                <div class="col-lg-12">
+                    <div class="ibox projectplan">
+                        <div class="ibox-head">
+                            <div class="ibox-title">
+                                Business Function - Compatibility checks
+                            </div>
+                        </div>
+                        <div class="ibox-body">
+                            <div class="d-flex pro-list-table" style="height: calc(72vh - 235px);">
+                                <table class="fixed table table-borderless bg-mediumgray mb-0 accordion" id="accordion3">
+                                    <thead>
+                                        <tr>
+                                            <td scope="col" width=10% class="S_no">S.NO.</td>
+                                            <td scope="col" width=25%>Type</td>
+                                            <td scope="col" width=20%>Business Function</td>
+                                            <td scope="col" width=20%>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="" class="tr_Effect">
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="">1.</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_CI_1">HCM_ESS_CI_1</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title=" HCM, ESS for Personal Information">HCM, ESS for Personal Information</span></td>
+                                        </tr>
+                                        <tr id="" class="tr_Effect">
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="">2.</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_WDA_1">HCM_ESS_WDA_1</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="Employee Self Services on WebDynpro ABAP">Employee Self Services on WebDynpro ABAP</span></td>
+                                        </tr>
+                                        <tr id="" class="tr_Effect">
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="">3.</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="Enterprise Business Function">Enterprise Business Function</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="HCM_ESS_WDA_2">HCM_ESS_WDA_2</span></td>
+                                            <td><span class="text-capitalize" data-toggle="tooltip" title="HCM, ESS on Web Dynpro ABAP 2">HCM, ESS on Web Dynpro ABAP 2</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    </div>
+    <script src="~/assets/js/ReadinessReport_AmChart.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#Tab_Readiness_Report').click();
+
+        
+        $("#CheckCompatibile_Extractor").hide();
+
+    });
+
+
+        function LoadReadinesscheck(PrjId, ID) {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: '@Url.Action("LoadAnalysisCompletedInstance", "Consultant")',
+                data: { 'ProjectId': PrjId, 'pagename': 'Readiness', Instance_Id: ID },
+                success: function (data) {
+
+                    if (data == true) {
+                        ReadinessCheck(ID);
+                        setTimeout(function () { LoadCharts(ID); }, 3000);
+                        setTimeout(function () { Tables(ID); }, 3000);
+                        Readiness_ECCHanaCount(ID, '@Url.Action("GetHanaCountReport")', '@Url.Action("GetHanaCountTable")');
+                    }
+                },
+                error: function (a) {
+                    Notiflix.Notify.Failure(a, { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    //alert(a);
+                }
+            });
+        }
+
+    $('#IDLob').change(function () {
+        var ID = $('#ProjInstance').val();
+        Table_Simplification(ID, '@Url.Action("SimplicationTable")');
+        SimplificationReport_Bar(ID, '@Url.Action("GetSimplificationReport_Bar")');
+    });
+    $('.localClass li').click(function () {
+
+        var url = $(this).data('ref');
+        if (url.includes("Readiness_Report")) {
+            // $('#Tab_Readiness_Report').click();
+        }
+
+        $('.localClass li button').removeClass('btn-primary');
+        $(this).children("button").addClass("btn-primary");
+
+    });
+
+    $("#ID_Phase,#ID_Condition").change(function () {
+        var ID = $('#ProjInstance').val();
+        ActivitiesTable(ID,'@Url.Action("ActivitiesTable")');
+        Activities_Report_Bar(ID, '@Url.Action("ActivitiesReport_Bar")');
+    });
+
+        $("#IDRoles").change(function () {
+            var ID = $('#ProjInstance').val();
+            FioriReport_Bar(ID, '@Url.Action("GetFioriAppsReportt_Bar")');
+            FioriTable(ID, '@Url.Action("FioriAppsTable")');
+
+        });
+
+    
+
+    $("#Tab_Readinesschk_BusinessProcess").on("click", function () {
+        var ID = $('#ProjInstance').val();
+        BWextractors(ID, '@Url.Action("GetBWExtractorsTable")');
+    });
+    async function BWextractors(ID, URL) {
+        
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: URL,
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+                $("#Id_BwExtractors").empty();
+                var S_No = 0;
+                $(Data).each(function (index, value) {
+                    S_No += 1;
+                    var table = '<tr class="tr_Effect" >';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + S_No + '">' + S_No + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Extractor_Name + '">' + value.Extractor_Name + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Application_Area + '">' + value.Application_Area + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Related_Simplification_Items + '">' + value.Related_Simplification_Items + '</span></td>';
+                    table += '<td><span class="" data-toggle="tooltip" title="' + value.Additional_Information + '">' + value.Additional_Information + '</span></td>';
+                    table += '</tr > ';
+
+                    $('#Id_BwExtractors').append(table);
+                });
+            }
+        });
+    };
+
+    async function ReadinessCheck(ID) {
+        Rediness_SimplificationDonut(ID, '@Url.Action("GetSimplificationReport")');
+        Rediness_CustomCode_Bar(ID, '@Url.Action("GetCustomCode_Bar")');
+        Rediness_Activities_Bar1(ID,'@Url.Action("GetActivities_Bar1")');
+        Rediness_Activities_Donut(ID,'@Url.Action("GetActivities_Donut")');
+        Rediness_Activities_Bar2(ID, '@Url.Action("GetActivities_Bar2")');
+        Rediness_Fiori_Bar(ID, '@Url.Action("GetFiori_Bar")');
+    };
+    async function LoadCharts(ID) {
+        SimplificationReport_Bar(ID, '@Url.Action("GetSimplificationReport_Bar")');
+        Activities_Report_Bar(ID,'@Url.Action("ActivitiesReport_Bar")');
+        CustomCode_Bar_(ID,'@Url.Action("GetCustomCode_Bar")');
+        FioriReport_Bar(ID,'@Url.Action("GetFioriAppsReportt_Bar")');
+    }
+    async function Tables(ID) {
+        DropDown_Simp(ID, '@Url.Action("SimplificationReport")');
+        Table_Simplification(ID,'@Url.Action("SimplicationTable")');
+        DropDown_Ass(ID, '@Url.Action("ActivitiesReport_Dropdown")');
+        DropDown_Fiori(ID, '@Url.Action("GetFiori_Dropdown")')
+
+        ActivitiesTable(ID,'@Url.Action("ActivitiesTable")');
+        CustomCodeTable(ID,'@Url.Action("CustomCodeTable")');
+        setTimeout(function () { FioriTable(ID, '@Url.Action("FioriAppsTable")'); }, 3000);
+        HanaDataBaseTables(ID,'@Url.Action("HanaDataBaseTables")')
+
+        @*systemScanReport(ID, '@Url.Action("GetInstance_LandScape")');*@
+        //BillingDocuments(ID);
+        //OrderDocuments(ID);
+        //ComplexityAnalysis(ID);
+        //StructureSales(ID);
+    }
+
+
+
+    @*function systemScanReport(ID, URL) {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            async: false,
+            url: URL,
+            data: { Instance: ID },
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (Data) {
+                if (Data == 'Manual') {
+                    Table_SAPDirect_DB(ID, '@Url.Action("GetSAPData_Table")')
+                } else if (Data == 'Automation') {
+                    SAPDirect(ID,'@Url.Action("GetData","SAP")');
+                }
+            }
+        });
+    }*@
+
+    @*$("#Drp_Sys_ScanReport").on("change", function () {
+         var ID = $('#ProjInstance').val();
+         systemScanReport(ID, '@Url.Action("GetInstance_LandScape")');
+        //SAPDirect(ID, '@Url.Action("GetData","SAP")');
+        //Table_SAPDirect_DB(ID, '@Url.Action("GetSAPData_Table")')
+    });*@
+</script>
+
+    @*<script>
+
+        am4core.ready(function() {
+
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        var chart = am4core.create("chartdiv_BusinessProcess", am4charts.XYChart);
+
+        // Add data
+        chart.data = [{
+          "Name": "Financial Accounting - FI",
+          "count": 15
+        }, {
+          "Name": "Sales and Distribution - SD",
+          "count": 13
+        }, {
+          "Name": "Materials Management - MM",
+          "count": 11
+        }, {
+          "Name": "Business Whearehouse - BW ",
+          "count": 10
+        }, {
+          "Name": "Controlling - CO",
+          "count": 8
+        }, {
+          "Name": "Quality Management - QM",
+          "count": 7
+        }, {
+          "Name": "Logistics - General - LO",
+          "count": 7
+        }, {
+          "Name": "Logistics - Execution - LO",
+          "count": 7
+        }, {
+          "Name": "Production Planning and Control - PP",
+          "count": 5
+        }, {
+          "Name": "Cross-Application Components - CA",
+          "count": 5
+        }, {
+          "Name": "Plant Maintenance - PM",
+          "count": 5
+        }, {
+          "Name": "Basis Components - BASIS",
+          "count": 4
+        }, {
+          "Name": "Enterprise Controlling - EC",
+          "count": 3
+        },{
+          "Name": "Service - SV",
+           "count": 2
+        }];
+
+        // Create axes
+
+        var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+        categoryAxis.dataFields.category = "Name";
+        categoryAxis.renderer.grid.template.location = 0;
+        categoryAxis.renderer.minGridDistance = 30;
+        //columnTemplate.width = am4core.percent(50)
+
+        categoryAxis.renderer.labels.template.adapter.add("dy", function(dy, target) {
+          if (target.dataItem && target.dataItem.index & 2 == 2) {
+            return dy + 25;
+          }
+          return dy;
+        });
+
+        var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.calculateTotals = true;
+                valueAxis.min = 0;
+                valueAxis.max = 20;
+                valueAxis.strictMinMax = true;
+                valueAxis.renderer.labels.template.adapter.add("text", function (text) {
+                    return text + "%";
+                });
+
+             let label = categoryAxis.renderer.labels.template;
+            label.truncate = true;
+            label.maxWidth = 120;
+            label.tooltipText = "{Name}";
+
+        // Create series
+        var series = chart.series.push(new am4charts.ColumnSeries());
+        series.dataFields.valueY = "count";
+        series.dataFields.categoryX = "Name";
+        //series.name = "count";
+        series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/]";
+        series.columns.template.fillOpacity = .8;
+
+            //series.calculatePercent = true;
+            //series.dataFields.valueYShow = "changePercent";
+
+        var columnTemplate = series.columns.template;
+        columnTemplate.strokeWidth = 2;
+            columnTemplate.strokeOpacity = 1;
+            columnTemplate.stroke = am4core.color("#FFFFFF");
+
+             columnTemplate.adapter.add("fill", function (fill, target) {
+                return chart.colors.getIndex(target.dataItem.index);
+            })
+
+            columnTemplate.adapter.add("stroke", function (stroke, target) {
+                return chart.colors.getIndex(target.dataItem.index);
+            })
+
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.lineX.strokeOpacity = 0;
+        }); // end am4core.ready()
+        </script>
+
+        <script>
+            am4core.ready(function () {
+
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                // Create chart instance
+                var chart = am4core.create("chartdiv_TrainingScenario", am4charts.PieChart);
+
+                // Add data
+                chart.data = [{
+                    "country": "Quality Management - QM",
+                    "litres": 6
+                }, {
+                    "country": "Materials Management - MM",
+                    "litres": 12
+                }];
+
+                // Add and configure Series
+                var pieSeries = chart.series.push(new am4charts.PieSeries());
+                pieSeries.dataFields.value = "litres";
+                pieSeries.dataFields.category = "country";
+                pieSeries.slices.template.stroke = am4core.color("#fff");
+                pieSeries.slices.template.strokeWidth = 2;
+                pieSeries.slices.template.strokeOpacity = 1;
+
+                // This creates initial animation
+                pieSeries.hiddenState.properties.opacity = 1;
+                pieSeries.hiddenState.properties.endAngle = -90;
+                pieSeries.hiddenState.properties.startAngle = -90;
+
+            }); // end am4core.ready()
+        </script>*@
+
+    @*<script>
+
+            am4core.ready(function () {
+
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                // Create chart instance
+                var chart = am4core.create("chartdiv_ECC", am4charts.XYChart);
+
+                // Add data
+                chart.data = [{
+                    "Name": "ECC",
+                    "count": 5260
+                }, {
+                    "Name": "S/4Hana",
+                    "count": 4170
+                }];
+
+                // Create axes
+
+                var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "Name";
+                categoryAxis.renderer.grid.template.location = 0;
+                categoryAxis.renderer.minGridDistance = 30;
+                categoryAxis.renderer.labels.template.disabled = true;
+                categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+                    if (target.dataItem && target.dataItem.index & 2 == 2) {
+                        return dy + 25;
+                    }
+                    return dy;
+                });
+
+                var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                //valueAxis.title.text = "Users";
+                valueAxis.min = 0;
+                valueAxis.max = 7500;
+
+                let label = categoryAxis.renderer.labels.template;
+                label.truncate = true;
+                label.maxWidth = 120;
+                label.tooltipText = "{Name}";
+
+                // Create series
+                var series = chart.series.push(new am4charts.ColumnSeries());
+                series.dataFields.valueY = "count";
+                series.dataFields.categoryX = "Name";
+                //series.name = "count";
+                series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+                series.columns.template.fillOpacity = .8;
+
+                //series.calculatePercent = true;
+                //series.dataFields.valueYShow = "changePercent";
+
+                var columnTemplate = series.columns.template;
+                columnTemplate.strokeWidth = 2;
+                columnTemplate.strokeOpacity = 1;
+                columnTemplate.stroke = am4core.color("#FFFFFF");
+
+                columnTemplate.adapter.add("fill", function (fill, target) {
+                    return chart.colors.getIndex(target.dataItem.index);
+                })
+
+                columnTemplate.adapter.add("stroke", function (stroke, target) {
+                    return chart.colors.getIndex(target.dataItem.index);
+                })
+
+                chart.cursor = new am4charts.XYCursor();
+                chart.cursor.lineX.strokeOpacity = 0;
+            }); // end am4core.ready()
+        </script>*@
+
+    <script>
+
+        $(document).ready(function () {
+            $("#SystemScan").hide();
+            //$("#ECCS4Hana").hide();
+            $("#Add_Analytics").hide();
+            $("#Interface_Overview").hide();
+            $("#Archiving_Recommend").hide();
+            $("#S4HanaServer").hide();
+            $("#S4Hanadatabase").hide();
+            $("#S4HanaTables").hide();
+
+            /******************************************************/
+
+            $("#ComplexAnalysis").hide();
+            $("#StructurePurchase").hide();
+            $("#StructureOrder").hide();
+            $("#StructureBilling").hide();
+            $("#StructureSales").hide();
+            $("#ScenarioRecomend").hide();
+            $("#CheckCompatibile").hide();
+        });
+
+
+        $("#System").on("click", function () {
+            $("#SystemScan").toggle(this.clicked);
+        });
+        $("#ECC").on("click", function () {
+            $("#ECCS4Hana").toggle(this.clicked);
+        });
+        $("#Analytics").on("click", function () {
+            $("#Add_Analytics").toggle(this.clicked);
+        });
+        $("#Interface").on("click", function () {
+            $("#Interface_Overview").toggle(this.clicked);
+        });
+        $("#Archiving").on("click", function () {
+            $("#Archiving_Recommend").toggle(this.clicked);
+        });
+        $("#Server").on("click", function () {
+            $("#S4HanaServer").toggle(this.clicked);
+        });
+        $("#Database").on("click", function () {
+            $("#S4Hanadatabase").toggle(this.clicked);
+        });
+        $("#DatabaseTables").on("click", function () {
+            $("#S4HanaTables").toggle(this.clicked);
+        });
+        $("#BW_Extractor").on("click", function () {
+            $("#BW_Extractor_Table").toggle(this.clicked);
+        });
+        $("#Business_Extractor").on("click", function () {
+            $("#CheckCompatibile_Extractor").toggle(this.clicked);
+        });
+
+        /******************************************************/
+        $("#Breakdown").on("click", function () {
+            $("#BreakdownLob").toggle(this.clicked);
+        });
+        $("#Analysis").on("click", function () {
+            $("#ComplexAnalysis").toggle(this.clicked);
+        });
+
+        $("#Purchase").on("click", function () {
+            $("#StructurePurchase").toggle(this.clicked);
+        });
+        $("#Order").on("click", function () {
+            $("#StructureOrder").toggle(this.clicked);
+        });
+        $("#Billing").on("click", function () {
+            $("#StructureBilling").toggle(this.clicked);
+        });
+        $("#Sales").on("click", function () {
+            $("#StructureSales").toggle(this.clicked);
+        });
+        $("#Scenario").on("click", function () {
+            $("#ScenarioRecomend").toggle(this.clicked);
+        });
+        $("#Business").on("click", function () {
+            $("#CheckCompatibile").toggle(this.clicked);
+        });
+
+    </script>

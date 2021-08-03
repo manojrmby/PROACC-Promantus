@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-content fade-in-up task-projects">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row py-1 ">
+                <div class="col-lg-6">
+                    <ul class="m-0 p-0 sec-project">
+                        <li class="resource-planning">
+                            <div class="i-box">
+                                <div class="ibox-body">
+                                    <ul class="nav nav-tabs nav-justified">
+
+                                        <li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_ScenarioIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#ScenarioIndex" role="tab" aria-controls="ScenarioIndex" id="Tab_Scenario">Scenario</a>
+                                        </li>
+                                        <li class="nav-item" data-ref="@Url.Action("Index","other", new { name = "_VersionIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#VertionIndex" role="tab" aria-controls="VertionIndex" id="Tab_VersionIndex">Version</a>
+                                        </li>
+
+                                        <li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_RoleIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#roleIndex" role="tab" aria-controls="roleIndex">Roles</a>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom-line">
+                </div>
+            </div>
+
+            <div class="tab-content">
+
+                <div class="tab-pane active fade-in-up" id="VertionIndex" role="tabpanel">
+                </div>
+                <div class="tab-pane fade-in-up" id="roleIndex" role="tabpanel">
+                </div>
+                <div class="tab-pane fade-in-up" id="ScenarioIndex" role="tabpanel">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#Tab_Scenario').click();
+        $("#Tab_Miscellaneous").addClass('active');
+    });
+
+    $(".nav-tabs li").click(function () {
+        var url = $(this).data('ref');
+        $.ajax({
+            url: url,
+            //async: true,
+            //data: { pageId: pageId },
+            success: function (response) {
+
+                if (url.includes("_VersionIndex")) {
+                    $(this).addClass("active")
+                    //$("#activityindex a").replaceWith(response);
+                    $("#VertionIndex").html("");
+                    $("#VertionIndex").html(response);
+                }
+                else if (url.includes("_RoleIndex")) {
+                    $(this).addClass("active")
+                    //$("#roleIndex a").replaceWith(response);
+                    $("#roleIndex").html("");
+                    $("#roleIndex").html(response);
+                }
+                else if (url.includes("_ScenarioIndex")) {
+                    $(this).addClass("active")
+                    //$("#roleIndex a").replaceWith(response);
+                    $("#ScenarioIndex").html("");
+                    $("#ScenarioIndex").html(response);
+                }
+            }
+        });
+
+    });
+    function RefreshVersion() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "other", new { name = "_VersionIndex" })',
+            success: function (data) {
+                $("#VertionIndex").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+
+    function RefreshRole() {
+         $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_RoleIndex" })',
+             success: function (data) {
+                $("#roleIndex").html("");
+                $("#roleIndex").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+    function RefreshScenario() {
+          $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_ScenarioIndex" })',
+              success: function (data) {
+                  
+                  $("#ScenarioIndex").html(data);
+                  $('.modal-backdrop').remove();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+    }
+</script>

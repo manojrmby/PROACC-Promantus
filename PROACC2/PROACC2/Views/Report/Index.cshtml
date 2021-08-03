@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/Scripts/DatePicker")
+@Styles.Render("~/Content/css/DatePicker")
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up">
+    <div class="row py-1 ">
+        <div class="col-lg-8">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs nav-justified" id="myTab">
+
+                                <li class="nav-item" data-ref="@Url.Action("_AssessmentReport","Report", new { name = "_AssessmentReport" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#AssessmentReports" role="tab" aria-controls="AssessmentReports" id="Tab_AssessmentReport">Assessment Report</a>
+                                </li>
+                                <li class="nav-item" data-ref="@Url.Action("_DetailReport", "Report", new { name = "_DetailReport" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#DetailReport" role="tab" aria-controls="DetailReport" id="">Detail Report</a>
+                                </li>
+                                <li class="nav-item" data-ref="@Url.Action("_AuditReports","Report", new { name = "_AuditReports" })">
+                                    <a class="nav-link title-project" data-toggle="tab" href="#AuditReports" role="tab" aria-controls="AuditReports">Audit Report</a>
+                                </li>
+                                @if (Session["UserType"].ToString() == "Project Manager")
+                                {
+                                    <li class="nav-item" data-ref="@Url.Action("_RiskAssessment","Report", new { name = "_RiskAssessment" })">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#RiskAssessment" role="tab" aria-controls="RiskAssessment">Risk Assessment Report</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="bottom-line"></div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade-in-up" id="AssessmentReports" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="DetailReport" role="tabpanel">
+
+        </div>
+        <div class="tab-pane fade-in-up" id="AuditReports" role="tabpanel">
+        </div>
+        <div class="tab-pane fade-in-up" id="RiskAssessment" role="tabpanel">
+        </div>
+
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<script>
+
+    $(document).ready(function () {
+
+        var UserType = "@Session["UserType"].ToString()";
+        var PrjId = sessionStorage.getItem("Proj");
+        var CustId = sessionStorage.getItem("CustId");
+        $('.show_hide').hide();
+
+        if (UserType == 'Project Manager' || UserType == 'Customer' || UserType == 'Admin') {
+            if (PrjId == null) {
+                $('#Tab_AssessmentReport').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+                var msg = "Kindly select Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                $("#Unassigned_c").show();
+
+            }
+            else {
+                $('#Tab_AssessmentReport').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+            }
+        }
+        else if (UserType == 'Consultant') {
+            if (PrjId == null || CustId == null) {
+                $('#Tab_AssessmentReport').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+                var msg = "Kindly select Project & Instance..!";
+                Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                $("#Unassigned_c").show();
+
+            }
+            else {
+                $('#Tab_AssessmentReport').click();
+                $('.show_prj').addClass('show_data').removeClass('show_prj');
+            }
+        }
+        $(".Phone").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                e.preventDefault();
+            }
+        });
+
+     });
+
+    $(".nav-tabs li").click(function (e) {
+        e.preventDefault();
+        var url = $(this).data('ref');
+        var PrjId = sessionStorage.getItem("Proj");
+        var InsId = sessionStorage.getItem("Ins");
+        var CustId = sessionStorage.getItem("CustId");
+
+        $.ajax({
+            url: url,
+            async: false,
+            //data: { pageId: pageId },
+            success: function (response) {
+                $("#AssessmentReports").html(" ");
+                $("#DetailReport").html(" ");
+                $("#AuditReports").html(" ");
+                $("#RiskAssessment").html(" ");
+
+                if (url.includes("_AssessmentReport")) {
+
+                    $("#AssessmentReports").html(response);
+                    if (CustId !== null && CustId != "" && CustId != "undefined") {
+
+                        $("#drpCustomer").val(CustId);
+
+                        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+                        BindingProject_Detail(CustId, CustUrl);
+
+                        $('#drpProject').val(PrjId);
+                        var Insurl = '@Url.Action("GetInstancesByProject", "Report")';
+
+                        GlobalBindInstance(PrjId, Insurl);
+                        $('#ProjInstance').val(InsId);
+
+                        ResetAssementReport();
+                        loadpdfNames();
+                        e.preventDefault();
+                    }
+                    else if (InsId != null) {
+
+                        $('.show_prj').addClass('show_data').removeClass('show_prj');
+
+                        $('#drpProject').val(PrjId);
+                        var Insurl = '@Url.Action("GetInstancesByProject", "Report")';
+                        GlobalBindInstance(PrjId, Insurl);
+
+                        $('#ProjInstance').val(InsId);
+
+                        ResetAssementReport();
+                        loadpdfNames();
+
+                        e.preventDefault();
+                    }
+                    else {
+                        $('.show_hide').hide();
+                        $('.show_prj').addClass('show_data').removeClass('show_prj');
+                        var msg = "Kindly select Project & Instance..!";
+                        Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                        e.preventDefault();
+
+                        // $("#Unassigned_c").show();
+                    }
+                }
+                else if (url.includes("_DetailReport")) {
+
+                    $("#DetailReport").html(response);
+
+                    if (CustId !== null && CustId != "" && CustId != "undefined") {
+
+                        $("#drpCustomer").val(CustId);
+
+                        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+                        BindingProject_Detail(CustId, CustUrl);
+
+                        $('#drpProject').val(PrjId);
+                        var Insurl = '@Url.Action("GetInstancesByProject", "Report")';
+
+                        GlobalBindInstance(PrjId, Insurl);
+                        $('#ProjInstance').val(InsId);
+
+                        var Reporturl = '@Url.Action("GetRportdata","Report")';
+                        DetailReport_Load(InsId, Reporturl);
+                        e.preventDefault();
+                    }
+                    else if (InsId != null) {
+
+                        $('#drpProject').val(PrjId);
+                        var Insurl = '@Url.Action("GetInstancesByProject", "Report")';
+                        GlobalBindInstance(PrjId, Insurl);
+                        $('#ProjInstance').val(InsId);
+                        var Reporturl = '@Url.Action("GetRportdata","Report")';
+                        DetailReport_Load(InsId, Reporturl);
+                        e.preventDefault();
+                    }
+                    else {
+                        $('.show_prj').addClass('show_data').removeClass('show_prj');
+                        var msg = "Kindly select Project & Instance..!";
+                        Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                        e.preventDefault();
+                    }
+                }
+                else if (url.includes("_AuditReports")) {
+                    $("#AuditReports").html(response);
+                }
+                else if (url.includes("_RiskAssessment")) {
+                    var msg = "Kindly select Project..!";
+                    Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+                    e.preventDefault();
+                    $("#RiskAssessment").html(response);
+
+                }
+                $(this).addClass("active");
+            }
+        });
+    });
+
+
+
+
+
+</script>
+

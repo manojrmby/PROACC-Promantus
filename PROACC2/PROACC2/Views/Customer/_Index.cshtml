@@ -1,0 +1,408 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<!-- START PAGE CONTENT-->
+
+<div class="page-content fade-in-up task-projects">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex">
+                <div class="tab-content w-100">
+                    <div class="tab-pane active" id="projects" role="tabpanel">
+
+                        <div class="form-row py-1">
+                            <div class="col-lg-7">
+
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="new-project-submit d-flex justify-content-end">
+                                    <button type="button" class="btn btn-primary  pointer" onclick="AddCustomer();">Add Customer</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex pro-list-table">
+                            <table class="fixed table table-borderless bg-mediumgray mb-0">
+                                <thead>
+                                    <tr>
+                                        <td scope="col">Customer Name</td>
+                                        <td scope="col">Industry Sector</td>
+                                        <td scope="col">Contact Person</td>
+                                        <td scope="col">Phone</td>
+                                        <td scope="col">Email</td>
+                                        <td scope="col">Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.Customers)
+                                    {
+                                        <tr>
+
+                                            <td>
+                                                <span class="card-title">@item.Company_Name</span>
+                                            </td>
+                                            <td>
+                                                <span class="card-title">@item.IndustrySector</span>
+                                            </td>
+                                            <td>
+                                                <span class="card-title">@item.Contact</span>
+                                            </td>
+                                            <td>
+                                                <span class="card-title">@item.Phone</span>
+                                            </td>
+                                            <td>
+                                                <span class="card-title">@item.Email</span>
+                                            </td>
+                                            <td>
+                                                <span class="fa fa-pencil btnCustomerEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Customer_ID" />
+                                                <span class="fa fa-trash btnCustomerDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Customer_ID" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- <div class="tab-pane" id="role" role="tabpanel">..2.</div> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<div id="addCustomer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addcustomer">Add new Customer</h4>
+                <h4 class="modal-title text-center w-100 semibold" id="h4UpdateCustomer" style="display:none">Update Customer</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="hidden" id="txtCustomer_ID" />
+                                <div class="form-group">
+                                    <label for="">Customer Name*</label>
+                                    <input type="text" class="form-control" id="txtCompanyName" aria-describedby="">
+                                    <span class="" id="lblCompanyName" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Industry Sector</label>
+                                    <select class="form-control" id="drpIndustrySector" name="Industry">
+                                        <option value="0">Select IndustrySector </option>
+                                        @foreach (var item in ViewBag.IndustrySector)
+                                        {
+                                            <option value="@item.IndustrySector_ID">@item.IndustrySector</option>
+                                        }
+                                    </select>
+                                    <span class="" id="lblIndustrySector" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Contact Person</label>
+                                    <input type="text" class="form-control" id="txtContact" aria-describedby="">
+                                    <span class="" id="lblContact" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Phone</label>
+                                    <input type="text" class="form-control" id="txtCustomerPhone" aria-describedby="">
+                                    <span class="" id="lblCustomerPhone" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Email</label>
+                                    <input type="text" class="form-control" id="txtCustomerEmail" aria-describedby="">
+                                    <span class="" id="lblCustomerEmail" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnCustomerCreate">Save</button>
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnCustomerUpdate" style="display:none">Update</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PPOPUP-->
+@Scripts.Render("~/bundles/Scripts/Layout")
+<script>
+    function AddCustomer() {
+        $('#addCustomer').modal('show');
+        Customer_reset();
+    }
+    $('#cancel').click(function () {
+        $('#addCustomer').modal('hide');
+        Customer_reset()
+    });
+
+    function ValidateName(data) {
+        var letters = /^[A-Za-z._, ]+$/;
+        if (!letters.test(data)) {
+            return false;
+        }
+    }
+    function TaskEmailCheck(custEmail) {
+        //var str = custEmail;
+       var filter = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+       if (!filter.test(custEmail)) {
+          return false
+       }
+    }
+
+    function TaskPhone(custphone){
+        var validateMobNum= /^\d*(?:\.\d{1,2})?$/;
+        //var filter = /[1-9]{1}[0-9]{9}/;
+        if (validateMobNum.test(custphone) && custphone.length == 10) {
+            //alert("Valid Mobile Number");
+        }
+        else {
+            return false;
+            //alert("Invalid Mobile Number");
+        }
+    }
+
+    function Customer_reset() {
+        $("#txtCompanyName").val("");
+        $("#drpIndustrySector").val(0);
+        $("#txtContact").val("");
+        $("#txtCustomerPhone").val("");
+        $("#txtCustomerEmail").val("");
+
+        $("#lblCompanyName").html("").show();
+        $("#lblIndustrySector").html("").show();
+        $("#lblContact").html("").show();
+        $("#lblCustomerPhone").html("").show();
+        $("#lblCustomerEmail").html("").show();
+
+        $("#h4addcustomer").show();
+        $("#h4UpdateCustomer").hide();
+        $("#btnCustomerCreate").show();
+        $("#btnCustomerUpdate").hide();
+
+    }
+
+    $("#btnCustomerCreate").on("click", function () {
+        
+         var CompanyName = $("#txtCompanyName").val().trim();
+         CompanyName = CompanyName.replace(/,/g, " ");
+         var IndustrySector = $("#drpIndustrySector").val();
+         var Contact = $("#txtContact").val().trim();
+         Contact = Contact.replace(/,/g, " ");
+         var custphone = $("#txtCustomerPhone").val().trim();
+         var custEmail = $("#txtCustomerEmail").val().trim();
+
+        var CompanyName_ = IndustrySector_ = Contact_ = custphone_ = custEmail_ = false;
+
+        if (CompanyName == "" || ValidateName(CompanyName) == false) {
+            CompanyName_ = true
+            $("#lblCompanyName").html("Please enter the Customer Name").show();
+        }
+        else {
+            $("#lblCompanyName").html("").show();
+        }
+        //else if (CompanyNameExists(CompanyName,null) == false)
+        //{
+        //    $("#lblCompanyName").html("Company Name already exists").show().fadeOut(5000);
+        //}
+        if (IndustrySector == 0) {
+            IndustrySector_ = true;
+            $("#lblIndustrySector").html("Please Select the Industry Sector").show();
+        }
+        else {
+            $("#lblIndustrySector").html("").show();
+        }
+
+        if (Contact == "" || ValidateName(Contact) == false) {
+            Contact_ = true;
+            $("#lblContact").html("Please enter the Contact Person").show();
+        }
+        else {
+            $("#lblContact").html("").show();
+        }
+        if (custphone == "" || TaskPhone(custphone) == false) {
+            custphone_ = true;
+            $("#lblCustomerPhone").html("Please enter a valid mobile number").show();
+        }
+        else {
+            $("#lblCustomerPhone").html("").show();
+        }
+        if (custEmail == "" || TaskEmailCheck(custEmail) == false) {
+            custEmail_ = true;
+            $("#lblCustomerEmail").html("Please enter the Customer Email").show();
+        }
+        else {
+            $("#lblCustomerEmail").html("").show();
+        }
+        if (CompanyName_ == false && IndustrySector_ == false && Contact_ == false && custphone_ == false && custEmail_ == false) {
+            $.ajax({
+                   type: "POST",
+                url: '@Url.Action("Customer_Create_Update","Customer")',
+                async: false,
+                data: { Company_Name: CompanyName, IndustrySector_ID: IndustrySector, Phone: custphone, Email: custEmail, Contact: Contact },
+                success: function (response) {
+                    if (response == "success") {
+                        alert("Customer Saved successfully..!");
+                        location.reload();
+                    }
+                },
+                failure: function (response) {
+                   alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+    $(".btnCustomerEdit").on("click", function () {
+
+        var id = $(this).next().val();
+
+         $.ajax({
+            url: '@Url.Action("GetCustomerById","Customer")',
+            type: "GET",
+            data: { id: id },
+            async: false,
+            success: function (result) {
+                $('#addCustomer').modal('show');
+                $("#txtCustomer_ID").val(result.Customer_ID);
+                $("#txtCompanyName").val(result.Company_Name);
+                $("#drpIndustrySector").val(result.IndustrySector_ID);
+                $("#txtContact").val(result.Contact);
+                $("#txtCustomerPhone").val(result.Phone);
+                $("#txtCustomerEmail").val(result.Email);
+                $("#btnCustomerUpdate").show();
+                $("#btnCustomerCreate").hide();
+                $("#h4addcustomer").hide();
+                $("#h4UpdateCustomer").show();
+
+                //$("#projcre_on").val(result.Cre_on);
+                //$("#projcre_By").val(result.Cre_By);
+                //$("#btnProjectUpdate").show();
+                //$("#btnAddNew").show();
+                //$("#btnProjectCreate").hide();
+                //$("#prjtCreate").hide();
+                //$("#prjtUpdate").show();
+                //$(".app-main_Scroll").animate({ scrollTop: 0 }, 1000);
+            },
+            error: function (err) {
+                alert(err.responseText);
+            }
+        });
+    });
+
+    $("#btnCustomerUpdate").on("click", function () {
+
+        var Customer_ID = $("#txtCustomer_ID").val();
+         var CompanyName = $("#txtCompanyName").val().trim();
+         CompanyName = CompanyName.replace(/,/g, " ");
+         var IndustrySector = $("#drpIndustrySector").val();
+         var Contact = $("#txtContact").val().trim();
+         Contact = Contact.replace(/,/g, " ");
+         var custphone = $("#txtCustomerPhone").val().trim();
+         var custEmail = $("#txtCustomerEmail").val().trim();
+
+        var CompanyName_ = IndustrySector_ = Contact_ = custphone_ = custEmail_ = false;
+
+        if (CompanyName == "" || ValidateName(CompanyName) == false) {
+            CompanyName_ = true
+            $("#lblCompanyName").html("Please enter the Customer Name").show();
+        }
+        else {
+            $("#lblCompanyName").html("").show();
+        }
+        //else if (CompanyNameExists(CompanyName,null) == false)
+        //{
+        //    $("#lblCompanyName").html("Company Name already exists").show().fadeOut(5000);
+        //}
+        if (IndustrySector == 0) {
+            IndustrySector_ = true;
+            $("#lblIndustrySector").html("Please Select the Industry Sector").show();
+        }
+        else {
+            $("#lblIndustrySector").html("").show();
+        }
+
+        if (Contact == "" || ValidateName(Contact) == false) {
+            Contact_ = true;
+            $("#lblContact").html("Please enter the Contact Person").show();
+        }
+        else {
+            $("#lblContact").html("").show();
+        }
+        if (custphone == "" || TaskPhone(custphone) == false) {
+            custphone_ = true;
+            $("#lblCustomerPhone").html("Please enter a valid mobile number").show();
+        }
+        else {
+            $("#lblCustomerPhone").html("").show();
+        }
+        if (custEmail == "" || TaskEmailCheck(custEmail) == false) {
+            custEmail_ = true;
+            $("#lblCustomerEmail").html("Please enter the Customer Email").show();
+        }
+        else {
+            $("#lblCustomerEmail").html("").show();
+        }
+        if (CompanyName_ == false && IndustrySector_ == false && Contact_ == false && custphone_ == false && custEmail_ == false) {
+            $.ajax({
+                   type: "POST",
+                url: '@Url.Action("Customer_Create_Update","Customer")',
+                async: false,
+                data: { Customer_ID: Customer_ID, Company_Name: CompanyName, IndustrySector_ID: IndustrySector, Phone: custphone, Email: custEmail, Contact: Contact },
+                success: function (response) {
+                    if (response == "success") {
+                        alert("Customer Updated successfully..!");
+                        location.reload();
+                    }
+                },
+                failure: function (response) {
+                   alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+
+    })
+
+    $('.btnCustomerDelete').on("click", function () {
+        
+        var id = $(this).next().val();
+         $.ajax({
+             type: "POST",
+             url: '@Url.Action("Delete","Customer")',
+             data: { id: id },
+             dataType: "json",
+             success: function (response) {
+                 if (response == "success") {
+                     alert('Customer deleted successfully..!');
+                     location.reload();
+                 }
+             },
+             failure: function (response) {
+                 alert(response.responseText);
+             },
+             error: function (response) {
+                  alert(response.responseText);
+             }
+         });
+    })
+</script>

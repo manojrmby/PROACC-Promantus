@@ -1,0 +1,253 @@
+﻿
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Add New Project</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closePr2">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="">Project Name<span id="asterisk4" style="color:red">*</span></label>
+                                    <input type="text" class="form-control" id="txtProjectName2" name="ProjectName2" />
+                                    <span id="lblProjectName2" style="color:red"></span>
+                                </div>
+                                <div class="form-group">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToUserSettings()"></span>
+                                    }
+                                        <label for="">Project Manager<span id="asterisk5" style="color:red">*</span></label>
+                                        <select class="form-control drpTextHeight" id="drpProjectManager2" name="ProjectManager2" style="width:100%">
+                                            <option value="0">--Select Project Manager---</option>
+
+                                            @foreach (var item in ViewBag.ProjectManager)
+                                            {
+                                                if (item != null)
+                                                {
+                                                    <option value="@item.ProjectManagerId">@item.ProjectManagerName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="0">---No Record---</option>
+                                                }
+                                            }
+                                        </select>
+                                        <span id="lblProjectManager2" style=" color:red;"></span>
+                                    </div>
+                                <div class="form-group">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToUserSettings()"></span>
+                                    }
+                                        <label for="">Customer<span id="asterisk6" style="color:red">*</span></label>
+                                        <select class="form-control drpTextHeight" id="drpCustomer2" name="Customer2" style="width:100%">
+                                            <option value="0">--Select Customer---</option>
+                                            @foreach (var item in ViewBag.Company)
+                                            {
+                                                <option value="@item.Customer_ID">@item.Company_Name</option>
+                                            }
+                                        </select>
+                                        <span id="lblCustomerName2" style=" color:red;"></span>
+                                    </div>
+                                <div class="form-group">
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToOther()"></span>
+                                    }
+                                        <label for="">Scenario<span id="asterisk7" style="color:red">*</span></label>
+                                        <select class="form-control drpTextHeight" id="drpScenario2" name="Scenario2" style="width:100%">
+                                            <option value="0">--Select Scenario---</option>
+
+                                            @foreach (var item in ViewBag.Scenario)
+                                            {
+                                                <option value="@item.ScenarioId">@item.ScenarioName</option>
+                                            }
+                                        </select>
+                                        <span id="lblScenerio2" style=" color:red;"></span>
+                                    </div>
+                                <div class="form-group">
+                                    <label for="">Description</label>
+                                    <textarea class="form-control" id="desc2" name="Descripton2" rows="4" cols="50"></textarea>
+                                    <span id="lblDescripton2" style="color:red"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnProjectCreate2">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelProject2">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+     function RedirectToUserSettings() {
+        var url = '@Url.Action("UserSettings", "Admin")';
+        window.location.href = url;
+    }
+    function RedirectToOther() {
+        var url = '@Url.Action("Index", "Other")';
+        window.location.href = url;
+    }
+    function ResetProject2() {
+        $('#createModal2').modal('hide');
+        $('.modal-backdrop').remove();
+
+        $("#Maxchar").show();
+        $("#asterisk4").show();
+        $("#asterisk5").show();
+        $("#asterisk6").show();
+        $("#asterisk7").show();
+
+        $("#txtProjectName2").val('');
+        $("#drpProjectManager2").val(0);
+        $("#drpScenario2").val(0);
+        $("#drpCustomer2").val(0);
+
+        $("#lblProjectName2").html("").show();
+        $("#lblCustomerName2").html("").show();
+        $("#lblProjectManager2").html("").show();
+        $("#lblScenerio2").html("").show();
+        $("#desc2").val('');
+
+    }
+
+    $("#closePr2,#cancelProject2").click(function () {
+        ResetProject2();
+    });
+
+    function CheckProjectAvailabiltiy2(ProjectName) {
+        var _Projname = ProjectName;
+        var _status = true
+
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("CheckProjectAvailabilty", "Home")',
+                data: {
+                    ProjectName: _Projname,
+                },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        _status = false;
+                    }
+                },
+                error: function () {
+                },
+            });
+
+        return _status;
+    }
+
+    $("#btnProjectCreate2").on("click", function () {
+        var ProjectName = $("input[name='ProjectName2']").val();
+        var CustomerName = $("select[name='Customer2'] option:selected").val().trim();
+        var ProjectManagerName = $("select[name='ProjectManager2'] option:selected").val().trim();
+        var ScenerioName = $("select[name='Scenario2'] option:selected").val().trim();
+        var Description = $("textarea[name='Descripton2']").val();
+
+        var _ProjectName = _CustomerName = _ProjectManagerName = _ScenerioName = _Description = false;
+
+        if (ProjectName == "") {
+            _ProjectName = true;
+            $("#asterisk").show();
+            $("#lblProjectName2").html("Please enter the Project Name").show();
+        }
+        else {
+            $("#asterisk").hide();
+            $("#lblProjectName2").html("").show();
+        }
+        if (CustomerName == 0) {
+            _CustomerName = true;
+            $("#asterisk2").show();
+            $("#lblCustomerName2").html("Please Select the Customer").show();
+        }
+        else {
+            $("#asterisk2").hide();
+            $("#lblCustomerName2").html("").show();
+        }
+        if (ProjectManagerName == 0) {
+            _ProjectManagerName = true;
+            $("#asterisk1").show();
+            $("#lblProjectManager2").html("Please Select the Project Manager").show();
+        }
+        else {
+            $("#asterisk1").hide();
+            $("#lblProjectManager2").html("").show();
+
+        }
+        if (ScenerioName == 0) {
+            _ScenerioName = true;
+
+            $("#asterisk3").show();
+            $("#lblScenerio2").html("Please Select the Scenario Name").show();
+        }
+        else {
+            $("#asterisk3").hide();
+
+            $("#lblScenerio2").html("").show();
+
+        }
+        //if (Description == "") {
+        //    _Description = true;
+        //    $("#lblDescripton").html("Please enter the Description").show();
+        //}
+        //else {
+        //    $("#lblDescripton").html("").show();
+        //}
+        if (CheckProjectAvailabiltiy2(ProjectName)==false) {
+            $("#lblProjectName2").html("Project Name Already Exists").show();
+        }
+        else {
+            if (ProjectName == "") {
+                $("#lblProjectName2").html("Please enter the Project Name").show();
+            }
+            else {
+                $("#lblProjectName2").html("").show();
+            }
+        }
+            if (_ProjectName == false && _ProjectManagerName == false && _CustomerName == false && _ScenerioName == false && CheckProjectAvailabiltiy2(ProjectName) == true) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CreateProject", "Admin")',
+                    data: {
+                        ProjectName: ProjectName,
+                        CustomerName: CustomerName,
+                        ScenerioName: ScenerioName,
+                        ProjectManagerName: ProjectManagerName,
+                        Description: Description
+                    },
+                    success: function (response) {
+                        if (response == "success") {
+
+                            ResetProject();
+                            $('.modal-backdrop').remove();
+                            $("#createModal2").modal("hide");
+                            Notiflix.Notify.Success('Project <Strong>created </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        }
+                        else {
+                            $("#btnProjectCreate2").prop('disabled', true);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
+    });
+
+    </script>

@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewBag.Title = "UserSettings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up task-projects">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row py-1 ">
+                <div class="col-lg-6">
+                    <ul class="m-0 p-0 sec-project">
+                        <li class="resource-planning">
+                            <div class="i-box">
+                                <div class="ibox-body">
+                                    @*<ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project active" data-toggle="tab" href="#customer" role="tab" aria-controls="customer">Customer</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#user" role="tab" aria-controls="user">User</a>
+                                    </li>
+                                </ul>*@
+                                    <ul class="nav nav-tabs nav-justified">
+                                        <li class="nav-item" data-ref="@Url.Action("UserSettings", "Admin", new { name = "_CustomerIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#customer" role="tab" aria-controls="customer" id="Tab_customer">Customer</a>
+                                        </li>
+                                        <li class="nav-item" data-ref="@Url.Action("UserSettings","Admin", new { name = "_UserIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#user" role="tab" aria-controls="User">User</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom-line">
+                </div>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane fade-in-up" id="customer" role="tabpanel">
+                    @*<a></a>*@
+                </div>
+                <div class="tab-pane fade-in-up" id="user" role="tabpanel">
+                    @*<a></a>*@
+                </div>
+            </div>
+
+            @*<div class="d-flex">
+                <div class="tab-content w-100">
+                    <div class="tab-pane active fade-in-up" id="customer" role="tabpanel">
+                    @Html.Partial("_CustomerIndex")
+                    </div>
+
+                    <div class="tab-pane fade-in-up" id="user" role="tabpanel">
+                        @Html.Partial("_UserIndex")
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<script>
+     
+    $(document).ready(function () {
+
+        $('#Tab_customer').click();
+
+     });
+
+     $(".nav-tabs li").click(function () {
+        var url = $(this).data('ref');
+        $.ajax({
+            url: url,
+            async: false,
+            //data: { pageId: pageId },
+            success: function (response) {
+                $("#load").css("display", "block");
+                if (url.includes("_CustomerIndex")) {
+                    $(this).addClass("active")
+                    //$("#customer a").replaceWith(response);
+                    $("#customer").html(response);
+                }
+                else if (url.includes("_UserIndex")) {
+                    $(this).addClass("active")
+                    //$("#user a").replaceWith(response);
+                    $("#user").html(response);
+                }
+                $("#load").css("display", "none");
+            }
+        });
+    });
+    function RefreshUser() {
+
+         $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("UserSettings", "Admin", new { name = "_UserIndex" })',
+            success: function (data) {
+                $("#user").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("");
+            },
+         });
+    }
+
+    function RefreshCustomer() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("UserSettings","Admin", new { name = "_CustomerIndex" })',
+            success: function (data) {
+                $("#customer").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("");
+            },
+        });
+    }
+
+    @*function RefreshUserSettingsPage() {
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_InstanceProject" })',
+            success: function (data) {
+                $("#projects").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_PMIndex" })',
+            success: function (data) {
+                $("#pmtask").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_RoleIndex" })',
+            success: function (data) {
+                $("#role").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+         $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_ActivityIndex" })',
+            success: function (data) {
+                $("#activity").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }*@
+</script>
+

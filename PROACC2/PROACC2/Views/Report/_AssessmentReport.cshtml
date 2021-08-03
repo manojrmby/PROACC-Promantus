@@ -1,0 +1,395 @@
+﻿<style>
+    .show_ins, .show_prj {
+        display: none;
+    }
+
+    .show_data {
+        display: block;
+    }
+</style>
+<div class="page-content fade-in-up">
+
+    <div class="row">
+        <div class="col-lg-12">
+
+            <ul class="nav navbar-toolbar sec-left-resource">
+                <li>
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpCustomer">
+                                <option value="0">Select Customer</option>
+                                @foreach (var item in ViewBag.CustomerName)
+                                {
+                                    <option class="text-capitalize" value="@item.Value">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <i class="fa fa-clone" aria-hidden="true"></i> <strong>Projects</strong>//&nbsp; &nbsp;
+                    }
+
+                </li>
+                <li class="show_prj">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_prj">
+                    @*<div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>*@
+                    @if (User.IsInRole("Customer") || User.IsInRole("Project Manager") || User.IsInRole("Admin"))
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                                @foreach (var item in ViewBag.ProjectName)
+                                {
+                                    <option class="text-capitalize" value="@item.Project_ID">@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="ibox dropdown-resources mb-0">
+                            <select class="form-control border-0 text-capitalize" id="drpProject">
+                                <option value="0">Select Project</option>
+                            </select>
+                        </div>
+                    }
+                </li>
+                <li class="show_ins">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </li>
+                <li class="show_ins">
+                    <div class="ibox dropdown-resources mb-0">
+                        <select class="form-control border-0 text-capitalize" id="ProjInstance">
+                            <option>Instance</option>
+                        </select>
+                    </div>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+    <div>
+        <div class="col-lg-12">
+            <ul class="m-0 p-0 sec-project">
+                <li class="resource-planning">
+                    <div class="i-box">
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs nav-justified" id="myTab1">
+                                <li class="nav-item Hideme active" id="Nav_41">
+                                    <a role="tab" class="nav-link active " id="tab-c1-41" data-toggle="tab" href="#tab-animated1-41" aria-selected="false">
+                                        <span class="nav-text">Comprehensive Assessment and Readiness Check Report</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item Hideme" id="Nav_01">
+                                    <a role="tab" class="nav-link" id="tab-c1-01" data-toggle="tab" href="#tab-animated1-01" aria-selected="false">
+                                        <span class="nav-text">Landscape & System Management</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item Hideme" id="Nav_11">
+                                    <a role="tab" class="nav-link " id="tab-c1-11" data-toggle="tab" href="#tab-animated1-11" aria-selected="false">
+                                        <span class="nav-text">Custom Code Analysis</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item Hideme" id="Nav_21">
+                                    <a role="tab" class="nav-link " id="tab-c1-21" data-toggle="tab" href="#tab-animated1-21" aria-selected="false">
+                                        <span class="nav-text">License Optimization</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="tab-content show_hide">
+
+                <div class="tab-pane fade-in-up active" id="tab-animated1-41" role="tabpanel">
+                    <div id="Parent41"></div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+
+        @*<div class="row py-1 show_hide">
+                <div class="col-lg-12">
+                    <ul class="m-0 p-0 sec-project">
+                        <li class="resource-planning">
+                            <div class="i-box">
+                                <div class="ibox-body">
+                                    <ul class="nav nav-tabs nav-justified" id="myTab">
+                                        <li class="nav-item Hideme active" id="Nav_4">
+                                            <a role="tab" class="nav-link active " id="tab-c1-4" data-toggle="tab" href="#tab-animated1-4" aria-selected="false">
+                                                <span class="nav-text">Comprehensive Assessment and Readiness Check Report</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item Hideme" id="Nav_0">
+                                            <a role="tab" class="nav-link" id="tab-c1-0" data-toggle="tab" href="#tab-animated1-0" aria-selected="false">
+                                                <span class="nav-text">Landscape & System Management</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item Hideme" id="Nav_1">
+                                            <a role="tab" class="nav-link " id="tab-c1-1" data-toggle="tab" href="#tab-animated1-1" aria-selected="false">
+                                                <span class="nav-text">Custom Code Analysis</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item Hideme" id="Nav_2">
+                                            <a role="tab" class="nav-link " id="tab-c1-2" data-toggle="tab" href="#tab-animated1-2" aria-selected="false">
+                                                <span class="nav-text">License Optimization</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>*@
+
+
+        <!--<ul class="tabs-animated-shadow nav-justified tabs-animated nav show_hide">
+            <li class="nav-item Hideme" id="Nav_4">
+                <a role="tab" class="nav-link show active" id="tab-c1-4" data-toggle="tab" href="#tab-animated1-4" aria-selected="false">
+                    <span class="nav-text">Comprehensive Assessment and Readiness Check Report</span>
+                </a>
+            </li>
+            <li class="nav-item Hideme" id="Nav_0">
+                <a role="tab" class="nav-link" id="tab-c1-0" data-toggle="tab" href="#tab-animated1-0" aria-selected="false">
+                    <span class="nav-text">Landscape & System Management</span>
+                </a>
+            </li>
+            <li class="nav-item Hideme" id="Nav_1">
+                <a role="tab" class="nav-link " id="tab-c1-1" data-toggle="tab" href="#tab-animated1-1" aria-selected="false">
+                    <span class="nav-text">Custom Code Analysis</span>
+                </a>
+            </li>
+
+            <li class="nav-item Hideme" id="Nav_2">
+                <a role="tab" class="nav-link show" id="tab-c1-2" data-toggle="tab" href="#tab-animated1-2" aria-selected="false">
+                    <span class="nav-text">License Optimization</span>
+                </a>
+            </li>-->
+        @*<li class="nav-item Hideme" id="Nav_3">
+                <a role="tab" class="nav-link show" id="tab-c1-2" data-toggle="tab" href="#tab-animated1-3" aria-selected="false">
+                    <span class="nav-text">Current State & Vision: Business Case</span>
+                </a>
+            </li>*@
+
+        <!--</ul>-->
+        <!--<div class="tab-content show_hide">
+            <div class="tab-pane fade-in-up active" id="tab-animated1-4" role="tabpanel">
+                <div id="Parent4"></div>
+            </div>
+            <div class="tab-pane fade-in-up" id="tab-animated1-0" role="tabpanel">
+                <div id="Parent0"></div>
+            </div>
+            <div class="tab-pane fade-in-up" id="tab-animated1-1" role="tabpanel">
+                <div id="Parent1"></div>
+            </div>
+            <div class="tab-pane fade-in-up" id="tab-animated1-2" role="tabpanel">
+                <div id="Parent2"></div>
+            </div>-->
+        @*<div class="tab-pane show" id="tab-animated1-3" role="tabpanel">
+                <div id="Parent3"></div>
+            </div>*@
+        <!--</div>-->
+    </div>
+
+
+    <style>
+        iframe {
+            height: 1000px;
+        }
+
+        .content-wrapper {
+            height: calc(100vh - 235px);
+        }
+    </style>
+    <script>
+      var Path_0 = "";
+      var Path_1 = "";
+      var Path_2 = "";
+      var Path_4 = "";
+
+      //$(".nav-link").click(function () {
+      //    loadpdfNames();
+      //});
+    $("#Nav_41").click(function () {
+        loadPDF(Path_4);
+    });
+    $("#Nav_01").click(function () {
+        loadPDF(Path_0);
+    });
+    $("#Nav_11").click(function () {
+    loadPDF(Path_1);
+    });
+    $("#Nav_21").click(function () {
+        loadPDF(Path_2);
+    });
+    $("#drpCustomer").change(function () {
+        var CustId = $("#drpCustomer").val();
+        var CustUrl = '@Url.Action("GetProjectByCustomer", "Transaction")';
+        BindingProject_Detail(CustId, CustUrl);
+    });
+
+    $("#drpProject").change(function () {
+        var PrjId = $(this).val();
+        var Insurl = '@Url.Action("GetInstancesByProject", "Report")';
+        GlobalBindInstance(PrjId, Insurl);
+    });
+
+    $('#ProjInstance').change(function () {
+          var UserType = "@Session["UserType"].ToString()";
+          var InsId = $("#ProjInstance").val();
+          var CustId = "";
+          var PhId = "";
+          var ProjId = $("#drpProject").val();
+
+          if (UserType == "Project Manager") {
+              CustId = "";
+          }
+          else {
+              CustId = $("#drpCustomer").val();
+
+          }
+          if (InsId != 0) {
+              SessionStorage(CustId, PhId, ProjId, InsId);
+              ResetAssementReport();
+              loadpdfNames();
+             
+          }
+          else {
+              $('.show_hide').hide();
+          }
+
+
+      });
+
+
+      $(window).resize(function () {
+          dimention();
+      });
+      function MakeActive(ID) {
+
+          $('.nav-link.active').removeClass('active');
+          ID.addClass('showMe').removeClass('Hideme');
+          $(ID).find('a').addClass('active');
+          $(ID).click();
+      }
+
+      function dimention() {
+          //var newHeight = $(".app-main_Scroll").height() - 120;
+          //var Width = $(".app-main__inner").width();
+
+          var newHeight = $(".content-wrapper").height() + 10;
+          var Width = $(".tab-content").width() + 5;
+          $("iframe").height(newHeight);
+          $("iframe").width(Width);
+      }
+      function ResetAssementReport() {
+          $('.show_hide').hide();
+          $("#Parent0,#Parent1,#Parent2,#Parent3,#Parent4").html("");
+      }
+      function loadpdfNames() {
+          var Path = "@ViewBag.PDFfilepath";
+          Path = Path.replace("~/", "../");
+          var id = $('#ProjInstance').val();
+          $.ajax({
+              type: 'GET',
+              url: '@Url.Action("PMReportData", "Report")',
+              data: {
+                  InstanceId: id
+              },
+
+              dataType: "json",
+              async: false,
+              contentType: "application/json; charset=utf-8",
+              success: function (data) {
+
+                  data = data.data;
+                  var length = data.length;
+                  if (length <= 0) {
+                      //var info = "Report's not found..! Check After some time "
+                      //Notiflix.Report.Info("ProAcc Info !", info, "Click", function () {
+                      //    var url = $("#RedirectTo").val();
+                      //    location.href = url;
+                      //});
+
+                      var info = "Report's not found..! Check After some time "
+                      Notiflix.Report.Info("ProAcc Info !", info, "Click");
+                      $("#myTab1").hide();
+                  }
+                  else {
+
+                      var ID = "";
+                      for (var i = 0; i < length; i++) {
+                          var filetype = data[i].FileType;
+                          var name = data[i].File_Type;
+                          var idiv = document.createElement('iframe');
+                          //idiv.id = 'pdf-js-viewer' + i;
+                          idiv.id = name;
+                          //idiv.src = '/Asset/UploadedFiles/' + name + '.pdf';
+                          idiv.src = Path + data[i].C_FileName + '.pdf';
+                          idiv.title = name;
+                          idiv.frameborder = '0';
+                          idiv.title = "Manoj";
+                          $("#myTab1").show();
+                          if (filetype == 10) {
+                               Path_0 = idiv;
+                              ID = $('#Nav_0');
+                              $("#Parent0").html(idiv);
+                          } else if (filetype == 11) {
+                               Path_1 = idiv;
+                              ID = $('#Nav_1');
+                              $("#Parent1").append(idiv);
+                          } else if (filetype == 12) {
+                               Path_2 = idiv;
+                              ID = $('#Nav_2');
+                              $("#Parent2").append(idiv);
+
+                          } else if (filetype == 13) {
+                              var Path_3 = idiv;
+                              ID = $('#Nav_3');
+                              $("#Parent3").append(idiv);
+                          }
+                          else if (filetype == 9) {
+                               Path_4 = idiv;
+                              ID = $('#Nav_4');
+                              $("#Parent4").append(idiv);
+
+                          }
+                          dimention();
+
+                          $('.show_hide').show();
+                      }
+                      loadPDF(Path_0);
+                       //MakeActive(ID);
+                  }
+
+              },
+              error: function (a) {
+                  alert(a);
+              }
+          });
+      }
+
+      function loadPDF(Path) {
+          $("#Parent41").html("");
+          $("#Parent41").append(Path);
+          dimention();
+      }
+    </script>

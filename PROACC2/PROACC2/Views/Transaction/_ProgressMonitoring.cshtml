@@ -1,0 +1,1094 @@
+﻿<script src="~/assets/js/CustomSelect.js"></script>
+
+<style>
+    ._trackcircle {
+        font-size: 7px;
+    }
+
+    .TextRap {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .drpOwner {
+        background-color: #e9ecef !important;
+    }
+
+    .sec-left-resource1 span {
+        color: black;
+        padding: 38px;
+    }
+
+    .multiselect-option {
+        height: 34px;
+    }
+
+    .btn-group, .btn-group-vertical {
+        position: relative;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        vertical-align: middle;
+        margin-top: 0px;
+    }
+
+    .multiselect-container {
+        position: absolute;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 0px;
+        border-radius: 9px;
+        margin-left: -85px;
+    }
+
+    #Prog_design_table {
+        height: calc(100vh - 310px);
+    }
+</style>
+
+<div class="form-row py-2">
+    <div class="col-lg-8">
+        <div class="ibox acme-assessment">
+            <div class="ibox-body pm">
+                <table class="table table-borderless ProgressMonitor_count">
+                    <thead class="remove_background">
+                        <tr>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            <td scope="col">--</td>
+                            @*<td scope="col">
+                                    <div><small class="scheduler"><i class="fa fa-circle schedule" aria-hidden="true"></i>&nbsp;on schedule</small></div>
+                                </td>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row"><small> TOTAL TASK</small></td>
+                            <td><small>COMPLETION</small></td>
+                            <td><small>IN PROGRESS</small></td>
+                            <td><small>ON HOLD</small></td>
+                            <td><small>YET TO START</small></td>
+                            <td><small>START DATE</small></td>
+                            <td><small>END DATE</small></td>
+                            <td><small>OVERALL STATUS</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4" id="externals">
+        <div class="ibox btn-widget mb-0">
+            <div class="ibox-body">
+                <div class="d-flex justify-content-between align-middle">
+                    @*<span><i class="fa fa-share-alt" aria-hidden="true"></i></span>*@
+                    <div class="show-hide mr-2">
+                        <div class="form-group shadow" id="DrpProgressMonitorCheckBox">
+                        </div>
+                    </div>
+                    <span><i class="fa fa-download" aria-hidden="true" onclick="exportPDF_ProgressMonitor();"></i></span>
+                    <span><i class="fa fa-envelope" aria-hidden="true" onclick="exportMail_ProgressMonitor();" id="Mailexport"></i></span>
+
+                    <button type="button" class="btn btn-primary pointer" id="PMActivityAdd">Add Activity</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="sendMail" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-url='@Url.Action("__SendMail","Transaction")'></div>
+</div>
+@*<div class="form-row py-3 duration progress-monitor">*@
+@*<div class="form-row duration">
+        <div class="col-lg-10">
+
+        </div>
+        <div class="col-lg-2">
+            <ul class="nav navbar-toolbar sec-left-resource1">
+                <li>
+                   <div class="show-hide">
+                      <div class="form-group" id="DrpProgressMonitorCheckBox">
+                       </div>
+                   </div>
+                </li>
+            </ul>
+        </div>
+    </div>*@
+@*<div class="form-row pro-list-table-pm">
+        <div class="col-lg-12 resource-planning">
+
+        </div>
+    </div>*@
+<div class="d-flex pro-list-table" id="Prog_design_table">
+    <table class="fixed table table-borderless bg-mediumgray mb-0 ProgressMonitor" id="ProgressMonitor">
+        <thead>
+            <tr>
+                <td scope="col" width="50px" class="" data-toggle="tooltip" title="s no" data-placement="top">s.no</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Activity/Task">activity/task</td>
+                <td scope="col" class="" data-toggle="tooltip" title="Building Block" data-placement="top">building block</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Role" hidden>role</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Owner">owner</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Task Type">Task Type</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="comments">comments</td>
+                <td scope="col" class="addSelect" data-placement="top" data-toggle="tooltip" title="Parallel Type">Parallel Type</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="status">status</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" hidden title="track">track</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Planned Start Date" hidden>Planned Start Date</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Planned End Date" hidden>Planned End Date</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Actual Start Date" hidden>Actual Start Date</td>
+                <td scope="col" class="" data-placement="top" data-toggle="tooltip" title="Actual End Date" hidden>Actual End Date</td>
+                <td scope="col" class="editPM" hidden>Edit</td>
+                @*<td scope="col" class="">Show More</td>*@
+            </tr>
+        </thead>
+        <tbody class="bg-white">
+            <tr class="colspan">
+                <td colspan="8" style="text-align:center">
+                    No Records Found
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- End of Page -->
+<!-- START POPUP-->
+<div id="addActivityTask" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold" id="h4addactivity">Add New Activity</h4>
+                <button type="button" class="close Activitycancel" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <input type="hidden" id="txtActivity_ID" />
+                                <input type="hidden" id="txtSequence" />
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Task<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="txtTask" aria-describedby="">
+                                            <span class="" id="lblTask" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Building Block<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpBuildingBlock" name="">
+                                              @*<option value="0">--Select Building Block--</option>
+                                                @foreach (var item in ViewBag.BuildingBlock)
+                                                {
+                                                    <option value="@item.block_ID">@item.Block_Name</option>
+                                                }*@
+                                            </select>
+                                            <span class="" id="lblBuildingBlock" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Role<span style="color:red">*</span></label>
+                                            <input id="drphiddenRoles" type="hidden" />
+                                            <select class="form-control drpTextHeight" id="drpRoles" name="">
+                                                <option value="0">Select Role</option>
+                                                @foreach (var item in ViewBag.Role)
+                                                {
+                                                    <option value="@item.RoleID">@item.RoleName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblRoles" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Owner<span style="color:red">*</span></label>
+                                            @*<input id="drphiddenRoles" type="hidden" />*@
+                                            <select class="form-control drpTextHeight" id="drpOwner" name="">
+                                                <option value="0">Select Owner</option>
+                                            </select>
+                                            <span class="" id="lblOwner" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Application Area<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpApplicationArea" name="">
+                                                <option value="0">--Select Application Area--</option>
+                                                @foreach (var item in ViewBag.ApplicationArea)
+                                                {
+                                                    <option value="@item.Id">@item.ApplicationArea</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblApplicationArea" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Est Hours HH:MM<span style="color:red">*</span></label>
+                                            <input type="text" class="form-control txtEstimated" id="txtEstimated" aria-describedby="" placeholder="00:00">
+                                            <span class="" id="lblEstimated" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Task Type<span style="color:red">*</span></label>
+                                            <select class="form-control drpTextHeight" id="drpTaskType" name="">
+                                                <option value="0">--Select Task Name--</option>
+                                                @foreach (var item in ViewBag.TaskTypelist)
+                                                {
+                                                    <option value="@item.TaskId">@item.TaskName</option>
+                                                }
+                                            </select>
+                                            <span class="" id="lblTaskType" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                        <div class="form-group" id="parallelhideid" style="display:none">
+                                            <label for="">Parallel Type</label>
+                                            <select class="form-control drpTextHeight" id="drpParallelId" name="">
+                                            </select>
+                                            <span class="" id="lblParallelType" style="color:red;display:none">&nbsp;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnActivityCreate">Save</button>
+                    <button type="button" class="btn btn-secondary pointer Activitycancel" id="Activitycancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PPOPUP-->
+<!-- START SECOND POPUP-->
+<div id="Prev-Activity" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group" id='newParallelrow' style="display:none">
+                                    <label for="">New Parallel Name</label>
+                                    <input type="text" class="form-control" id="txtParallelName" aria-describedby="">
+                                    <span class="" id="lblParallelName" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Previous Task</label>
+                                    <select class="form-control" id="drpTsk" name="">
+                                    </select>
+                                    <span class="" id="lblPreviousTask" style="color:red;display:none">&nbsp;</span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnSeq">Save</button>
+                    <button type="button" class="btn btn-secondary pointer" id="btnSeqCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- END SECOND POPUP-->
+
+<div class="modal fade" id="EditProgressMonitor" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" role="dialog" data-backdrop="static" data-keyboard="false" data-url='@Url.Action("__ProgressEdit","Transaction")'></div>
+
+<script>
+
+      function exportMail_ProgressMonitor() {
+         var Prjval = $("#drpProject").val();
+         var InsVal = $("#ProjInstance").val();
+
+         if (Prjval == 0 || InsVal == 0) {
+             $("#Mailexport").attr('disabled', true);
+             var msg = "Kindly select Project & Instance..!";
+             Notiflix.Report.Info("ProAcc Info !", msg, "Click");
+         }
+         else {
+             var modal = $("#sendMail").data();
+             $.get(modal, function (data) {
+                 $("#sendMail").html(data);
+                 $("#sendMail").modal('show');
+             });
+         }
+     }
+
+     var IsanyHold = false;
+
+    $(document).ready(function () {
+        var PhId = $("#drpPhase").val();
+        var InsId = $("#ProjInstance").val();
+        var UserType = "@Session["UserType"].ToString()";
+        $("#externals").hide();
+        //console.log(InsId);
+        if (InsId !=0) {
+            MonitorData(PhId, InsId);
+            Taskcount(PhId, InsId);
+        }
+
+        ShowEdit();
+
+
+        $("#PMActivityAdd").hide();
+        if (InsId != 0 && UserType == 'Project Manager') {
+            //$("#PMActivityAdd").show();
+            $.ajax({
+                url: '@Url.Action("PullTaskButton","Transaction")',
+                data: { PhaseId: PhId, InstanceId: InsId },
+                async: false,
+                success: function (response) {
+                    if (response == false) {
+                        $("#PMActivityAdd").hide();
+                    } else {
+                        $("#PMActivityAdd").show();
+                    }
+                }
+            })
+        }
+
+    });
+
+    $(document).off('click', '#slideToggletask');
+    $(document).on('click', '#slideToggletask', function (e) {
+        e.preventDefault();
+        var trId = $(this).closest('tr');
+        var tr_Id = trId[0].id;
+        var element = $("#ShowProgressMonitor");
+        ShowModal_Tran(tr_Id, element);
+    });
+
+    $(document).off('click', '#Edittask');
+    $(document).on('click', '#Edittask', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+
+        var modal = $("#EditProgressMonitor").data('url');
+        var url = modal + "?id=" + tr_Id;
+        $.get(url, function (data) {
+            $("#EditProgressMonitor").modal('show');
+            $("#EditProgressMonitor").html(data);
+            $('#comments-bdg').prop('disabled', true);
+        });
+    });
+
+
+
+    $(document).off('click', '#Comments_text');
+    $(document).on('click', '#Comments_text', function (e) {
+        e.preventDefault();
+        var tr = $(this).closest('tr');
+        tr_Id = tr[0].id;
+        var modal = $("#EditProgressMonitor").data('url');
+        var url = modal + "?id=" + tr_Id;
+        $.get(url, function (data) {
+            $("#comments-bdg").addClass("active");
+
+            $("#EditProgressMonitor").html(data);
+            $("#EditProgressMonitor").modal('show');
+            $("#tab_PMdetails").hide();
+            $("#details").hide();
+            $("#comments").show();
+        });
+    });
+
+
+    $("#drpPhase,#ProjInstance").on('change', function () {
+        var UserType = "@Session["UserType"].ToString()";
+
+        var PhId = $("#drpPhase").val();
+        var InsId = $("#ProjInstance").val();
+        var CustId = "";
+        var ProjId = $("#drpProject").val();
+
+        if (UserType == "Project Manager") {
+            CustId = "";
+        }
+        else {
+            CustId = $("#drpCustomer").val();
+
+        }
+
+
+        SessionStorage(CustId, PhId, ProjId, InsId);
+
+        var PullTaskTransUrl = '@Url.Action("PullTaskButton","Transaction")';
+        var GetTaskCountUrl = '@Url.Action("GetTaskCount","Transaction")';
+        $('#Tab_ProgressMonitor').click();
+        PulltaskTrans(PhId, InsId, UserType, PullTaskTransUrl, GetTaskCountUrl);
+     });
+
+
+    $("#PMActivityAdd").on("click", function () {
+        $('#addActivityTask').modal('show');
+
+        var InstanceId = $('#ProjInstance').val();
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetBuildingBlock", "Transaction")',
+            data: {InstanceId:InstanceId},
+            success: function (data) {
+                var state = $("#drpBuildingBlock");
+                state.empty();
+                state.append($('<option/>', {
+                    value: 0,
+                    text: '--Select Building Block--'
+                }));
+                $.each(data, function (index, item) {
+                    state.append($('<option/>', {
+                        value: item.block_ID,
+                        text: item.Block_Name
+                    }));
+                });
+            }
+        });
+
+    });
+
+    $("#drpRoles").on("change", function () {
+        var GetUserRoleUrl = '@Url.Action("GetUserByRole","Transaction")';
+        DrpOwnerUserRole(GetUserRoleUrl);
+    });
+
+     $('#txtEstimated').on('keyup', function (e) {
+
+        this.value = this.value
+            .replace(/[^\d:]/g, '')             // numbers and decimals only
+            .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at th\e beginning
+            .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+            //.replace(/(\:[\d]{2})./g, '$1')    // not more than 4 digits after decimal
+            .replace(/(\:[0-5][0-9]{1})./g, '$1');
+
+    });
+
+
+     $('.Activitycancel').click(function () {
+        $('#addActivityTask').modal('hide');
+        Activity_reset()
+    });
+
+    $("#btnSeqCancel").on("click", function () {
+        $('#addActivityTask').modal('show');
+        $('#Prev-Activity').modal('hide');
+    });
+
+
+
+    $("#drpTaskType").change(function () {
+        var ParallelPhaseNameUrl='@Url.Action("ParallelNameByPhase","Transaction")';
+        ParallelPhaseName(ParallelPhaseNameUrl);
+    });
+
+
+
+    $("#btnActivityCreate").on("click", function () {
+        var AllTaskParallelUrl = '@Url.Action("GetAllTaskByParallelType","Transaction")';
+        var PreviousTaskUrl = '@Url.Action("PreviousTaskPhase","Transaction")';
+        CreateActivityProgress(AllTaskParallelUrl, PreviousTaskUrl);
+    });
+
+    $("#btnSeq").on("click", function () {
+
+        var id = $("#txtActivity_ID").val();
+        var Task = $("#txtTask").val();
+        Task = Task.replace(/,/g, " ");
+        var ApplicationArea = $("#drpApplicationArea").val();
+        var Phase = $('#drpPhase').val();
+        var Owner = $('#drpOwner').val();
+        var Role = $('#drpRoles').val();
+        var BlockId = $('#drpBuildingBlock').val();
+        var Estimated = $("#txtEstimated").val();
+        var Tasktype = $("#drpTaskType").val();
+        var Paralleltype = $("#drpParallelId").val();
+        Estimated = Estimated.replace(/:/g, ".");
+
+        var LatestTaskId = $("#hiddenActivityId").val();
+        var LastTaskId = $("#drpTsk").val();
+        var Parallel_Name = $("#txtParallelName").val();
+         var InstanceId = $('#ProjInstance').val();
+
+        var model = {
+            Activity_ID: id,
+            Task: Task,
+            PhaseId: Phase,
+            Owner: Owner,
+            BuildingBlockID: BlockId,
+            EST_hrs: Estimated,
+            ApplicationAreaID: ApplicationArea,
+            RoleID: Role,
+            Task_id: Tasktype,
+            PreviousId: LastTaskId,
+            parallel_Id: Paralleltype,
+            Parallel_Name: Parallel_Name,
+            Instance:InstanceId
+        }
+
+        var Task_ = Owner_ = BuildingBlock_ = EST_hours_ = ApplicationAreaID_ = RoleID_ = Task_id_ = ParallelName_ = false;
+
+        if (Task == "") {
+            Task_ = true;
+            $("#lblTask").html("Please enter the Task").show();
+        }
+        else {
+            $("#lblTask").html("").show();
+        }
+
+        if (ApplicationArea == 0) {
+            ApplicationAreaID_ = true;
+            $("#lblApplicationArea").html("Please select the ApplicationArea").show();
+        }
+        else {
+            $("#lblApplicationArea").html("").show();
+        }
+
+       if (Owner == 0) {
+            Owner_ = true;
+            $("#lblOwner").html("Please select the Owner").show();
+        }
+        else {
+            $("#lblOwner").html("").show();
+        }
+
+        if (Role == 0) {
+            RoleID_ = true;
+            $("#lblRoles").html("Please select the Role").show();
+        }
+        else {
+            $("#lblRoles").html("").show();
+        }
+
+        if (BlockId == 0) {
+            BuildingBlock_ = true;
+            $("#lblBuildingBlock").html("Please select the Building Block").show();
+        }
+        else {
+            $("#lblBuildingBlock").html("").show();
+        }
+
+        if (Estimated == "") {
+            EST_hours_ = true;
+            $("#lblEstimated").html("Please fill the Estimated hours").show();
+        }
+        else {
+            $("#lblEstimated").html("").show();
+        }
+        if (Tasktype == 0) {
+            Task_id_ = true;
+            $("#lblTaskType").html("Please select the Task Type").show();
+        }
+        else {
+            $("#lblTaskType").html("").show();
+        }
+
+        if (ParallelName(Parallel_Name, Tasktype,InstanceId) == false) {
+            ParallelName_ = true;
+            $("#lblParallelName").html("Parallel Name already in use").show();
+        }
+        else if (Paralleltype == '00000000-0000-0000-0000-000000000000' && Parallel_Name == "") {
+            ParallelName_ = true;
+            $("#lblParallelName").html("Please enter the Parallel Name").show();
+        }
+        else {
+            $("#lblParallelName").html("").show();
+        }
+
+        if (Task_ == false && Owner_ == false && BuildingBlock_ == false && EST_hours_ == false && ApplicationAreaID_ == false && RoleID_ == false && Task_id_ == false && ParallelName_ == false) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddActivityTask", "Transaction")',
+                data: { projectMonitor: model },
+                success: function (response) {
+                    $('#Prev-Activity').modal('hide');
+                    Activity_reset();
+                    RefreshProjectMonitor();
+                    RefreshResourceAllocation();
+                    $('#addActivityTask').modal('hide');
+                    Notiflix.Notify.Success('Activity Task Added successfully...!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                }
+            });
+        }
+    });
+
+
+    //Function's
+    function Activity_reset() {
+
+            $("#txtTask").val("");
+            $("#drpApplicationArea").val(0);
+            $('#drpOwner').val(0);
+            $('#drpRoles').val(0);
+            $('#drpBuildingBlock').val(0);
+            $("#txtEstimated").val("");
+            $("#drpTaskType").val(0);
+            $("#drpParallelId").val("00000000-0000-0000-0000-000000000000");
+            $("#parallelhideid").hide();
+            $("#txtParallelName").val("");
+
+            $("#lblTask").html("");
+            $("#lblApplicationArea").html("");
+            $("#lblOwner").html("");
+            $("#lblRoles").html("");
+            $("#lblBuildingBlock").html("");
+            $("#lblEstimated").html("");
+            $("#lblTaskType").html("");
+            $("#lblParallelName").html("");
+        }
+    function TaskCheck(Task, id) {
+        var Status=true;
+        var VID = "00000000-0000-0000-0000-000000000000";
+        var InsId = $("#ProjInstance").val();
+        $.ajax({
+           url: '@Url.Action("CheckTaskAvailability", "Transaction")',
+            type: "GET",
+            async: false,
+            data: { namedata: Task, id: id, VID: VID, InsId: InsId },
+           dataType: "json",
+            success: function (data) {
+               if (data != "success") {
+                  Status = false;
+               }
+           },
+           error: function (err) {
+               alert("Please Enter proper details");
+           }
+        });
+        return Status;
+    }
+    function TaskEstHrs(Estimated) {
+       var Status = true;
+        var filter = /^([0-9]{1,2}).[0-5][0-9]$/
+        var filter1 = /^(00.[0-5][1-9]|0.[0-5][1-9]|00.[1-5][0-9]|0.[1-5][0-9]|0[1-9]+[.][0-5][0-9]|[1-9]+[.][0-5][0-9]|[1-9][0-9]+[.][0-5][0-9])$/
+        if (!filter.test(Estimated)) {
+            Status = false;
+        }
+        else if (!filter1.test(Estimated)) {
+           Status = false;
+        }
+        return Status;
+    }
+    function ParallelName(Parallel_Name, Tasktype,InstanceId) {
+        Parallel_Name = Parallel_Name.replace(/,/g, " ");
+        var status = true
+        if (Tasktype == 2 && Parallel_Name != "") {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("CheckParallel_NameAvailability", "Transaction")',
+                data: { namedata: Parallel_Name,InstanceId:InstanceId },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data != "success") {
+                        status = false
+                    }
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+        return status;
+    }
+    function MonitorData(PhId, InsId) {
+            var loginid = '@Session["loginid"]';
+        var User = '@Session["UserType"]';
+
+            $.ajax({
+                url: '@Url.Action("GetProgressMonitor","Transaction")',
+                //async: false,
+                data: { PhaseId: PhId, InstanceId: InsId },
+                success: function (response) {
+                    $('.ProgressMonitor tbody').remove();
+
+                    var tbody = '<tbody>';
+                    var tr = '<tr class="tr_Effect">';
+                    if (response.length > 0) {
+                        $("#externals").show();
+                        $.each(response, function (key, val) {
+                            var OnTrack = CheckonTrack(val.PlanedDate, val.PlanedEn_Date, val.Status);
+
+                            var tr2 = '<tr  class="tr_Effect" id="' + val.Id + '">';
+                            var bb = '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="">' + ++key + '.</span></td>';
+                            
+                            //bb += '<td><span class="text-capitalize" data-toggle="tooltip" title="' + val.Task + '"data-placement="left" id="slideToggletask" style="cursor:pointer">' + val.Task + '</span ></td>';
+                            if (val.Task.length > 9) {
+                                var Task = val.Task.substring(0, 10) + "...";
+                                bb += '<td class="TextRap head content"><span class="text-capitalize" id="slideToggletask" data-toggle="popover"  id="slideToggletask" style="cursor:pointer" rel="popover" data-placement="top"  data-trigger="hover" data-content="' + val.Task + '">' + Task + '</span ></td>'; //data-original-title="Activity/Task"
+                            }
+                            else {
+                                bb += '<td class="TextRap head content"><span class="text-capitalize" data-toggle="popover"  id="slideToggletask" style="cursor:pointer" rel="popover" data-placement="top"  data-trigger="hover" data-content="' + val.Task + '">' + val.Task + '</span ></td>';
+                            }
+                            bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip"  title="' + val.BuildingBlock + '">' + val.BuildingBlock + '</td>';
+                            bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip"  title="' + val.Role + '">' + val.Role + '</td>';
+                            if (val.Owner == '') {
+                                bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="Unassigned">Unassigned</td>';
+                            }
+                            else {
+                                bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Owner + '">' + val.Owner + '</td>';
+                            }
+                            bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.TaskType + '">' + val.TaskType + '</td>';
+                            //bb += '<td><i class="fa fa-commenting-o" aria-hidden="true" id="Comments_text"></i><span class="badge badge-primary table-badge" style="padding:10px 10px !important">' + val.Comments_Count + '</span></td>';
+                            bb += '<td><i class="fa fa-commenting-o" aria-hidden="true" id="Comments_text"></i><span class="badge badge-primary badge-pill" style="border-radius: 114% 114% 114% 114% !important;height:96% !important;width:16% !important;">' + val.Comments_Count + '</span></td>';
+                            if (val.Parallel_Name != null) {
+                                bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="' + val.Parallel_Name + '">' + val.Parallel_Name + '</td>';
+                            } else {
+                                bb += '<td class="TextRap"><span class="text-capitalize" data-toggle="tooltip" title="">--</td>';
+                            }
+
+                            if (OnTrack == "Red") {
+                                bb += '<td class="TextRap"><span class="text-capitalize text-danger font-weight-bold" ><i class="fa fa-circle text-danger _trackcircle" aria-hidden="true"></i>&nbsp;' + val.Status + ' &nbsp;<i class="fa fa-pencil text-dark edit_' + val.Id + '" id="Edittask" style="cursor:pointer;" data-toggle="tooltip" title="Edit"></td>';
+                                bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip" title=""><i class="fa fa-circle text-danger _trackcircle" aria-hidden="true"></i></td>';
+                            }
+                            else if (OnTrack == "Green") {
+                                bb += '<td class="TextRap"><span class="text-capitalize text-success font-weight-bold"><i class="fa fa-circle text-success _trackcircle" aria-hidden="true"></i>&nbsp;' + val.Status + ' &nbsp;<i class="fa fa-pencil text-dark edit_' + val.Id + '" id="Edittask" style="cursor:pointer;" data-toggle="tooltip" title="Edit"></td>';
+                                bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip" title=""><i class="fa fa-circle text-success _trackcircle" aria-hidden="true"></i></td>';
+                            }
+                            else if (OnTrack == "Orange") {
+                                bb += '<td class="TextRap"><span class="text-capitalize text-warning font-weight-bold"><i class="fa fa-circle text-warning _trackcircle" aria-hidden="true"></i>&nbsp;' + val.Status + ' &nbsp;<i class="fa fa-pencil text-dark edit_' + val.Id + '" id="Edittask" style="cursor:pointer;" data-toggle="tooltip" title="Edit"></td>';
+                                bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip" title=""><i class="fa fa-circle text-warning _trackcircle" aria-hidden="true"></i></td>';
+                            }
+                            else {
+                                bb += '<td class="TextRap"><span class="text-capitalize text-secondary font-weight-bold"><i class="fa fa-circle text-secondary _trackcircle" aria-hidden="true"></i>&nbsp;' + val.Status + ' &nbsp;<i class="fa fa-pencil text-dark edit_' + val.Id + '" id="Edittask" style="cursor:pointer;" data-toggle="tooltip" title="Edit"></td>';
+                                bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip" title=""><i class="fa fa-circle text-secondary _trackcircle" aria-hidden="true"></i></td>';
+                            }
+                            bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip"  title="' + val.PlanedDate + '">' + val.PlanedDate + '</td>';
+                            bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip"  title="' + val.PlanedEn_Date + '">' + val.PlanedEn_Date + '</td>';
+                            bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip"  title="' + val.ActualDate + '">' + val.ActualDate + '</td>';
+                            bb += '<td class="TextRap" hidden><span class="text-capitalize" data-toggle="tooltip"  title="' + val.ActualEn_Date + '">' + val.ActualEn_Date + '</td>';
+                            //bb += '<td class="TextRap hidden"><span class="text-capitalize" title="' + val.Task + '">' + val.Task + '</span ></td>';
+                            bb += '<td hidden><i class="fa fa-pencil edit_' + val.Id + '" id="Edittask" style="cursor:pointer"></td>';
+                            //bb += '<td><i class="fa fa-ellipsis-h" id="slideToggletask" style="cursor:pointer"></td>';
+                            tr = tr + tr2 + bb + '</tr>' + '</tr>';
+                        });
+                        tbody = tbody + tr + '</tbody>';
+                        $('.ProgressMonitor').append(tbody);
+
+                        //$(".custom-select,#testselect").removeAttr('disabled');
+                        //$(".custom-select").removeClass('disabled');
+                    }
+                    else {
+                        $("#externals").hide();
+                        var bb2 = '<td colspan="7" class="text-center">' + "<strong>No Record Found</strong>" + '</td>';
+                        tr = tr + bb2 + '</tr>';
+                        tbody = tbody + tr + '</tbody>';
+                        $('.ProgressMonitor').append(tbody);
+
+                        //$(".custom-select").attr('disabled', 'disabled');
+
+                       if ($('#Tab_ProgressMonitor').hasClass('active')) {
+                            if (PhId != 1) {
+                                var msg = 'one or more previous phase task\'s are not completed ,Please complete the task\'s and try..!<strong> Kindly select the Instance..!</strong>';
+                                Notiflix.Report.Info("ProAcc Info !", msg,
+                                    "okay",
+                                    function () {
+                                        ResetInstProject();
+                                        RefreshProjectMonitor();
+                                        var result = $("#drpPhase :selected").text();
+                                        $("#CurrentPhase").text(result);
+                                    });
+                            }
+                        }
+
+                    }
+
+
+                    if (response.length > 0) {
+                        //debugger
+                        var arr = [];
+
+                        var par_minID = 0;
+                        var seq_min = 0;
+                        var isSeq = 0;
+                        var ispar = 0;
+                        for (var i = 0; i < response.length; i++) {
+                            //UpdateUserByRole(response[i].RoleID, response[i].UserID, response[i].Status);
+                            //debugger;
+
+                            var localid = i + 1;
+                            let Items = {
+                                "Id": response[i].Id,
+                                "StatusId": response[i].StatusId,
+                                "UserID": response[i].UserID,
+                                "ParallelName": response[i].ParallelName,
+                                "Task_id": response[i].Task_id,
+                                "localid": localid,
+                                "par_minID": par_minID,
+                                "seq_min": seq_min,
+                                "isSeq": isSeq,
+                                "ispar": ispar
+                            }
+                            arr[i] = UpdateEditButton(response[i].Id,
+                                response[i].StatusId, response[i].UserID,
+                                response[i].ParallelName, response[i].Task_id,
+                                localid, par_minID, seq_min, isSeq, ispar);
+
+                            ispar = arr[i][0];
+                            isSeq = arr[i][1];
+                            par_minID = arr[i][2];
+                            seq_min = arr[i][3];
+                            console.log(ispar, isSeq, par_minID, seq_min);
+                        }
+                    }
+                    if (IsanyHold) {
+                        for (var j = 0; j < response.length; j++) {
+                            if (response[j].StatusId == 4) {
+                                $(".edit_" + response[j].Id).hide();
+                            }
+
+                        }
+                    }
+
+
+                }
+            });
+    }
+    $(document).on('mouseover', '#slideToggletask', function (e) {
+        $('[data-toggle="popover"]').popover({
+            html: true,
+            title: function () {
+                return $(this).parent().find('.head').html();
+            },
+            content: function () {
+                return $(this).parent().find('.content').html();
+            }
+        });
+
+    });
+
+    function CheckonTrack(PlanedDate, PlanedEn_Date, Status) {
+
+        var status = "";
+        var _stat = "";
+        var _CurrentDate = new Date().toLocaleDateString('en-GB');
+        if ((_CurrentDate >= PlanedDate) && (_CurrentDate <= PlanedEn_Date)) {
+            _stat = true;
+        }
+        else if ((_CurrentDate >= PlanedDate) && (_CurrentDate >= PlanedEn_Date)) {
+            _stat = false;
+        }
+        else if ((_CurrentDate <= PlanedEn_Date)) {
+            status = "Grey";
+        }
+        if (_stat==true) {
+            switch (Status) {
+                case 'Yet To Start':
+                    status = "Grey";
+                    break;
+                case 'Completed':
+                    status = "Green"
+                    break;
+                case 'Work In Progress':
+                    status = "Orange"
+                    break;
+                case 'On Hold':
+                    status = "Orange"
+                    break;
+                case 'Not Applicable':
+                    status = "Grey"
+                    break;
+                default:
+                    status = "Grey";
+
+            }
+        }
+        else if (_stat == false) {
+                switch (Status) {
+                    case 'Yet To Start':
+                        status = "Red";
+                        break;
+                    case 'Completed':
+                        status = "Green"
+                        break;
+                    case 'Work In Progress':
+                        status = "Red"
+                        break;
+                    case 'On Hold':
+                        status = "Red"
+                        break;
+                    case 'Not Applicable':
+                        status = "Grey"
+                        break;
+                    default:
+                        status = "Grey";
+                }
+            }
+        return status;
+    }
+
+
+    function UpdateEditButton(Id, Status_Id, UserID, ParallelID, Task_id, localid, par_minID, seq_min, isSeq, ispar) {
+            var User = '@Session["UserType"]';
+            var loginid = '@Session["loginid"]';
+            var UserType = "@Session["UserType"].ToString()";
+            if (Status_Id == 2) {
+                IsanyHold = true;
+            }
+            if (UserType == 'Project Manager') {
+                WIP_Status = false;
+                if (Status_Id == 2) {
+                    WIP_Status = true;
+                }
+
+                if (Status_Id == 1 || Status_Id == 3) {
+                    $(".edit_" + Id).hide();
+                }
+                else {
+                    $(".edit_" + Id).show();
+                }
+                if (WIP_Status) {
+                    if (Status_Id == 4) {
+                        $(".edit_" + Id).hide();
+                    }
+                }
+            }
+            else {
+
+                if (Status_Id == 1 || Status_Id == 3 || Status_Id == 4) {
+                    $(".edit_" + Id).hide();
+                }
+                else {
+                    //var  localid = Number(Id);
+                    if (ParallelID != 0 && Status_Id != 1 && par_minID == 0 && isSeq == 0) {
+                        par_minID = Number(ParallelID);
+                        ispar = Number(ParallelID);
+                    }
+                    if (Status_Id != 1 && Status_Id != 3 && Task_id == 1 && seq_min == 0 && ispar == 0) {
+
+                        seq_min = Number(localid);
+                        isSeq = Number(localid);
+                    }
+                    if (isSeq != 0) {
+                        if (localid > isSeq) {
+                            $(".edit_" + Id).hide();
+                        }
+
+                    }
+                    else if (ispar != 0) {
+
+                        if (ispar > 0 && ispar != ParallelID) {
+
+                            $(".edit_" + Id).hide();
+                        }
+                        if (Task_id == 1) {
+                            $(".edit_" + Id).hide();
+                        }
+
+                    }
+                    if (Task_id == 3) {
+                        $(".edit_" + Id).show();
+                    }
+                }
+
+                if (UserID != loginid) {
+                    $(".edit_" + Id).hide();
+                }
+            }
+            var arr1 = [ispar, isSeq, par_minID, seq_min];
+
+            return arr1;
+        }
+
+     function ShowEdit() {
+         var table = $("#ProgressMonitor");
+         var header = table.find('thead tr td');
+         var select = '<select id="testselect" multiple>';
+         var option = [];
+         var headerObj = [];
+         var className = [];
+         var headerName = [];
+
+         for (var i = 0; i < header.length; i++) {
+             className[i] = header[i].className;
+             headerObj[i] = header[i].innerText.trim();
+             if (className[i] == "addSelect") {
+                 option[i] = '<option value="' + i + '" class="' + className[i] + '" scope="col">' + headerObj[i].toUpperCase() + '</option>';
+             }
+         }
+         select = select + option + "</select>";
+         $("#DrpProgressMonitorCheckBox").append(select);
+         //$("#testselect").attr('disabled', 'disabled');
+         $("#testselect").multiselect({
+             disableIfEmpty: true,
+             includeResetOption: true,
+             resetText: "Reset all",
+             maxHeight: 200,
+             numberDisplayed: 1,
+             //enableFiltering: true,
+             onChange: function (option, checked, select) {
+                 if (checked) {
+                     var val = $(option).text().toUpperCase();
+                     $.each(headerObj, function (data, item) {
+                         var val2 = headerObj[data].trim().toUpperCase();
+                         if (val2 == val) {
+                             var originalindex = data;
+                             $(".ProgressMonitor").find('tr :nth-child(' + (originalindex + 1) + ')').toggle();
+                         }
+                     });
+                 }
+                 else {
+                     for (var i = 0; i < header.length; i++) {
+                         headerName[i] = header[i].innerText.trim().toUpperCase();
+                         var val2 = $(option).text().toUpperCase();
+                         if (headerName[i] == val2) {
+                             var hiddenIndex = i;
+                             $(".ProgressMonitor").find('tr :nth-child(' + (hiddenIndex + 1) + ')').show();
+
+                             //$(".ProgressMonitor").find('tr td:hidden').show();
+                         }
+                     }
+                 }
+             }
+         });
+         $(".btn-block").click(function () {
+             $(".ProgressMonitor").find('tr td:hidden').show();
+         });
+     }
+  function exportPDF_ProgressMonitor() {
+
+    var _ProjectName = $("#drpProject option:selected").text();
+    var _InstanceName = $("#ProjInstance option:selected").text();
+    var _InstanceId = $("#ProjInstance option:selected").val();
+    var PhId = $("#drpPhase").val();
+    var _PhaseName = $("#drpPhase option:selected").text();
+      if (_InstanceId != 0) {
+          $.ajax({
+              type: 'POST',
+              url: '@Url.Action("ExportPDF_ProgressMonitor", "Transaction")',
+              data: {
+                  ProjName: _ProjectName,
+                  InsName: _InstanceName,
+                  PhaName: _PhaseName,
+                  InsId: _InstanceId,
+                  PhaseId: PhId
+              },
+              success: function (response) {
+                  if (response.fileName != "") {
+                      //use window.location.href for redirect to download action for download the file
+                      window.location.href = "@Url.RouteUrl(new
+    { Controller = "Report", Action = "Download"})/?file=" + response.fileName;
+                  }
+
+                  Notiflix.Notify.Success('File <Strong>successfully </strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+              }, error: function () {
+                  Notiflix.Notify.Info('File <Strong>Not</strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+
+              }
+
+          });
+      }
+      else {
+          Notiflix.Report.Info("ProAcc Info !", 'Kindly select Project & Instance..!', "Click");
+      }
+
+}
+</script>

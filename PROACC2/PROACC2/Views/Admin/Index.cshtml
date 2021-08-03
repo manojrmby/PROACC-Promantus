@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- START PAGE CONTENT-->
+<div class="page-content fade-in-up task-projects">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row py-1 ">
+                <div class="col-lg-6">
+                    <ul class="m-0 p-0 sec-project">
+                        <li class="resource-planning">
+                            <div class="i-box">
+                                <div class="ibox-body">
+                                    @*<ul class="nav nav-tabs mb-0" id="myTab" role="tablist">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link  title-project active" data-toggle="tab" href="#projects" role="tab" aria-controls="projects">Projects</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#role" role="tab" aria-controls="role">Roles</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#pmtask" role="tab" aria-controls="role">PM-Task</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link title-project" data-toggle="tab" href="#activity" role="tab" aria-controls="activity">Activity</a>
+                                    </li>
+
+                                </ul>*@
+                                    <ul class="nav nav-tabs nav-justified">
+                                        @*<li class="nav-item">
+            <a class="nav-link  title-project active" data-toggle="tab" href="#instanceProject" role="tab" aria-controls="instanceProject">Projects</a>
+        </li>*@
+                                        <li class="nav-item" data-ref="@Url.Action("Index", "Admin", new { name = "_InstanceProject" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#instanceProject" role="tab" aria-controls="instanceProject" id="Tab_instanceProject">Projects</a>
+                                        </li>
+                                        @*<li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_RoleIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#roleIndex" role="tab" aria-controls="roleIndex">Roles</a>
+                                        </li>*@
+                                        <li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_PMIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#pmIndex" role="tab" aria-controls="pmIndex">PM-Task</a>
+                                        </li>
+                                        <li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_ActivityIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#activityindex" role="tab" aria-controls="activityindex" id="ActivityTabID">Activity</a>
+                                        </li>
+                                        @*<li class="nav-item" data-ref="@Url.Action("Index","Admin", new { name = "_ScenarioIndex" })">
+                                            <a class="nav-link title-project" data-toggle="tab" href="#ScenarioIndex" role="tab" aria-controls="ScenarioIndex">Scenario</a>
+                                        </li>*@
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom-line">
+                </div>
+            </div>
+
+            <div class="tab-content">
+                @*<div class="tab-pane fade-in-up" id="instanceProject" role="tabpanel">*@
+                <div class="tab-pane active fade-in-up" id="instanceProject" role="tabpanel">
+                    @*@Html.Partial("_InstanceProject")*@
+                </div>
+                <!--<div class="tab-pane fade-in-up" id="roleIndex" role="tabpanel">-->
+                    @*<a></a>*@
+                <!--</div>-->
+                <div class="tab-pane fade-in-up" id="pmIndex" role="tabpanel">
+                    @*<a></a>*@
+                </div>
+                <div class="tab-pane fade-in-up" id="activityindex" role="tabpanel">
+                    
+                    @*<a></a>*@
+                </div>
+                <!--<div class="tab-pane  fade-in-up" id="ScenarioIndex" role="tabpanel">-->
+                    @*<a></a>*@
+                <!--</div>-->
+            </div>
+
+            @*<div class="d-flex">
+                <div class="tab-content w-100">
+
+                    <div class="tab-pane active fade-in-up" id="projects" role="tabpanel">
+                        @Html.Partial("_InstanceProject")
+                    </div>
+                    <div class="tab-pane fade-in-up" id="role" role="tabpanel">
+                        @Html.Partial("_RoleIndex")
+                    </div>
+                    <div class="tab-pane fade-in-up" id="pmtask" role="tabpanel">
+                        @Html.Partial("_PMIndex")
+                    </div>
+                    <div class="tab-pane fade-in-up" id="activity" role="tabpanel">
+                        @Html.Partial("_ActivityIndex")
+                    </div>
+
+
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTENT-->
+<!-- START POPUP-->
+<script>
+
+    $(document).ready(function () {
+        $('#Tab_instanceProject').click();
+        $(".Phone").keypress(function (e) {
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                e.preventDefault();
+            }
+        });
+         $('.txtEstimated').keyup(function (event) {
+             this.value = this.value
+                 .replace(/[^\d:]/g, '')             // numbers and decimals only
+                 .replace(/(^[\d]{2})[\d]/g, '$1')   // not more than 2 digits at the beginning
+                 .replace(/(\::*)\:/g, '$1')         // decimal can't exist more than once
+                 //.replace(/(\:[\d]{2})./g, '$1');    // not more than 4 digits after decimal
+                 .replace(/(\:[0-5][0-9]{1})./g,'$1');
+
+         });
+     });
+
+    $(".nav-tabs li").click(function () {
+            var url = $(this).data('ref');
+        $.ajax({
+            url: url,
+            //async: true,
+            //data: { pageId: pageId },
+            success: function (response) {
+                if (url.includes("_InstanceProject")) {
+                    $(this).addClass("active")
+                    $("#instanceProject").html("");
+                    //$("#instanceProject a").replaceWith(response);
+                    $("#instanceProject").html(response);
+
+                }
+                else if (url.includes("_RoleIndex")) {
+                    $(this).addClass("active")
+                    //$("#roleIndex a").replaceWith(response);
+                    $("#roleIndex").html("");
+                    $("#roleIndex").html(response);
+                }
+                else if (url.includes("_PMIndex")) {
+                    $(this).addClass("active")
+                    //$("#pmIndex a").replaceWith(response);
+                    $("#pmIndex").html("");
+                    $("#pmIndex").html(response);
+                }
+                else if (url.includes("_ActivityIndex")) {
+                    $(this).addClass("active")
+                    //$("#activityindex a").replaceWith(response);
+                    $("#activityindex").html("");
+                    $("#activityindex").html(response);
+                }
+                else if (url.includes("_ScenarioIndex")) {
+                    $(this).addClass("active")
+                    //$("#activityindex a").replaceWith(response);
+                    $("#ScenarioIndex").html("");
+                    $("#ScenarioIndex").html(response);
+                }
+
+            }
+        });
+    });
+
+    function RefreshActivity() {
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_ActivityIndex" })',
+            success: function (data) {
+                $("#activityindex").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }
+
+    function RefreshInstanceProject() {
+         $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_InstanceProject" })',
+            success: function (data) {
+                $("#instanceProject").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+    }
+
+    
+
+    function RefreshPmTask() {
+          $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_PMIndex" })',
+            success: function (data) {
+                $("#pmIndex").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+    }
+    
+
+    @*function RefreshPage() {
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_InstanceProject" })',
+            success: function (data) {
+                $("#projects").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("UserSettings", "Admin", new { name = "_CustomerIndex" })',
+            success: function (data) {
+                $("#customer").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("");
+            },
+        });
+
+         $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("UserSettings", "Admin", new { name = "_UserIndex" })',
+            success: function (data) {
+                $("#user").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("");
+            },
+        });
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_PMIndex" })',
+            success: function (data) {
+                $("#pmtask").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+        });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_RoleIndex" })',
+            success: function (data) {
+                $("#role").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: '@Url.Action("Index", "Admin", new { name = "_ActivityIndex" })',
+            success: function (data) {
+                $("#activity").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('');
+            },
+
+        });
+    }*@
+</script>

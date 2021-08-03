@@ -1,0 +1,1126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="robots" content="follow,index">
+    <meta name="description" content="">
+    <meta name="author" content="ProAcc">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ProAcc Application</title>
+    <!-- Favicons -->
+    <link href="~/assets/img/logos/Logo_Arrow.png" rel="icon">
+    <link href="~/Assets/Notiflix/notiflix-2.3.1.min.css" rel="stylesheet" />
+    <script src="~/Assets/Notiflix/notiflix-2.3.1.min.js"></script>
+    <script src="~/Assets/js/Transaction.js"></script>
+    <script src="~/Assets/Notiflix/notiflix-aio-2.3.1.min.js"></script>
+    <script src="~/assets/js/MasterScript.js"></script>
+
+    <style>
+
+        /***********Menu Setting***********/
+        
+        #notify {
+            position: relative;
+            top: 0%;
+            left: 108%;
+        }
+        li#Usertype {
+            position: absolute;
+            /* margin-top: 1%; */
+            height: 63%;
+            left: -18px;
+        }
+        a#userType {
+            width: 137px;
+            margin-left: -51px;
+            margin-top: -10px;
+            direction: rtl;
+        }
+            /********************New Camera Setting ***************/
+        .showImg {
+            position: relative;
+            transition: 0.5s ease;
+            backface-visibility: hidden;
+        }
+
+        #circleData2 {
+            color: darkcyan;
+            font-size: 10.55em;
+            position: absolute;
+            justify-content: center;
+            top: -7px;
+            left: 19%;
+        }
+
+        #circleData {
+            color: darkcyan;
+            font-size: 2.5em;
+            position: absolute;
+            justify-content: center;
+            top: -5px;
+            left: 12%;
+        }
+
+        #profileVisibilty {
+            position: absolute;
+            z-index: 1;
+            top: -7%;
+            left: 40%;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        #profileVisibilty2 {
+            position: absolute;
+            z-index: 1;
+            top: 9%;
+            left: 45%;
+            color: white;
+            font-size: 5.2em;
+            cursor: pointer;
+            margin-top: -6%;
+        }
+
+        #camera2 {
+            position: relative;
+            z-index: 1;
+            margin-left: 0px;
+            top: -47px;
+            color: black;
+            opacity: 0;
+            left: 8px;
+        }
+
+
+        #UserDisp {
+            position: absolute;
+            z-index: 1;
+            height: 131px;
+            width: 131px;
+            left: 27px;
+            border-radius: 50%;
+            margin-top: 0px;
+            backface-visibility: hidden;
+            transition: 0.5s ease;
+        }
+
+        #UserDisp2 {
+            position: absolute;
+            z-index: 1;
+            height: 34px;
+            width: 33px;
+            left: 2px;
+            border-radius: 50%;
+            margin-top: -5px;
+            opacity: 0;
+        }
+
+
+
+        /***************Camera New Design *******************/
+
+        .hoverimage {
+            position: absolute;
+            z-index: 1;
+            left: 76%;
+            border-radius: 50%;
+            height: 31px;
+            box-shadow: 5px 5px 5px grey;
+            /* margin-top: -12%; */
+            margin-top: 104px;
+        }
+
+        #hoverCamera {
+            z-index: 1;
+            color: white;
+            position: relative;
+            left: 1%;
+            top: -9%;
+            font-size: 2.97em;
+        }
+
+        /*#camera {
+            position: relative;
+            z-index: 1;
+            top: 20%;
+            pointer-events: inherit;
+            cursor: pointer;
+            font-size: 1.99em;
+            left: 19%;
+            border-radius: 50%;
+            color: darkslategrey;
+        }*/
+
+        .fa-camera:hover {
+            color: mediumaquamarine;
+            transition: 0.5s ease;
+        }
+        /***************Camera New Design End*******************/
+
+        li.upload {
+            position: relative;
+            width: 33px;
+            height: 23px;
+            justify-content: center;
+            display: inline-flex;
+            z-index: 1;
+            cursor: pointer;
+            left: 56%;
+        }
+
+        #DrpRefresh {
+            margin-top: 290px;
+            position: fixed;
+            background-color: white;
+            border-radius: 3%;
+            margin-left: -5%;
+            height: 233px;
+            display: none;
+            background-color: #E9EEF3;
+            border: 1px solid black;
+            border-top-color: white;
+        }
+
+
+        #close {
+            position: absolute;
+            left: 99%;
+            top: 0%;
+            font-size: 1.35em;
+            cursor: pointer;
+        }
+
+            #close:hover {
+                transition: 0.5s ease;
+                color: red;
+                font-size: 1.8em;
+                margin-left: -3%;
+            }
+
+        .hovereffect {
+            position: relative;
+            left: 5%;
+            height: 121px;
+        }
+
+        #UserName {
+            position: relative;
+            left: 16%;
+            top: 5%;
+            font-weight: bolder;
+            background-color: #E9EEF3;
+        }
+        /********************New Camera Setting Ended***************/
+        /*  LOADING SPINNER  */
+        .loadingDiv-parent {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.7);
+            z-index: 9999;
+            /*display: none;*/
+        }
+        .Processing {
+            position: fixed;
+            width: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.7);
+            z-index: 9999;
+            /*display: none;*/
+        }
+        .loadingDiv {
+            position: fixed;
+            text-align: center;
+            top: 40%;
+            left: 45%;
+            z-index: 999999;
+        }
+
+            .loadingDiv .loading-image {
+                display: block;
+                /* margin: 25px 75px;*/
+                width: 50%;
+            }
+
+        td {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /*more less*/
+
+
+        .morecontent span {
+            display: none;
+        }
+
+
+
+
+
+        /*more less*/
+
+        .arrow-top .dropdown-item:hover {
+            background-color: var(--primary) !important;
+            color: #fff !important;
+            /*border-radius:10px;*/
+        }
+
+        .arrow-top {
+            margin-top: 10px !important;
+        }
+
+            .arrow-top:after {
+                content: " ";
+                position: absolute;
+                right: 0px;
+                top: -10px;
+                border-top: none;
+                border-right: 10px solid transparent;
+                border-left: 10px solid transparent;
+                border-bottom: 10px solid rgba(255,255,255,0.7);
+            }
+    </style>
+
+
+    <!-- GLOBAL MAINLY STYLES-->
+    @Styles.Render("~/Content/css/Layout")
+
+
+    @*<link href="~/assets/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />*@
+    <!-- THEME STYLES-->
+    @*<link href="~/assets/css/main.css" rel="stylesheet" />*@
+    @Scripts.Render("~/bundles/Scripts/jquery")
+
+</head>
+
+
+<body class="fixed-navbar">
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <header class="header">
+            <div class="page-brand">
+                @*<a class="nav-link sidebar-toggler js-sidebar-toggler">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </a>
+                    <a class="link">
+                        <img class="max-height50 max-height10-mobile" src="~/assets/img/logos/logo_small.png">
+                    </a>*@
+                <a class="nav-link sidebar-toggler js-sidebar-toggler">
+
+                    <!-- <i class="fa fa-bars"></i> -->
+                    <!-- <a class="link"> -->
+                    <span class="brand">
+                        <span class="brand-tip"><img class="max-height50 max-height10-mobile" src="~/assets/img/logos/logo-white.png"></span>
+                    </span>
+                    <span class="brand-mini"><img class="max-height50 max-height10-mobile" src="~/assets/img/logos/arrow.png"></span>
+                    <!-- </a> -->
+
+                </a>
+                @*<a><img class="max-height50 max-height10-mobile" src="~/assets/img/logos/arrow.png"></a>*@
+            </div>
+            <div class="flexbox flex-1" id="pannelMenu">
+                <ul class="nav navbar-toolbar">
+                    <li>
+                        @* <a href="javascript:;">
+                               <!-- <i class="fa fa-plus-circle fa-1x plus-gray" aria-hidden="true"></i> -->
+                               <i class="fa fa-align-left fa-1x plus-gray" aria-hidden="true"></i>&nbsp;&nbsp; <span class="semibold">Projects</span>
+                            </a> *@
+                    </li>
+                </ul>
+                <ul class="nav navbar-toolbar sec-right">
+
+                    <li>
+                        <form class="navbar-search project-search" action="javascript:;">
+                            <div class="rel">
+                                @if (Session != null && Session["UserType"] != null)
+                                {
+                                    <a class="card-title">@Session["UserType"].ToString()</a>
+                                }
+
+                            </div>
+                        </form>
+                    </li>
+                    <li class="dropdown dropdown-notification">
+                        <a class="nav-link dropdown-toggle NotifyMessage" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-bell-o rel">
+                                <span class="notify-signal"></span>
+                            </i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-center dropdown-menu-lg pt-0 MessageShow">
+                            @*<div class="dropdown-header bg-light"><strong>You have 4 messages</strong></div><a class="dropdown-item" href="#">
+                                <div class="message">
+                                    <div class="py-3 mfe-3 float-left">
+                                        <div class="c-avatar">
+                                            <img class="c-avatar-img" src="" alt="user@email.com">
+                                            <span class="c-avatar-status bg-success"></span>
+                                        </div>
+                                    </div>
+                                    <div><small class="text-muted">John Doe</small><small class="text-muted float-right mt-1">Just now</small></div>
+                                    <div class="text-truncate font-weight-bold"><span class="text-danger">!</span> Important message</div>
+                                    <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item text-center border-top" href="#"><strong>View all messages</strong></a>*@
+                        </div>
+                    </li>
+
+                    <li class="dropdown dropdown-user">
+                        <a class="nav-link dropdown-toggle link" id="UserProfile" data-toggle="dropdown" href="#" aria-haspop="true" aria-expanded="false">
+                            @*<span class="">@Session["ShortName"]</span>*@
+                            @*<img class="c-avatar-img-Click" src="~/assets/img/consultants/e72d5e62-5972-4ed7-a7e3-6ee0e3ddfdc5.jpg" alt="user@email.com">*@
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="c-avatar" id="_avatar">
+                                @*<a class="c-avatar-img-menu"><span>@Session["ShortName"]</span></a>*@
+                                @*<img class="c-avatar-img-menu" src="~/assets/img/consultants/e72d5e62-5972-4ed7-a7e3-6ee0e3ddfdc5.jpg" alt="user@email.com">*@
+                                <span class="fa fa-camera c-avatar-Camara" id="camera"></span>
+
+                                @* <span class="c-avatar-status bg-success"></span> *@
+                            </div>
+                            <div class="_Name">
+                                <span class="text-capitalize">@Session["UserName"]</span>
+                            </div>
+                            <div class="dropdown-header bg-darkgrey py-2"><strong>Account</strong></div>
+                            <a class="dropdown-item bg-light fa fa-refresh" href="#" id="UpdtPwdModal">
+                                &nbsp;&nbsp; Update Password
+                                @* <span class="badge badge-info mfs-auto">42</span> *@
+                            </a>
+                            <!-- <div class="dropdown-header bg-light py-2"><strong>Settings</strong></div> -->
+                            <!-- <div class="dropdown-divider"></div> -->
+                            <a class="dropdown-item bg-light  fa fa-sign-out" href="@Url.Action("Logout", "Login")" onclick="SessionClear()">
+                                <span class="align-content-end">&nbsp;&nbsp;Logout</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                @*<ul class="nav navbar-toolbar" id="pannelContent">
+                        <li id="Usertype">
+                            @if (Session != null && Session["UserType"] != null)
+                            {
+                                <a class="card-title" id="userType">@Session["UserType"].ToString()</a>
+                            }
+
+                        </li>
+                        <li class="dropdown dropdown-notification">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell-o rel">
+                                    <span class="notify-signal"></span>
+                                </i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-center dropdown-menu-lg pt-0">
+                                <div class="dropdown-header bg-light"><strong>You have 4 messages</strong></div><a class="dropdown-item" href="#">
+                                    <div class="message">
+                                        <div class="py-3 mfe-3 float-left">
+                                            <div class="c-avatar">
+                                                <img class="c-avatar-img" src="assets/img/consultants/dp4@2x.png" alt="user@email.com">
+                                                <span class="c-avatar-status bg-success"></span>
+                                            </div>
+                                        </div>
+                                        <div><small class="text-muted">John Doe</small><small class="text-muted float-right mt-1">Just now</small></div>
+                                        <div class="text-truncate font-weight-bold"><span class="text-danger">!</span> Important message</div>
+                                        <div class="small text-muted text-truncate">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt...</div>
+                                    </div>
+                                </a>
+
+
+                                </a><a class="dropdown-item text-center border-top" href="#"><strong>View all messages</strong></a>
+                            </div>
+                        </li>
+                        <li class="upload" data-clicked-times="0" onclick="funcUpload()">
+                            <img src='' alt="" id="UserDisp2" class="img-rounded" />
+                            <i class="fa fa-circle" aria-hidden="true" id="circleData"></i>
+                            <strong id="profileVisibilty">
+                                @Session["ShortName"]
+                            </strong>
+                        </li>
+
+
+                        <li class="dropdown dropdown-user" id="DrpRefresh">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12 ">
+                                        <div class="hovereffect">
+                                            <div class="showImg" id="ProfilePicVisibile">
+                                                <img src='' alt="" id="UserDisp" class="img-rounded" />
+                                                <div class="hoverimage" id="hoverScroll">
+                                                    <span class="fa fa-camera" id="camera" aria-hidden="true"></span>
+                                                </div>
+                                                <i class="fa fa-circle" aria-hidden="true" id="circleData2"></i>
+                                                <strong id="profileVisibilty2">
+                                                    @Session["ShortName"]
+                                                </strong>
+                                            </div>
+
+                                        </div>
+                                        <a class="dropdown-item text-center" href="#" id="UserName">&nbsp;@Session["UserName"]</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item fa fa-refresh" href="#" id="UpdtPwdModal">&nbsp;Update Password</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item fa fa-power-off" href="@Url.Action("Logout", "Login")">&nbsp;LogOut</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>*@
+                <!-- END TOP-RIGHT TOOLBAR-->
+            </div>
+        </header>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <nav class="page-sidebar semibold" id="sidebar">
+            <div id="sidebar-collapse">
+                @if (User.Identity.IsAuthenticated)
+                {
+                <ul class="side-menu metismenu">
+                    <li>
+                        <a href="@Url.Action("Home", "Home")">
+                            <i class="sidebar-item-icon fa fa-th-large"></i>
+                            <span class="nav-label">Dashboard</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Analysis", "Consultant")">
+                                <i class="sidebar-item-icon fa fa-line-chart"></i>
+                                <span class="nav-label">Analysis</span>
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Project Manager"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", "PM")">
+                                <i class="sidebar-item-icon fa fa-bookmark"></i>
+                                <span class="nav-label">PM</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("ProjectView", "PM")">
+                                <i class="sidebar-item-icon fa fa-bookmark"></i>
+                                <span class="nav-label">Progress View</span>
+                            </a>
+                        </li>
+
+                    }
+                    @if (User.IsInRole("Consultant") || User.IsInRole("Project Manager") || User.IsInRole("customer"))
+                    {
+                        <li>
+                            <a href="@Url.Action("ReadinessCheck", "Home")">
+                                <i class="sidebar-item-icon fa fa-user-circle"></i>
+                                <span class="nav-label">Readiness Check</span>
+                            </a>
+
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Project Manager") || User.IsInRole("Consultant") || User.IsInRole("customer"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Index", "Transaction")">
+                                <i class="sidebar-item-icon fa fa-tasks"></i>
+                                <span class="nav-label">Task Monitoring</span>
+                            </a>
+                        </li>
+                    }
+
+
+                    @if (User.IsInRole("Admin"))
+                    {
+
+
+                        <li>
+                            <a href="@Url.Action("UserSettings", "Admin")">
+                                <i class="sidebar-item-icon fa fa-user-circle"></i>
+                                <span class="nav-label">User Settings</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "Admin")">
+                                <i class="sidebar-item-icon fa fa-briefcase"></i>
+                                <span class="nav-label">Configuration</span>
+                            </a>
+
+                        </li>
+                        <li>
+                            <a href="@Url.Action("Index", "other")" id="Tab_Miscellaneous">
+                                <i class="sidebar-item-icon fa fa-briefcase"></i>
+                                <span class="nav-label">Miscellaneous</span>
+                            </a>
+
+                        </li>
+                    }
+                    <hr />
+                    <li>
+                        <a href="@Url.Action("Index","Report")">
+                            <i class="sidebar-item-icon fa fa-flag-checkered"></i>
+                            <span class="nav-label">Reports</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Project Manager") || User.IsInRole("Consultant") || User.IsInRole("customer"))
+                    {
+                        <li>
+                            <a href="@Url.Action("Index","IssueTrack")">
+                                <i class="sidebar-item-icon fa fa-bug"></i>
+                                <span class="nav-label">Issue Tracking</span>
+                            </a>
+                        </li>
+                    }
+
+                    @*<li>
+            <a href="http://123.176.34.15:8021/survey/" target="_blank">
+                <i class="sidebar-item-icon fa fa-question-circle"></i>
+                <span class="nav-label">Questionnaire</span>
+            </a>
+        </li>*@
+                    @if (User.IsInRole("Consultant"))
+                    {
+                        @*<li>
+                <a href="@Url.Action("CustomerNeedHelpIndex", "Help")">
+                    <i class="sidebar-item-icon fa fa-envelope"></i>
+                    <span class="nav-label">Customer Help</span>
+                </a>
+            </li>*@
+                    }
+                    @if (User.IsInRole("Consultant") || User.IsInRole("Project Manager") || User.IsInRole("customer") || User.IsInRole("Admin"))
+                    {
+                        <li>
+                            <a href="@Url.Action("SendMailToCustomer", "Help")">
+                                <i class="sidebar-item-icon fa fa-bookmark"></i>
+                                <span class="nav-label">ProAcc Survey Mail</span>
+                            </a>
+                        </li>
+                    }
+                    @*<li>
+            <a href="#">
+                <i class="sidebar-item-icon fa fa-info"></i>
+                <span class="nav-label">Help</span>
+            </a>
+        </li>*@
+
+                </ul>
+                }
+            </div>
+        </nav>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+            <!-- START PAGE CONTENT-->
+            <!--<div class="col-md-2 features-role">
+                <div class="sec-tabs-fetaures ">
+                    <div class="ibox task-tabs">
+                        <div class="ibox-head">
+                            <div class="ibox-title">
+                            CONFIGURE
+                            </div>
+                        </div>
+                        <div class="ibox-body">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#projects" role="tab" aria-controls="home"><i class="fa fa-server" aria-hidden="true"></i>&nbsp;&nbsp;Projects</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#role" role="tab" aria-controls="profile"><i class="fa fa-map-signs" aria-hidden="true"></i>&nbsp;&nbsp;Roles</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+            @RenderBody()
+            <!-- END PAGE CONTENT-->
+            <footer class="page-footer">
+                <div class="font-14 text-right">
+                    <img src="~/assets/img/promantus-new-logo.png" style="width: 150px;" />
+                    <a class="" style="color:gray !important;"> ©Copyright 2020 Promantus Inc, All Rights Reserved </a>
+                </div>
+                <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
+                @*<div class="app-footer-left">
+                        <img src="~/Asset/images/resizeimage.png" style="width: 150px;" /><br />
+                        <p style="text-indent: 1em;"><a style="color:gray !important;">©Copyright 2020 Promantus Inc,All Rights Reserved</a></p>
+                    </div>
+                    <div class="app-footer-right">
+                    </div>*@
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/Scripts/Layout")
+
+    <div class="loadingDiv-parent" id="load">
+        <div class="loadingDiv ">
+            <i class="loading-image" aria-hidden="true">
+                <img src="~/assets/img/Loading.gif" style="margin-top: -40%;margin-left: 50%;">
+            </i>
+        </div>
+    </div>
+    @*<div class="Processing" id="div_Processing" style="display:none;">
+        <div class="loadingDiv ">
+            <i class="loading-image" aria-hidden="true">
+                <img src="~/assets/img/Loading.gif" style="margin-top: -40%;margin-left: 50%;">
+            </i>
+        </div>
+    </div>*@
+</body>
+
+</html>
+
+
+<!-- Model's-->
+<div id="UpdatePwd" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Update Password</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnUpdtPWdClose">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">Old Password<span id="Oldpwd" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="password" class="form-control" id="txtOldPassword" style="border: 2px solid #ccc !important" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblOldPassword" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">New Password<span id="Newpwd" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="password" class="form-control" id="txtNewPassword" maxlength="8" style="border: 2px solid #ccc !important" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblNewPassword" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">Confirm Password<span id="Cnfpwd" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="password" class="form-control" id="txtCnfPassword" maxlength="8" style="border: 2px solid #ccc !important" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblCnfPassword" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    @Html.Hidden("RedirectToHome", Url.Action("Logout", "Login"))
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnPwdUpdate">Update</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelPwdModal" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="UploadFile" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center w-100 semibold">Upload Profile Photo</h4>
+                <button type="button" class="close" aria-label="Close" id="btnUpldClose">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row bg-white">
+                    <div class="ibox w-100">
+                        <div class="ibox-body">
+                            <form>
+                                <div class="form-group">
+                                    <label class="control-label col-md-5 required">Upload Photo<span id="UpldPic" style="color:red">*</span></label>
+                                    <div class="col-md-10">
+                                        <input type="file" id="fileUpload" name="files" accept=".jpeg, .jpg, .png" />
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblPhotoUpload" style="color:red">&nbsp;</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="submit d-flex justify-content-center w-100">
+                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnUploadPhoto">Upload</button>
+                    <button type="button" class="btn btn-secondary pointer" id="cancelUpldModal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Scripts-->
+@Scripts.Render("~/bundles/Scripts/bootstrap")
+
+@Scripts.Render("~/bundles/Scripts/AmCharts")
+
+
+<script>
+
+     $(document).ready(function () {
+         var User = '@Session["UserType"]';
+        if (User == 'Consultant' || User == 'Customer') {
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("__ViewMessage", "Home")',
+                async: false,
+                success: function (response) {
+                    if (response.length > 0) {
+                        $('.notify-signal').show();
+                    }
+                    else {
+                        $('.notify-signal').hide();
+                    }
+                }
+            });
+        }
+        else {
+            //$('.notify-signal').show();
+            $('.notify-signal').hide();
+        }
+    });
+
+    $('.NotifyMessage').click(function () {
+        var User = '@Session["UserType"]';
+        if (User == 'Consultant' || User == 'Customer') {
+            $.ajax({
+                type: 'Get',
+                url: '@Url.Action("__ViewMessage", "Home")',
+                async: false,
+                success: function (response) {
+                    $('.MessageShow').empty();
+                    var aa1 = '<a>';
+                    var Count = "";
+                    for (var i = 0; i < response.length; i++) {
+                         Count= '<div class="dropdown-header bg-light"><strong>You have ' + response[i].CountMessgae + ' messages</strong></div>';
+                    }
+                    var dd = '<div class="message">';
+                    if (response.length > 0) {
+                        $.each(response, function (index, val) {
+                            var ConsUserName = val.ConsUserName;
+                            var PmName = val.PmName;
+                            var IssueName = val.IssueName;
+                            var Cre_on = val.Createdon;
+
+                            var aa = '<a class="dropdown-item notifyread" href="#" onclick="redirect()" id=' + val.Id + '>';
+                            var bb = '<div><small class="text-muted">' + ConsUserName + '</small><small class="text-muted float-right mt-1">' + Cre_on + ' </small></div>';
+
+                            bb += '<div class="text-truncate font-weight-bold"><span class="text-danger">!</span> Important message</div>';
+                            bb += '<div class="small text-muted text-truncate">A New Issue <strong>' + IssueName + '</strong> Is Being Issued By <strong>' + PmName + '</strong> To You </div>';
+
+                            aa = aa + bb + '</a>';
+                            dd = dd + aa + '</div>';
+                        });
+
+                        //aa1 = aa1 + dd + '</a>';
+                        Count = Count + dd + '</div>';
+                        $('.MessageShow').append(Count);
+                        $('.notify-signal').show();
+                    }
+                }
+            });
+        }
+    });
+
+    function redirect() {
+        
+        var id = $('.MessageShow').find('.notifyread').attr('id');
+        $.ajax({
+            type: 'Post',
+            url: '@Url.Action("DeleteMessage","Home")',
+            data: {
+                id:id
+            },
+            success: function (response) {
+                if (response == true) {
+                    var url = '@Url.Action("Index","IssueTrack")';
+                    window.location.href = url;
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    $(document).ajaxStart(function () {
+        $("#load").css("display", "block");
+    });
+    $(document).ajaxComplete(function () {
+        $("#load").css("display", "none");
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    function Loading_On() {
+        $("#load").css("display", "block");
+    }
+    function Loading_Off() {
+        $("#load").css("display", "none");
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    //$(document).ajaxError(function (e, jqxhr, settings, exception) {
+    //    e.stopPropagation();
+    //    if (jqxhr != null)
+    //        alert(jqxhr.responseText);
+    //});
+    $(window).on('load', function () {
+        $(".loadingDiv-parent").fadeOut("slow");
+    });
+    $(window).on('beforeunload', function () {
+        $(".loadingDiv-parent").fadeIn(50);
+    });
+    $(document).ready(function () {
+        var RL_Url = '@Url.Action("Data", "Home")';
+        var Short_Name = '@Session["ShortName"]';
+        var RamdomColor = '@Session["RamdomColor"]';
+        var col = getSColor(random(1, 7));
+        if (RamdomColor != "") {
+            col = RamdomColor;
+        }
+        load_Profile(RL_Url, Short_Name, col);
+
+
+        @*$('#UserProfile').addClass(col);
+        $('.profile-dropdown-avatar').addClass(col);
+        '<@Session["RamdomColor"] = "' + color + '"; %>';*@
+
+            //Reload(RL_Url);
+        var showChar = 50;
+        var ellipsestext = "...";
+        var moretext = "more";
+        var lesstext = "less";
+
+        $('.more').each(function () {
+            var content = $(this).html();
+
+            if (content.length > showChar) {
+
+                var c = content.substr(0, showChar);
+                var h = content.substr(showChar - 1, content.length - showChar);
+
+                var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+                $(this).html(html);
+            }
+
+        });
+
+        $(".morelink").click(function () {
+            if ($(this).hasClass("less")) {
+                $(this).removeClass("less");
+                $(this).html(moretext);
+            } else {
+                $(this).addClass("less");
+                $(this).html(lesstext);
+            }
+            $(this).parent().prev().toggle();
+            $(this).prev().toggle();
+            return false;
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(".side-menu li a").each(function () {
+        if ((window.location.pathname.indexOf($(this).attr('href'))) > -1) {
+            $(this).addClass('active');
+        }
+    });
+    //$("#Oldpwd").hide();
+    //$("#Newpwd").hide();
+    //$("#Cnfpwd").hide();
+    $("#cancelPwdModal,#btnUpdtPWdClose").click(function () {
+        ResetUpdtPwd();
+    })
+
+
+    $('#txtNewPassword,#txtCnfPassword').on("cut copy paste", function (e) {
+        e.preventDefault();
+    });
+
+
+    $("#UpdtPwdModal").click(function () {
+        $("#UpdatePwd").modal('show');
+    });
+    $("#btnPwdUpdate").click(function () {
+        var URL = '@Url.Action("UpdatePassword", "Login")';
+        var OLD_Pwd_URL = '@Url.Action("OldPasswordcheck", "Login")';
+        //PwdUpdate(URL, OLD_Pwd_URL);
+        var _oldpassword1 = $("#txtOldPassword").val().trim();
+        var _newPassword = $("#txtNewPassword").val().trim();
+        var _cnfPassword = $("#txtCnfPassword").val().trim();
+
+        var model = {
+            Password: _newPassword
+        }
+
+        var _Pwd = _Newpwd = _Cnfpwd = false;
+        if (_oldpassword1 == "") {
+            _Pwd = true;
+            $("#lblOldPassword").html("Please enter the Old Password").show();
+            $("#txtOldPassword").val("");
+        }
+        else if (oldpasswordcheck(OLD_Pwd_URL) == false) {
+            _Pwd = true;
+            $("#lblOldPassword").html("Please enter the Correct Password").show();
+            $("#txtOldPassword").val("");
+            $("#txtOldPassword").val("");
+            $("#txtNewPassword").val("");
+            $("#txtCnfPassword").val("");
+        }
+        else {
+            $("#lblOldPassword").html("").show();
+        }
+
+        if (_newPassword == "") {
+            _Newpwd = true;
+            $("#txtNewPassword").val("");
+            $("#lblNewPassword").html("Please enter the New Password").show();
+
+        }
+        else if (TaskPwd() == false) {
+            _Newpwd = true;
+            $("#txtNewPassword").val("");
+            $("#txtCnfPassword").val("");
+            //  $("#lblNewPassword").html("Password should contain one character, Special char and number").show();
+        }
+        else if (_oldpassword1 != "" && _newPassword != "") {
+            if (oldnewpassword() == false) {
+                _Newpwd = true;
+                $("#txtNewPassword").val("");
+                $("#lblNewPassword").html("Choose another password except old").show();
+            }
+        }
+        else {
+            $("#lblNewPassword").html("").show();
+        }
+
+        if (_cnfPassword == "") {
+            _Cnfpwd = true;
+            $("#lblCnfPassword").html("Please enter the Confirm Password").show();
+        }
+        else if (cnfpassword() == false) {
+            _Cnfpwd = true;
+            $("#txtCnfPassword").val("");
+            $("#lblCnfPassword").html("Password Does Not Match Kindly Check").show();
+        }
+        else {
+            $("#lblCnfPassword").html("").show();
+        }
+        if (_Newpwd == false && _Pwd == false && _Cnfpwd == false) {
+            $.ajax({
+                type: "POST",
+                url: URL,
+                data: model,
+                success: function (response) {
+                    if (response == "success") {
+                        Notiflix.Notify.Success('Password <Strong>updated </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                        ResetUpdtPwd();
+                        location.href = $("#RedirectToHome").val();                        
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    });
+
+
+
+    //$("#UserDisp").hide();
+    //$("#UserDisp2").hide();
+
+    $("#btnUpldClose,#cancelUpldModal").click(function () {
+        $("#UploadFile").modal('hide');
+        console.log("Upload File completed");
+
+        $('.modal-backdrop').remove();
+        console.log("Modalcompleted");
+
+        $("#lblPhotoUpload").html("").show();
+        console.log("completed");
+
+        $("#fileUpload").val('');
+        console.log("completed");
+
+        $("#DrpRefresh").hide();
+    });
+
+    //$("#camera").click(function () {
+    //    debugger;
+    //    $("#UploadFile").modal('show');
+    //    $("#hideDropdown").hide();
+    //    $("#DrpRefresh").hide();
+
+    //});
+    $("#_avatar").click(function () {
+        $("#UploadFile").modal('show');
+        //$("#hideDropdown").hide();
+        //$("#DrpRefresh").hide();
+
+    });
+    $("#btnUploadPhoto").click(function () {
+        var URL = '@Url.Action("UploadPhoto", "Home")';
+        var RL_Url = '@Url.Action("Data", "Home")';
+        var Short_Name = '@Session["ShortName"]';
+        UploadPhoto(URL, RL_Url, Short_Name);
+    });
+
+    $(document).on('click', function () {
+        $('.upload').data('clicked-times', 0);
+            $("#DrpRefresh").hide();
+    });
+
+
+    function SessionClear() {
+        sessionStorage.clear();
+    }
+    //$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+    //    localStorage.setItem('activeTab', $(e.target).attr('href'));
+    //});
+    //var activeTab = localStorage.getItem('activeTab');
+    //if (activeTab) {
+    //    $('#myTab a[href="' + activeTab + '"]').tab('show');
+    //    $('#myTab a[href="' + activeTab + '"]').click();
+    //}
+
+
+
+</script>

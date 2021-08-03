@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PROACC2", "PROACC2\PROACC2.csproj", "{188EDEC4-73B5-4204-8227-280FFE5A28E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DEV|Any CPU = DEV|Any CPU
+		PREPRO|Any CPU = PREPRO|Any CPU
+		PRODUCTION|Any CPU = PRODUCTION|Any CPU
+		QA|Any CPU = QA|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.DEV|Any CPU.ActiveCfg = DEV|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.DEV|Any CPU.Build.0 = DEV|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.PREPRO|Any CPU.ActiveCfg = PREPRO|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.PREPRO|Any CPU.Build.0 = PREPRO|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.PRODUCTION|Any CPU.ActiveCfg = PRODUCTION|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.PRODUCTION|Any CPU.Build.0 = PRODUCTION|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.QA|Any CPU.Build.0 = QA|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{188EDEC4-73B5-4204-8227-280FFE5A28E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AFB03E6-5FEF-4E50-B607-C960DCBA5E1D}
+	EndGlobalSection
+EndGlobal
