@@ -424,10 +424,16 @@ var FileUpload1_View = "", FileUpload2_View = "", FileUpload3_View = "", FileUpl
         dimention();
     });
 
-    $(document).on('click', '.browse', function () {
+    $('.browse').click(function () {
+        
         var file = $(this).parent().parent().parent().find('.file');
-        file.trigger('click');
+        var ID = file[0].id;
+        $('#'+ID).click();
     });
+    //$(document).on('click', '.browse', function () {
+    //    var file = $(this).parent().parent().parent().find('.file');
+    //    //file.trigger('click');
+    //});
     $(document).on('change', '.file', function () {
         $(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
