@@ -228,9 +228,11 @@ where I.isActive=1 and I.Project_ID=@Id order by InstaceName
 	BEGIN
 	Declare @MemberId uniqueidentifier
 	DECLARE @uid uniqueidentifier 
+	DECLARE @VersionId uniqueidentifier =(SELECT Version_ID from Instance where Instance_id=@Previous_Instance)
 	SET @uid  = newid()
-	    Insert into Instance (Instance_id,InstaceName,Project_ID,LastUpdated_Dt,Cre_By,Description) 
-		  values (@uid,@InstaceName,@Project_ID,GETUTCDATE(),@Cre_By,@Description)
+
+	    Insert into Instance (Instance_id,InstaceName,Project_ID,Version_ID,LastUpdated_Dt,Cre_By,Description) 
+		  values (@uid,@InstaceName,@Project_ID,@VersionId,GETUTCDATE(),@Cre_By,@Description)
 		DECLARE @userid uniqueidentifier = '00000000-0000-0000-0000-000000000000'
 		DECLARE @innercount int=null
 		--@Userid uniqueidentifier=null
@@ -257,6 +259,7 @@ where I.isActive=1 and I.Project_ID=@Id order by InstaceName
 	  ,Actual_St_Date
 	  ,Actual_En_Date
 	  ,EST_hours
+	  ,Version_Id
       ,[Cre_By]
 	  )
 	 SELECT
@@ -277,6 +280,7 @@ where I.isActive=1 and I.Project_ID=@Id order by InstaceName
 	  ,GETUTCDATE()
 	  ,GETUTCDATE()
 	  ,[EST_hours]
+	  ,Version_Id
 	  ,@Cre_By
 	  FROM #temp_ProjectMonitor TP where isactive=1
 

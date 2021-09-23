@@ -57,59 +57,69 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.scenarioDetail)
+            @if (ViewBag.scenarioDetail.Count == 0)
             {
-                <tr id="@item.ScenarioId" class="tr_Effect">
-
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ScenarioName">@item.ScenarioName</span></td>
-                    <td>
-                        <span>
-                            <select class="form-control list_BuildingBlock" id="@item.ScenarioId"  name="Building_Block"  multiple  style="width:100%">
-                                @*<option value="0">---Select Building Block's'---</option>*@
-                                @foreach (var item1 in ViewBag.BuildingBlocks)
-                                {
-                                    foreach (var item2 in item.TagIds)
-                                    {
-                                        if (item2 == item1.block_ID)
-                                        {
-                                            <option value="@item1.block_ID" selected>@item1.Block_Name</option>
-                                        }
-                                    }
-                                }
-                            </select>
-                        </span>
-                    </td>
-                    <td>
-                        @if (Scenario_EditList.Count > 0)
-                        {
-                            Boolean A = false;
-                            foreach (var item1 in Scenario_EditList)
-                            {
-                                if (item1 == item.ScenarioId)
-                                {
-                                    A = true;
-                                    break;
-
-                                }
-                            }
-                            if (A==false)
-                            {
-                            <span class="text-capitalize">
-                                <i class="fa fa-pencil getScenarioId" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
-                                &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delScenario" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ScenarioId" />
-                            </span>
-                            }
-                }
-                else { 
-                    <span class="text-capitalize">
-                        <i class="fa fa-pencil getScenarioId" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
-                        &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delScenario" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ScenarioId" />
-                    </span>
-                    }
-                    </td>
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
                 </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.scenarioDetail)
+                {
+                    <tr id="@item.ScenarioId" class="tr_Effect">
+
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ScenarioName">@item.ScenarioName</span></td>
+                        <td>
+                            <span>
+                                <select class="form-control list_BuildingBlock" id="@item.ScenarioId" name="Building_Block" multiple style="width:100%">
+                                    @*<option value="0">---Select Building Block's'---</option>*@
+                                    @foreach (var item1 in ViewBag.BuildingBlocks)
+                                    {
+                                        foreach (var item2 in item.TagIds)
+                                        {
+                                            if (item2 == item1.block_ID)
+                                            {
+                                                <option value="@item1.block_ID" selected>@item1.Block_Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </span>
+                        </td>
+                        <td>
+                            @if (Scenario_EditList.Count > 0)
+                            {
+                                Boolean A = false;
+                                foreach (var item1 in Scenario_EditList)
+                                {
+                                    if (item1 == item.ScenarioId)
+                                    {
+                                        A = true;
+                                        break;
+
+                                    }
+                                }
+                                if (A == false)
+                                {
+                                    <span class="text-capitalize">
+                                        <i class="fa fa-pencil getScenarioId" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
+                                        &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delScenario" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ScenarioId" />
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-capitalize">
+                                    <i class="fa fa-pencil getScenarioId" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
+                                    &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delScenario" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ScenarioId" />
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 

@@ -14,6 +14,7 @@ namespace PROACC2.BL.Model
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        public string TimeZone { get; set; }
         public System.Guid UserId { get; set; }
 
         public string ProjectManagerName { get; set; }

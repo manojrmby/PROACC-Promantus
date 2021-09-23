@@ -6,9 +6,13 @@
     [Assignee]           NVARCHAR (MAX) NULL,
     [RaisedBy]           NVARCHAR (MAX) NULL,
     [ApplicationArea]    NVARCHAR (MAX) NULL,
-    [OpenDt]             DATETIME       NULL,
-    [CloseDt]            DATETIME       NULL,
+    [OpenDt]             VARCHAR (500)  NULL,
+    [CloseDt]            VARCHAR (500)  NULL,
     [SAPIssueDumpStatus] NVARCHAR (MAX) NULL,
     [Resolution]         NVARCHAR (MAX) NULL,
     [Comments]           NVARCHAR (MAX) NULL);
+
+
+
+
 

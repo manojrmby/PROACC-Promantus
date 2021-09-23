@@ -1,4 +1,5 @@
 ﻿
+@Scripts.Render("~/bundles/Scripts/moment")
 <div class="form-row py-1">
     <div class="col-lg-7">
         <label id="IssueHeading" style="display:none"><b>Upload S/4 Project Issues dump from Customer ITSM tool</b></label>
@@ -7,7 +8,7 @@
         <div class="new-project-submit d-flex justify-content-end">
             <div>
                 @*<i class="fa fa-download" data-toggle="tooltip" title="Download Template" id="DwnTemplate" style="display:none" aria-hidden="true" onclick="location.href='@Url.Action("DownloadTemplate", "IssueTrack")'"></i>*@
-            </div>            
+            </div>
             <button type="button" class="btn btn-primary  pointer" id="DumpIssue" style="display:none" onclick="">Upload</button>
         </div>
     </div>
@@ -65,6 +66,10 @@
                                     <div>
                                         &nbsp;&nbsp;&nbsp;<span class="Class_span" id="lblDumpIssueFileUpload" style="color:red">&nbsp;</span>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary order-1 ml-2 pointer" id="btnIssueDumpTemplate">Template</button>
+
                                 </div>
                             </form>
                         </div>
@@ -137,7 +142,17 @@
 </div>
 <!--End Edit POPUP-->
 <script>
+    $("#btnIssueDumpTemplate").on("click", function () {
+        var href = "@Url.RouteUrl(new{ Controller = "IssueTrack", Action = "IssueDumpTemplate" })/?file=";
+        window.location.href = href;
+        setTimeout(DownloadSucess,5000)
 
+    });
+    function DownloadSucess() {
+        $('.modal-backdrop').remove();
+        $('#load').css("display", "none");
+        Notiflix.Notify.Success('File <Strong>successfully </strong>downloaded!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+    }
     $("#DumpIssue").on("click", function () {
 
         $("#UploadDumpIssue").modal("show");
@@ -149,7 +164,7 @@
         var instance = $("#ProjInstance").val();
         var ProjectId=$("#drpProject").val();
         var DumpIssue = $("#DumpIssuefileUpload").val();
-       
+
 
         if (DumpIssue == '') {
             $("#lblDumpIssueFileUpload").html("Please Enter the file").show();
@@ -176,15 +191,16 @@
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    if (response == true) {
+                    if (response.Status) {
                         Notiflix.Notify.Success('SAP Issue File Uploaded successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
                         $("#DumpIssuefileUpload").val('');
                         $(".btnDumpIssuecancel").click();
 
                         LoadSAPIssuetrackUpload();
                     }
-                    else if (response == false) {
-                        Notiflix.Notify.Failure('Upload the file properly..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
+                    else {
+                        Notiflix.Report.Failure('Please Check Again..!', response.Errormessage, 'OK');
+                        //Notiflix.Notify.Failure('Upload the file properly..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
                         $("#DumpIssuefileUpload").val('');
                     }
                 }
@@ -192,7 +208,7 @@
         }
     });
     function LoadSAPIssuetrackUpload() {
-        
+
         var instance = $("#ProjInstance").val();
         var ProjectId=$("#drpProject").val();
         if (ProjectId != 0) {
@@ -213,8 +229,12 @@
                     $("#Issuetrack_Count").text(Count);
 
                     if (response.length > 0) {
+                        
                         $.each(response, function (key, val) {
                             var tr2 = '<tr id="' + val.SAPIssuetrack_Id + '">';
+                            
+                            var Opendt = moment(val.OpenDt).format('MM-DD-YYYY');
+                            var CloseDt = moment(val.CloseDt).format('MM-DD-YYYY');
                             var bb = '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.IssueNo + '">' + val.IssueNo + '</span></td>';
                             bb += '<td><span class="card-title" data-toggle="tooltip" title="' + val.IssueName + '"data-placement="left">' + val.IssueName + '</span ></td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Category + '">' + val.Category + '</td>';
@@ -222,8 +242,8 @@
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Assignee + '">' + val.Assignee + '</td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.RaisedBy + '">' + val.RaisedBy + '</td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.ApplicationArea + '">' + val.ApplicationArea + '</td>';
-                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.OpenDt + '">' + val.OpenDt + '</td>';
-                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.CloseDt + '">' + val.CloseDt + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + Opendt + '">' + Opendt + '</td>';
+                            bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + CloseDt + '">' + CloseDt + '</td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.status + '">' + val.status + '</td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Resolution + '">' + val.Resolution + '</td>';
                             bb += '<td class="TextRap"><span class="card-title" data-toggle="tooltip" title="' + val.Comments + '">' + val.Comments + '</td>';
@@ -241,7 +261,7 @@
                         var bb = '<td colspan="12" style="text-align:center">No Records Found</td>';
                         tr = tr + tr2 + bb + '</tr>' + '</tr>';
                         $("#Issuetrack_Count").text('0');
-                       
+
                     }
                     tbody = tbody + tr + '</tbody>';
                     $('.SAPIssueTrackTable').append(tbody);
@@ -265,7 +285,7 @@
     });
 
     $(document).on('click', '#EditSAPIssueTrack', function () {
-        
+
         var tr = $(this).closest('tr');
         tr_Id = tr[0].id;
 
@@ -275,7 +295,7 @@
             data: { id: tr_Id },
             async: false,
             success: function (result) {
-                
+
                 $('#EditSAPIssueDumpModal').modal('show');
                 $("#txtSAPIssueName").val(result.IssueName);
                 $('#drpSAPStatus').val(result.status)
@@ -289,7 +309,7 @@
     });
 
     $("#btnSAPIssueDumpUpdate").on("click", function () {
-        
+
         var Id=$("#SAPIssuetrack_Id").val();
         var SAPStatus = $('#drpSAPStatus').val();
         var Comments = $("#txtSAPIssueComments").val();
@@ -299,12 +319,12 @@
             type: "POST",
             data: { Id: Id, SAPStatus:SAPStatus,Comments:Comments},
             async: false,
-            success: function (result) {                
+            success: function (result) {
                 if (result == "success") {
                     Notiflix.Notify.Success('SAP Issue Updated successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
                     $(".cancelSAPIssueDump").click();
                     LoadSAPIssuetrackUpload();
-                }               
+                }
             },
             error: function (err) {
                 alert(err.responseText);

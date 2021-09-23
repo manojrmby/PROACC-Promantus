@@ -265,10 +265,14 @@ namespace PROACC2.Controllers
         [HttpPost]
         public ActionResult SAPIssueTrackFileUpload(string ProjectId)
         {
+            
+            
+            //var s = Dat.GetUtcOffset();
+
             HttpFileCollectionBase files = Request.Files;
             //string ProjectID = Request.Params["ProjectID"].ToString();
             //string InstanceID = Request.Params["InstanceID"].ToString();
-            bool Result = false;
+            object RS = null;
             string fname = "", ext, GivenName = "";
             if (files.Count > 0)
             {
@@ -300,24 +304,25 @@ namespace PROACC2.Controllers
                         _base.CreateIfMissing(Folder_Path);
                         fname = Path.Combine(Folder_Path, _fname);
                         file.SaveAs(fname);
-
-                        if (GivenName == "SAP_Issue_dump_upload_v1")
-                        {
-                            Result = _fileUpload.Process_SAP_Issue_dump(fname, NewID, Project_Id, User_Id);
-                        }
+                        var TimeZone = Session["TimeZone"].ToString();
+                        RS = _fileUpload.Process_SAP_Issue_dump(fname, NewID, Project_Id, User_Id,TimeZone);
+                        TempData["Error"] = RS;
+                        
                     }
                     catch(Exception ex)
                     {
                         _Log.createExMsgLog("SAPIssueTrackFileUpload Exception => " + ex);
+                        return Json("Error" + ex.Message);
                     }
                 }
             }
-            return Json(Result);
+            return Json(RS);
         }
 
         public ActionResult LoadSAPIssueTrack(string ProjectId)
         {
-            List<SAPIssueTrackModel> LoadSAPIssueTrack = _base.SP_LoadSAPIssueTrack(ProjectId);
+            var TimeZone = Session["TimeZone"].ToString();
+            List<SAPIssueTrackModel> LoadSAPIssueTrack = _base.SP_LoadSAPIssueTrack(ProjectId, TimeZone);
             return Json(LoadSAPIssueTrack, JsonRequestBehavior.AllowGet);
         }
         public ActionResult _GetSAPIssueTrack(Guid id)
@@ -347,6 +352,17 @@ namespace PROACC2.Controllers
             {
                 return Json("fail", JsonRequestBehavior.AllowGet);
             }
+        }
+
+
+        [HttpGet]
+        public ActionResult IssueDumpTemplate()
+        {
+            string file = "SAPIssueDumpTemplate.xlsx";
+            string filePath = Server.MapPath(ConfigurationManager.AppSettings["MasterFilePath"].ToString());  //"F:\\GitProAccNew\\ProAccNew\\ProAcc\\Asset\\Uploadedppt\\Sample.pdf";//Server.MapPath("Content") + "Sample.pdf";
+
+            string fullPath = Path.Combine(filePath, file);
+            return File(fullPath, "application/ms-excel", file);
         }
 
         //public FileResult DownloadTemplate()

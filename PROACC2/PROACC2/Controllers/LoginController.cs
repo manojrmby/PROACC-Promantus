@@ -62,6 +62,8 @@ namespace PROACC2.Controllers
                         Session["log-id"] = logedUser.LogID.ToString();
                         Session["loginid"] = logedUser.ID.ToString();
                         Session["UserName"] = logedUser.Name.ToString();
+                        string Timezone = user.TimeZone.ToString();
+                        Session["TimeZone"] = GetTImezone(Timezone);
                         Session["ShortName"] = _Base.GetFirstandLastName(logedUser.Name.ToString());
 
                         Session["InstanceId"] = Guid.Empty;
@@ -117,6 +119,43 @@ namespace PROACC2.Controllers
         }
 
 
+        private string GetTImezone(string Time_zone)
+        {
+            LogHelper _Log = new LogHelper();
+            string NewTimeZne = "";
+            try
+            {
+
+                //var timeZoneIds = TimeZoneInfo.GetSystemTimeZones().Select(t => t.Id);
+
+                if (Time_zone == "Asia/Calcutta")
+                {
+                    Time_zone = "India Standard Time";
+                }
+
+                var Time = TimeZoneInfo.FindSystemTimeZoneById(Time_zone);
+                //DateTimeOffset UTC = TimeZoneInfo.ConvertTime(Dt, Time);
+                //DateTime other = DateTime.SpecifyKind(Dt, DateTimeKind.Utc);
+
+
+                //DateTime localDate = DateTime.Now.Date;
+                //var s = DateTimeOffset.Now();
+                //var AUSOffset = new DateTimeOffset(localDate, TimeSpan.Zero);
+                NewTimeZne = Time.Id.ToString();
+
+            }
+            catch (Exception e)
+            {
+                _Log.createLog("GetTImezone --->"+e);
+                _Log.createLog("for TimeZone --->" + Time_zone);
+               // throw e;
+            }
+
+
+            return NewTimeZne;
+
+        }
+
         #region ForgotPwd
         public ActionResult CheckUserNameEmailAvailabiltiy(string Name, string EmailId)
         {
@@ -125,7 +164,7 @@ namespace PROACC2.Controllers
             try
             {
                 UserModel result = _Base.Sp_GetNameEmailCheck(Name, EmailId);
-                if (result.LoginId == Name && result.Email == EmailId)
+                if (result.LoginId.ToLower() == Name.ToLower() && result.Email.ToLower() == EmailId.ToLower())
                 {
                     status = true;
                     return Json(status, JsonRequestBehavior.AllowGet);

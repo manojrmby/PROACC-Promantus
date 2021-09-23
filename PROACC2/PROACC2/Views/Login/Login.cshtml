@@ -22,11 +22,20 @@
     <link href="~/assets/img/logos/Logo_Arrow.png" rel="icon">
     <!-- GLOBAL MAINLY STYLES-->
 
+    @Styles.Render("~/Content/css/notiflix")
+    @Scripts.Render("~/bundles/Scripts/notiflix")
+    @Scripts.Render("~/bundles/Scripts/moment")
+    @Styles.Render("~/Content/css/Layout")
+    @Scripts.Render("~/bundles/Scripts/jquery")
 
+    @*<link href="~/Assets/Notiflix/notiflix-2.3.1.min.css" rel="stylesheet" />
 
-    <link href="~/Assets/Notiflix/notiflix-2.3.1.min.css" rel="stylesheet" />
-    <script src="~/Assets/Notiflix/notiflix-2.3.1.min.js"></script>
-    <script src="~/Assets/Notiflix/notiflix-aio-2.3.1.min.js"></script>
+        <script src="~/Assets/Notiflix/notiflix-2.3.1.min.js"></script>
+        <script src="~/Assets/Notiflix/notiflix-aio-2.3.1.min.js"></script>*@
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="	https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.31/moment-timezone-with-data.js"></script>*@
+    @*<script src="~/Scripts/moment.js"></script>
+        <script src="~/Scripts/moment-timezone-with-data.js"></script>*@
     <script>
         Notiflix.Notify.Init({
             width: '280px',
@@ -47,20 +56,11 @@
             background-color: #e3e6df !important;
         }
     </style>
-
-    @Styles.Render("~/Content/css/Layout")
-    @Scripts.Render("~/bundles/Scripts/jquery")
-
-
 </head>
 <body class="fixed-navbar">
-
-
     <div class="page-wrapper bg-darkgray" id="divReload">
         <div id="" class="login">
-            <!-- START PAGE CONTENT-->
             <div id="compass"></div>
-
             <section class="section content-login">
                 @using (Html.BeginForm("Validate", "Login"))
                 {
@@ -129,7 +129,6 @@
                                             <h5 class="font-weight-bold">Login</h5>
                                         </div>
                                     </div>
-
                                     <div class="ibox-body">
                                         <form class="login100-form validate-form">
                                             <div class="form-group">
@@ -142,15 +141,16 @@
                                             </div>
                                             <span class="d-flex justify-content-end forgot-password"><a href="javascript:;" id="FwdPwd">Forgot password</a></span>
                                             <div class="submit mt-4">
-                                                <button class="btn btn-primary pointer btn-signin fa  spinner-border" id="loginclick" type="submit" onclick="callme();" role="status">
+                                                <button class="btn btn-primary pointer btn-signin fa  spinner-border" id="loginclick" type="submit" onclick="callme(this);" role="status">
                                                     Sign In
                                                 </button>
                                             </div>
+
                                             @if (TempData["Message"] != null)
                                             {
                                                 <span style="color: red;">@TempData["Message"].ToString()</span>
                                             }
-
+                                            <input type="hidden" name="TimeZone" id="TimeZone" value="Manoj">
                                             <input type="hidden" name="ReturnUrl" value="@Request.QueryString["ReturnUrl"]" />
                                         </form>
                                     </div>
@@ -165,13 +165,6 @@
                     </div>
                 }
             </section>
-            <!-- END PAGE CONTENT-->
-            <!-- <footer class="page-footer text-center">
-            <div class="font-13 ">2020 © <b>ProACC</b> - All rights reserved</div>
-            <div class="to-top"><i class="fa fa-angle-double-up"></i></div>
-            </footer> -->
-
-
         </div>
     </div>
     <!----------Forgot Password------------->
@@ -213,41 +206,23 @@
             </div>
         </div>
     </div>
-
-    <!----------Forgot Password------------->
-    <!-- BEGIN PAGA BACKDROPS-->
-    @*<div class="sidenav-backdrop backdrop"></div>
-        <div class="preloader-backdrop">
-            <div class="page-preloader">Loading</div>
-        </div>*@
     @Scripts.Render("~/bundles/Scripts/Layout")
     @Scripts.Render("~/bundles/Scripts/bootstrap")
+
+    @Scripts.Render("~/bundles/Scripts")
+    
 </body>
 </html>
 
 <script>
-    function callme() {
-        //console.log("INN");
-        
-        $('#loginclick').html(
-            `<span class="fa fa-cog fa-spin" role="status" aria-hidden="true"></span> Loading...`
-        );
-        $('#loginclick').css('font-size', 'large !important');
-        // $('#loginclick').prop('disabled', true);
-    }
-   
+    $(document).ready(function () {
+        var timeZone = moment.tz.guess();
+        $("#TimeZone").val(timeZone);
+    });
+
     $("#Namestar").hide();
     $("#EmailIdstar").hide();
-    function checkEmail(emailId) {
-        //var emailId = $("#EmailId").val().trim();
-        var regex = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-        if (!regex.test(emailId)) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
+
 
     function Validation() {
         $("#txtName").val('');
@@ -258,27 +233,7 @@
         $("#lblEmailFgt").html("Please re-enter the Email-ID").show();
     }
 
-    function CheckUserNameEmailAvailabiltiy(Name, EmailId) {
-        var _name = Name;
-        var _email = EmailId;
-        var _status = true;
-        $.ajax({
-            type: 'Get',
-            url: '@Url.Action("CheckUserNameEmailAvailabiltiy", "Login")',
-            data: {
-                Name: _name,
-                EmailId: _email
-            },
-            dataType: "json",
-            async: false,
-            success: function (response) {
-                if (response == false) {
-                    _status = false;
-                }
-            }
-        })
-        return _status;
-    }
+
 
     function ResetForgot() {
         $("#Namestar").hide();
@@ -307,79 +262,9 @@
     $("#cancelForgotModal,#btnFgtClose").click(function () {
         ResetForgot();
     });
-    @*$("#btnForgot").click(function () {
-        var Name=$("#txtName").val();
-        var EmailId = $("#EmailId").val();
-
-        var _Name = _EmailId = false;
-
-        if (Name == "") {
-            _Name = false;
-            $("#Namestar").show();
-            $("#lblName").html("Enter The User-Name").show();
-        }
-        else {
-            $("#Namestar").hide();
-            $("#lblName").html("").show();
-        }
-        if (EmailId == "") {
-            _EmailId = true;
-            $("#EmailIdstar").show();
-            $("#lblEmailFgt").html("Enter the Email-ID").show();
-        }
-        else {
-            $("#EmailIdstar").hide();
-            $("#lblEmailFgt").html("").show();
-        }
-        if (checkEmail() == false) {
-            $("#EmailIdstar").show();
-            $("#lblEmailFgt").html("Kindly re-enter the Email-ID").show();
-        }
-        else {
-            if (EmailId == "") {
-                $("#EmailIdstar").show();
-                $("#lblEmailFgt").html("Enter the Email-ID").show();
-            }
-            else {
-                $("#EmailIdstar").hide();
-                $("#lblEmailFgt").html("").show();
-            }
-        }
-        if (CheckUserNameEmailAvailabiltiy(Name, EmailId) == false) {
-            Validation();
-        }
-        else {
-            if (Name == "" && EmailId == "") {
-                $("#Namestar").show();
-                $("#lblName").html("Enter The User-Name").show();
-                $("#EmailIdstar").show();
-                $("#lblEmailFgt").html("Enter the Email-ID").show();
-            }
-            else {
-                Restvalidate();
-            }
-        }
-        if (_EmailId == false && _Name == false && checkEmail() ==true) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("ForgotPassword","Login")',
-                data: {
-                    Name: Name,
-                    EmailId: EmailId
-                },
-                success: function (response) {
-                    if (response == "success") {
-                        ResetForgot();
-                        $('#divReload').load('divReload');
-                    }
-                }
-            });
-
-        }
-    })*@
 
     $("#btnForgot").click(function () {
-        debugger;
+
         var Name=$("#txtName").val();
         var EmailId = $("#EmailId").val();
 
@@ -407,7 +292,10 @@
             $("#EmailIdstar").hide();
             $("#lblEmailFgt").html("").show();
         }
-        if (CheckUserNameEmailAvailabiltiy(Name, EmailId) == false) {
+
+        var Url = '@Url.Action("CheckUserNameEmailAvailabiltiy", "Login")';
+        if (CheckUserNameEmailAvailabiltiy(Name, EmailId, Url) == false) {
+            console.log("CheckUserNameEmailAvailabiltiy false");
             if (Name == "") {
                 _Name = true;
                 $("#lblName").html("Enter The User Name").show();
@@ -426,31 +314,10 @@
         else {
             $("#lblName").html(" ").show();
             $("#lblEmailFgt").html("").show();
+            var UrlFwd = '@Url.Action("ForgotPassword","Login")';
+            forgotPassword(UrlFwd, Name, EmailId);
         }
-
-        if (_EmailId == false && _Name == false) {
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("ForgotPassword","Login")',
-                data: {
-                    Name: Name,
-                    EmailId: EmailId
-                },
-                success: function (response) {
-                    if (response == "success") {
-                        Notiflix.Notify.Success('Reset Password Link Sent Successfully..Kindly Check Email!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
-                        ResetForgot();
-                        location.reload();
-                        //$('#divReload').load('divReload');
-                    }
-                    else {
-                        //Validation();
-                        alert("validation Fail");
-                    }
-                }
-            });
-
-        }
+        
     })
 </script>
 

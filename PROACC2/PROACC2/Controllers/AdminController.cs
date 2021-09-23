@@ -1218,32 +1218,6 @@ namespace PROACC2.Controllers
             return Json(Activitylist, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult CheckTaskAvailability(string namedata, int? id)
-        //{
-        //    if (id != null)
-        //    {
-        //        //var SearchDt = db.ActivityMasters.Where(x => x.Task == namedata).Where(x => x.Activity_ID != id).Where(x => x.isActive == true).FirstOrDefault();
-        //        var SearchDt = _base.Sp_CheckTaskAvailability(namedata,id);
-        //        if (SearchDt != true)
-        //            return Json("error", JsonRequestBehavior.AllowGet);
-        //        else
-        //            return Json("success", JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        //var SearchDt = db.ActivityMasters.Where(x => x.Task == namedata).Where(x => x.isActive == true).FirstOrDefault();
-        //        var SearchDt = _base.Sp_CheckTaskAvailability(namedata, id);
-        //        if (SearchDt == true)
-        //        {
-        //            return Json("error", JsonRequestBehavior.AllowGet);
-        //        }
-        //        else
-        //        {
-        //            return Json("success", JsonRequestBehavior.AllowGet);
-        //        }
-        //    }
-        //}
-
         public ActionResult ActivityCreate(ActivityModel activityMaster)
         {
             try
@@ -1339,14 +1313,7 @@ namespace PROACC2.Controllers
                         string fpath = Path.Combine(filePath, fname);
                         file.SaveAs(fpath);
                         
-                        if (GivenName == "ActivityTemplate")
-                        {
-                            RS = _fileUpload.Process_ActivityMaster(fpath, NewId, User_Id);
-                        }
-                        else
-                        {
-                            RS = false;
-                        }
+                        RS = _fileUpload.Process_ActivityMaster(fpath, NewId, User_Id);
                         TempData["Error"] = RS;
                     }
                 }
@@ -1366,7 +1333,7 @@ namespace PROACC2.Controllers
         //public  ActionResult ActivityTemplate()
         //{
         //    string file = "ActivityTemplate.xlsx";
-        //    string File_Path = Server.MapPath(ConfigurationManager.AppSettings["ActivityTemplate_filePath"].ToString());
+        //    string File_Path = Server.MapPath(ConfigurationManager.AppSettings["MasterFilePath"].ToString());
 
         //    string fullPath = Path.Combine(File_Path, file);
         //    using (ExcelE)
@@ -1382,7 +1349,7 @@ namespace PROACC2.Controllers
         public ActionResult ActivityTemplate()
         {
             string file = "ActivityTemplate.xlsx";
-            string filePath = Server.MapPath(ConfigurationManager.AppSettings["ActivityTemplate_filePath"].ToString());  //"F:\\GitProAccNew\\ProAccNew\\ProAcc\\Asset\\Uploadedppt\\Sample.pdf";//Server.MapPath("Content") + "Sample.pdf";
+            string filePath = Server.MapPath(ConfigurationManager.AppSettings["MasterFilePath"].ToString());  //"F:\\GitProAccNew\\ProAccNew\\ProAcc\\Asset\\Uploadedppt\\Sample.pdf";//Server.MapPath("Content") + "Sample.pdf";
 
             string fullPath = Path.Combine(filePath, file);
             return File(fullPath, "application/ms-excel", file);

@@ -175,6 +175,7 @@ IF @Type='GetTaskFromPhase'
 
 	IF @Type='AddResource'
 	BEGIN
+	DECLARE @VID uniqueidentifier=(SELECT version_id from instance WHERE Instance_id=@InstanceID)
 		INSERT ProjectMonitor( 
 		[Id]
       ,[ActivityID]
@@ -188,6 +189,7 @@ IF @Type='GetTaskFromPhase'
 	  ,Actual_St_Date
 	  ,Actual_En_Date
 	  ,EST_hours
+	  ,Version_Id
       ,[Cre_By]
 	  )
 	 SELECT
@@ -204,6 +206,7 @@ IF @Type='GetTaskFromPhase'
 	  ,GETUTCDATE()
 	  ,DATEADD(DAY, CAST(([EST_hours]/8) AS INT), GETUTCDATE())
 	  ,[EST_hours]
+	  ,@VID
 	  ,@Cre_By
 	  FROM ActivityMaster where isactive=1 AND Activity_ID=@ActivityId and PM_Add=0
 	END

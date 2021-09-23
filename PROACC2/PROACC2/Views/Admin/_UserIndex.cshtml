@@ -47,55 +47,64 @@
         </thead>
 
         <tbody>
-            @foreach (var item in ViewBag.Users)
+            @if (ViewBag.Users.Count == 0)
             {
-                <tr class="tr_Effect">
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Name">@item.Name</span></td>
-                    <td style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;"><span class="card-title comment more" data-toggle="tooltip" title="@item.Email">@item.Email</span></td>
-                    <td>
-                        @if (item.DialCode != null)
-                        {
-                            <span class="text-capitalize" data-toggle="tooltip" title="@item.DialCode @item.Phone">@item.DialCode @item.Phone</span>
-                        }
-                        else
-                        {
-                            <span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span>
-                        }
-                    </td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.RoleName">@item.RoleName</span></td>
-                    <td><span class="" data-toggle="tooltip" title="@item.LoginId">@item.LoginId</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.UserType">@item.UserType</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Customer_Name">@item.Customer_Name</span></td>
-                    <td>
-                        @if (item.Status == "Active")
-                        {
-                            <input type="checkbox" class="justify-content-center ml-2" id="active" name="isActive" value="@item.Status" checked disabled>
-                        }
-                        else
-                        {
-                            <span class="" data-toggle="tooltip" title="@item.Status">
-                                <input type="checkbox" class="justify-content-center ml-2" id="active" name="isActive" value="@item.Status" disabled>
-                            </span>
-                        }
-                        @*<span class="" data-toggle="tooltip" title="@item.isActive"></span>*@
-                    </td>
-                    @if (item.Status == "Active")
-                    {
-                        <td>
-                            <span class="fa fa-pencil btnUserEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.UserId" />
-                            <span class="fa fa-trash btnUserDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.UserId" />
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-
-
-
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
                 </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.Users)
+                {
+                    <tr class="tr_Effect">
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Name">@item.Name</span></td>
+                        <td style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;"><span class="card-title comment more" data-toggle="tooltip" title="@item.Email">@item.Email</span></td>
+                        <td>
+                            @if (item.DialCode != null)
+                            {
+                                <span class="text-capitalize" data-toggle="tooltip" title="@item.DialCode @item.Phone">@item.DialCode @item.Phone</span>
+                            }
+                            else
+                            {
+                                <span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span>
+                            }
+                        </td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.RoleName">@item.RoleName</span></td>
+                        <td><span class="" data-toggle="tooltip" title="@item.LoginId">@item.LoginId</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.UserType">@item.UserType</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Customer_Name">@item.Customer_Name</span></td>
+                        <td>
+                            @if (item.Status == "Active")
+                            {
+                                <input type="checkbox" class="justify-content-center ml-2" id="active" name="isActive" value="@item.Status" checked disabled>
+                            }
+                            else
+                            {
+                                <span class="" data-toggle="tooltip" title="@item.Status">
+                                    <input type="checkbox" class="justify-content-center ml-2" id="active" name="isActive" value="@item.Status" disabled>
+                                </span>
+                            }
+                            @*<span class="" data-toggle="tooltip" title="@item.isActive"></span>*@
+                        </td>
+                        @if (item.Status == "Active")
+                        {
+                            <td>
+                                <span class="fa fa-pencil btnUserEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.UserId" />
+                                <span class="fa fa-trash btnUserDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.UserId" />
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+
+
+
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 <!-- END PAGE CONTENT-->

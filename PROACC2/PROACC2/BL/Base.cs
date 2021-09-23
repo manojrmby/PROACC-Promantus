@@ -4773,15 +4773,15 @@ namespace PROACC2.BL
             LogHelper _log = new LogHelper();
             try
             {
-                DBHelper dB = new DBHelper("SP_IssueTrack", CommandType.StoredProcedure);
+                DBHelper dB = new DBHelper("SP_FileUpload", CommandType.StoredProcedure);
 
                 dB.addIn("@Type", "SAPIssueTrackUpload");
                 dB.addIn("@tblSAPIssueTrackUpload", CustomTable);
-                dB.addIn("@Project_Id", Project_Id);
-                //dB.addIn("@fileName", NewId);
-                //dB.addIn("@File_Type", "SAPUserList");
-                //dB.addIn("@FileUploadID", Guid.NewGuid());
-                dB.addIn("@Cre_By", User_ID);
+                dB.addIn("@ProjectId", Project_Id);
+                dB.addIn("@fileName", NewId);
+                dB.addIn("@File_Type", "SAPIssueTrackUpload");
+                dB.addIn("@FileUploadID", Guid.NewGuid());
+                dB.addIn("@Createdby", User_ID);
 
                 var a = dB.ExecuteScalar();
                 status = true;
@@ -5558,7 +5558,7 @@ namespace PROACC2.BL
             return Status;
         }
 
-        public List<SAPIssueTrackModel> SP_LoadSAPIssueTrack(string ProjectId)
+        public List<SAPIssueTrackModel> SP_LoadSAPIssueTrack(string ProjectId, string TimeZone)
         {
             List<SAPIssueTrackModel> L = new List<SAPIssueTrackModel>();
             LogHelper _log = new LogHelper();
@@ -5574,6 +5574,8 @@ namespace PROACC2.BL
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
+
+                        
                         SAPIssueTrackModel ITM = new SAPIssueTrackModel();
                         ITM.SAPIssuetrack_Id = Guid.Parse(dr["Id"].ToString());
                         ITM.RunningID = Convert.ToInt32(dr["RunningID"].ToString());
@@ -5584,8 +5586,14 @@ namespace PROACC2.BL
                         ITM.Assignee = dr["Assignee"].ToString();
                         ITM.RaisedBy = dr["RaisedBy"].ToString();
                         ITM.ApplicationArea = dr["ApplicationAreaName"].ToString();
-                        ITM.OpenDt = dr["OpenDt1"].ToString();
-                        ITM.CloseDt = dr["CloseDt1"].ToString();
+                        
+                        var OpenDt1 = DateTimeOffset.Parse(dr["OpenDt1"].ToString() + "+00:00");
+                        ITM.OpenDt = ConvertUtcToLocal(OpenDt1, TimeZone).ToString();
+
+                        var CloseDt = DateTimeOffset.Parse(dr["CloseDt1"].ToString() + "+00:00");
+                        ITM.CloseDt = ConvertUtcToLocal(CloseDt, TimeZone).ToString();
+                        
+
                         ITM.status = dr["StatusName"].ToString();
                         ITM.Resolution = dr["Resolution"].ToString();
                         ITM.Comments = dr["Comments"].ToString();
@@ -5600,6 +5608,24 @@ namespace PROACC2.BL
             return L;
         }
 
+
+        public DateTimeOffset ConvertUtcToLocal(DateTimeOffset Dt ,string LocalTimeZone)
+        {
+            var Timezone = TimeZoneInfo.FindSystemTimeZoneById(LocalTimeZone);
+            DateTimeOffset ConvertedTime = TimeZoneInfo.ConvertTime(Dt, Timezone);
+
+            return ConvertedTime;
+        }
+        public DateTime ConvertLocalToUTC(DateTime Dt, string LocalTimeZone)
+        {
+            
+
+            var Timezone = TimeZoneInfo.FindSystemTimeZoneById(LocalTimeZone);
+            var ConvertedUtcTime= TimeZoneInfo.ConvertTimeToUtc(Dt, Timezone);
+           // DateTimeOffset ConvertedTime = TimeZoneInfo.ConvertTime(Dt, Timezone);
+
+            return ConvertedUtcTime;
+        }
         public List<SAPIssueTrackModel> Sp_GetSAPStatus()
         {
             DataTable dt = new DataTable();

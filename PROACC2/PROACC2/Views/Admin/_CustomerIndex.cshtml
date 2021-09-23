@@ -51,32 +51,41 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.Customers)
+            @if (ViewBag.Customers.Count == 0)
             {
-            <tr class="tr_Effect">
-
-                <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Company_Name">@item.Company_Name</span></td>
-                <td><span class="text-capitalize" data-toggle="tooltip" title="@item.IndustrySector">@item.IndustrySector</span></td>
-                <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Contact">@item.Contact</span></td>
-                <td>
-                    @if (item.DialCode != null)
-                    {
-                        <span class="text-capitalize" data-toggle="tooltip" title="@item.DialCode @item.Phone">@item.DialCode @item.Phone</span>
-                    }
-                    else
-                    {
-                        <span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span>
-                    }
-                </td>
-                @*<td><span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span></td>*@
-                <td><span class="" data-toggle="tooltip" title="@item.Email">@item.Email</span></td>
-                <td>
-                    <span class="fa fa-pencil btnCustomerEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Customer_ID" />
-                    <span class="fa fa-trash btnCustomerDelete" aria-hidden="true" id="btnCustomerDelete" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Customer_ID" />
-                </td>
-            </tr>
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
+                </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.Customers)
+                {
+                    <tr class="tr_Effect">
+
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Company_Name">@item.Company_Name</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.IndustrySector">@item.IndustrySector</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Contact">@item.Contact</span></td>
+                        <td>
+                            @if (item.DialCode != null)
+                            {
+                                <span class="text-capitalize" data-toggle="tooltip" title="@item.DialCode @item.Phone">@item.DialCode @item.Phone</span>
+                            }
+                            else
+                            {
+                                <span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span>
+                            }
+                        </td>
+                        @*<td><span class="text-capitalize" data-toggle="tooltip" title="@item.Phone">@item.Phone</span></td>*@
+                        <td><span class="" data-toggle="tooltip" title="@item.Email">@item.Email</span></td>
+                        <td>
+                            <span class="fa fa-pencil btnCustomerEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Customer_ID" />
+                            <span class="fa fa-trash btnCustomerDelete" aria-hidden="true" id="btnCustomerDelete" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Customer_ID" />
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 

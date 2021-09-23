@@ -288,11 +288,11 @@ BEGIN
 	END
 	IF @Type='InsertParallelType'
 	BEGIN
-	
+	DECLARE @ParCount int=(select count(*) from ParallelType)
 		INSERT INTO ParallelType 
 		(ParallelId, ParallelName,Parallel_Name)
 		values
-		(NEWID(),(SELECT MAX(ParallelName)+1 from ParallelType),@ParallelTypeName)
+		(NEWID(),(@ParCount+1),@ParallelTypeName)
 	END
 
 	

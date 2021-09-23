@@ -18,18 +18,18 @@ namespace PROACC2
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Boolean Serverstatus = false;
-            Base @base = new Base();
-            Serverstatus =@base.IsServerConnected();
-            if (Serverstatus)
-            {
+            //Boolean Serverstatus = false;
+            //Base @base = new Base();
+            //Serverstatus =@base.IsServerConnected();
+            //if (Serverstatus)
+            //{
                 
-            }
-            else
-            {
-                //throw new InvalidOperationException("Sql Connection Failed Expection");
+            //}
+            //else
+            //{
+            //    //throw new InvalidOperationException("Sql Connection Failed Expection");
 
-            }
+            //}
             Mail mail = new Mail();
             mail.StartMailSend();
         }

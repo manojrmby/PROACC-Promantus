@@ -22,9 +22,9 @@
                                 <li class="nav-item" data-ref="@Url.Action("_DetailReport", "Report", new { name = "_DetailReport" })">
                                     <a class="nav-link title-project" data-toggle="tab" href="#DetailReport" role="tab" aria-controls="DetailReport" id="">Detail Report</a>
                                 </li>
-                                <li class="nav-item" data-ref="@Url.Action("_AuditReports","Report", new { name = "_AuditReports" })">
+                                @*<li class="nav-item" data-ref="@Url.Action("_AuditReports","Report", new { name = "_AuditReports" })">
                                     <a class="nav-link title-project" data-toggle="tab" href="#AuditReports" role="tab" aria-controls="AuditReports">Audit Report</a>
-                                </li>
+                                </li>*@
                                 @if (Session["UserType"].ToString() == "Project Manager")
                                 {
                                     <li class="nav-item" data-ref="@Url.Action("_RiskAssessment","Report", new { name = "_RiskAssessment" })">

@@ -192,6 +192,7 @@
     <Build Include="dbo\Stored Procedures\Default_Disable_ENABLE_Triggers.sql" />
     <Build Include="dbo\Stored Procedures\Default_Backup_Database.sql" />
     <Build Include="dbo\Functions\SplitString.sql" />
+    <Build Include="dbo\Stored Procedures\SP_IssueDumpUpload.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Custom\SqlSchemaCompare.scmp" />

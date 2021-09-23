@@ -69,13 +69,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.Version)
+            @if (ViewBag.Version.Count == 0)
             {
-                <tr id="@item.ID" class="tr_Effect">
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Version_Name">@item.Version_Name</span></td>
-                    @*<td><span class="text-capitalize" data-toggle="tooltip" title="@item.isActive">@item.isActive</span></td>*@
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
-                    <td>
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in ViewBag.Version)
+                {
+                    <tr id="@item.ID" class="tr_Effect">
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Version_Name">@item.Version_Name</span></td>
+                        @*<td><span class="text-capitalize" data-toggle="tooltip" title="@item.isActive">@item.isActive</span></td>*@
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
+                        <td>
                             <span class="card-title">
                                 @if (item.isActive == true)
                                 {
@@ -88,22 +96,23 @@
                                 }
                             </span>
                         </td>
-                    @*<td>
-                        <span class="card-title">
-                                <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
-                                    </i>
+                        @*<td>
+                    <span class="card-title">
+                            <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
+                                </i>
+                        </span>
+                        </td>*@
+                        <td>
+                            <span class="text-capitalize">
+                                <i class="fa fa-pencil getVersionId" aria-hidden="true" id="EditVersion" style="cursor:pointer" data-toggle="modal"></i>
+                                @*&nbsp;&nbsp;&nbsp;<i class="fa fa-trash delVersion" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ID" />*@
                             </span>
-                            </td>*@
-                <td>
-                    <span class="text-capitalize">
-                        <i class="fa fa-pencil getVersionId" aria-hidden="true" id="EditVersion" style="cursor:pointer" data-toggle="modal"></i>
-                        @*&nbsp;&nbsp;&nbsp;<i class="fa fa-trash delVersion" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.ID" />*@
-                    </span>
-                   
-                </td>
-                </tr>
+
+                        </td>
+                    </tr>
+                }
             }
-        </tbody>
+            </tbody>
     </table>
 </div>
 <div class="holder">
@@ -150,339 +159,6 @@
 </div>
 
 <input type="hidden" id="UpdateVersionId" name="UpdateVersionId" />
-
-@*<div id="deleteRole" class="modal fade">
-    <input type="hidden" id="delRid" />
-    <div class="modal-dialog modal-confirm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>Do you really want to delete &nbsp; <b> <span id="hiddenRole" style="color:black"></span></b></p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-outline-danger" id="DeleteRoleName">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>*@
-
-@*<div id="deleteRoleInfo" class="modal fade">
-    <input type="hidden" id="delRid" />
-    <div class="modal-dialog modal-confirm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>Kindly Delete The Respective Users Assigned With Role &nbsp; <b> <span id="hiddenRoleinfo" style="color:black"></span></b></p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Ok</button>
-            </div>
-        </div>
-    </div>
-</div>*@
-
-
-<!--<script>
-    //$(function () {
-    //    $('#accordion3').DataTable({
-    //        "pageLength": 5,
-    //        "searching": false,
-    //        "lengthMenu": [[5, 10, 15, -1], [5, 10, 15, "All"]],
-    //    });
-    //});
-
-   
-
-    //$('#txtRoleName').on('keypress', function (event) {
-    //    var regex = new RegExp("^[a-zA-Z0-9]+$");
-    //    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    //    if (!regex.test(key)) {
-    //        event.preventDefault();
-    //        return false;
-    //    }
-    //});
-
-    $("#Rstar").show();
-    $("#Rnstar").show();
-
-    function Reset() {
-        //$('#accordion3').load(' #accordion3');
-        $('#addRole').modal('hide');
-        $('.modal-backdrop').remove();
-
-        $("#txtRoleName").val('')
-        $("#txtDescription").val('')
-        $("#lblRoleName").html("").show();
-        $("#lblRoleDescription").html("").show();
-        $("#Rstar").show();
-
-        $("#txtUpdateVersionName").val('')
-        $("#Updatedesc").val('')
-        $("#lblVersionNameUpdate").html("").show();
-        $("#lblDescriptonUpdate").html("").show();
-        $("#Rnstar").show();
-
-
-    }
-
-    function ResetUpdateVersion() {
-        //$('#accordion3').load(' #accordion3');
-
-        $('#UpdateVersion').modal('hide');
-        $('.modal-backdrop').remove();
-
-        $("#txtUpdateVersionName").val('')
-        $("#Updatedesc").val('')
-        $("#lblVersionNameUpdate").html("").show();
-        $("#lblDescriptonUpdate").html("").show();
-        $("#Rnstar").show();
-
-        $("#txtRoleName").val('')
-        $("#txtDescription").val('')
-        $("#lblRoleName").html("").show();
-        $("#lblRoleDescription").html("").show();
-        $("#Rstar").show();
-
-    }
-
-    function CheckRoleAvailability(RoleName) {
-        var _RoleName = RoleName;
-        var _status = true;
-        $.ajax({
-            type: 'Get',
-            url: '@Url.Action("Checkavailabilty", "Admin")',
-            data: {
-                RoleName: _RoleName
-            },
-            dataType: "json",
-            async: false,
-            success: function (response) {
-                if (response == false) {
-                    _status = false;
-                }
-            },
-            error: function () {
-            },
-        });
-        return _status;
-    }
-
-    function Checkavailability(RoleName,Rid) {
-        var _RoleName = RoleName;
-        var _RoleId = Rid;
-        var _status = true;
-        $.ajax({
-            type: 'Get',
-            url: '@Url.Action("Checkavailabilty", "Admin")',
-            data: {
-                RoleName: _RoleName,
-                RoleIdUpdt:_RoleId
-            },
-            dataType: "json",
-            async: false,
-            success: function (response) {
-                if (response == false) {
-                    _status= false;
-                }
-            }
-        });
-        return _status;
-    }
-
-
-    $('.getRoleID').click(function () {
-
-        var id = $(this).closest('tr').attr('id');
-         $.ajax({
-                type: "POST",
-                url: '@Url.Action("__UpdateVersion", "Admin")',
-             data: { 'id' : id},
-             success: function (data) {
-
-                 //debugger;
-                 //console.log(data);
-
-                 $("#UpdateVersionId").val(data.RoleId);
-                 $("#txtUpdateVersionName").val(data.RoleName);
-                 $("#Updatedesc").val(data.Description);
-                 $('#UpdateVersion').modal('show');
-                 //$('#addRole').modal.show();
-                 $("#txtTimeStamp").val(data.TS);
-             },
-             error: function (a) {
-                 //debugger;
-                 //alert(a);
-             }
-         });
-    });
-
-
-    $("#btnAddRole").on('click', function () {
-            $('#addRole').modal('show');
-    });
-
-    $("#btnRoleclose,#cancelModal").click(function () {
-        Reset();
-        RefreshRole();
-    });
-
-    
-
-
-
-    $("#btnRoleCreate").on("click", function () {
-
-        var RoleName = $("input[name='RoleName']").val();
-        var Description = $("textarea[name='RoleDescription']").val();
-        var _RoleName = false;
-
-        if (RoleName == "") {
-            _RoleName = true;
-            $("#Rstar").show();
-            $("#lblRoleName").html("Please enter the Role Name").show();
-        }
-        else if (CheckRoleAvailability(RoleName) == false) {
-            _RoleName = true;
-            $("#Rstar").show();
-            $("#lblRoleName").html("Role Name already exists").show();
-        }
-        else {
-            $("#Rstar").hide();
-            $("#lblRoleName").html("").show();
-        }
-
-        //if (CheckRoleAvailability(RoleName) == false) {
-        //    $("#Rstar").show();
-        //    $("#lblRoleName").html("Role Name already exists").show();
-        //}
-        //else {
-        //    if (RoleName == "") {
-        //        $("#Rstar").show();
-        //        $("#lblRoleName").html("Enter the Role Name").show();
-        //    }
-        //    else {
-        //        $("#Rstar").hide();
-        //        $("#lblRoleName").html("").show();
-        //    }
-        //}
-
-        if (_RoleName == false) {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("CreateRole", "Admin")',
-                data: {
-                    RoleName: RoleName,
-                    Description: Description
-                },
-                success: function (response) {
-                    if (response == "success") {
-                        Reset();
-                        RefreshRole();
-                         Notiflix.Notify.Success('Role <Strong>Created </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
-                    }
-                    else {
-                        $("#btnRoleCreate").prop('disabled', true);
-                    }
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        }
-        //else {
-        //    $("input[name='RoleName']").val("");
-        //    $("input[name='RoleDescription']").val("");
-        //    $("#lblRoleName").html("").show();
-        //    $("#lblRoleDescription").html("").show();
-        //}
-    });-->
-
-
-    @*$(".delRole").click(function () {
-        $("#deleteRole").modal('show');
-        var Rid = $(this).next().val();
-        var Rname = $(this).closest("tr").find('td:eq(0)').text();
-        $("#hiddenRole").text(Rname);
-        $("#hiddenRoleinfo").text(Rname);
-        $("#delRid").val(Rid);
-    });
-
-    $("#DeleteRoleName").click(function () {
-        var id = $("#delRid").val();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("DeleteRole", "Admin")',
-            data: { id: id },
-            dataType: "json",
-            success: function (response) {
-                if (response == "success") {
-                    $("#deleteRole").modal('hide');
-                    $('.modal-backdrop').remove();
-                    RefreshRole();
-
-                }
-                else {
-                    $("#deleteRole").modal('hide');
-                    $("#deleteRoleInfo").modal('show');
-                    // $('.modal-backdrop').remove();
-                }
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-        });
-    });*@
-
-     <!--$(".delRole").on("click", function () {
-        var id = $(this).next().val();
-         Notiflix.Confirm.Show(
-                'Confirm',
-                'Do you want to delete ?',
-                'Yes', 'No',
-                function () {
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DeleteRole", "Admin")',
-                        data: { id: id },
-                        dataType: "json",
-                        success: function (response) {
-                            if (response == "success") {
-                                $("#deleteRole").modal('hide');
-                                $('.modal-backdrop').remove();
-                                RefreshRole();
-                                 Notiflix.Notify.Success('Role <Strong>deleted </strong>successfully..!', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
-                            }
-                            else {
-                                //$("#deleteRole").modal('hide');
-                                //$("#deleteRoleInfo").modal('show');
-                                // $('.modal-backdrop').remove();
-                                Notiflix.Notify.Info('Kindly Delete The Respective Users Assigned With Role', { cssAnimationStyle: 'zoom', cssAnimationDuration: 500, });
-
-                            }
-                        },
-                        failure: function (response) {
-                            alert(response.responseText);
-                        },
-                        error: function (response) {
-                            alert(response.responseText);
-                        }
-                    });
-                }, function () {
-                    //location.reload();
-                    // No button callback
-                    //alert('If you say so...');
-                }
-            )
-     });
-
-
-   
-</script>-->
 
 <script>
     $("#searchVersion").on("keyup", function () {

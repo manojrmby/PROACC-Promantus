@@ -10,5 +10,5 @@
 --------------------------------------------------------------------------------------
 */
 
-DECLARE @RID varchar(50)=(select replace(convert(varchar, getdate(),101),'/','') + replace(convert(varchar, getdate(),108),':',''))
-EXEC Default_Backup_Database @databaseName='PROACC2DEV', @backupDirectory='D:\BackUp\DBBACKUP', @releaseid=@RID
+--DECLARE @RID varchar(50)=(select replace(convert(varchar, getdate(),101),'/','') + replace(convert(varchar, getdate(),108),':',''))
+--EXEC Default_Backup_Database @databaseName='PROACC2DEV', @backupDirectory='D:\BackUp\DBBACKUP', @releaseid=@RID

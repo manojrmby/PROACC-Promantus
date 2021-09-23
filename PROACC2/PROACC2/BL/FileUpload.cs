@@ -4,6 +4,7 @@ using PROACC2.BL.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -1265,14 +1266,17 @@ namespace PROACC2.BL
             using (XLWorkbook workbook = new XLWorkbook(FilePath))
             {
                 var workSheet = workbook.Worksheet(1);
-                var firstRowUsed = workSheet.FirstRowUsed();
-                var firstPossibleAddress = workSheet.Row(firstRowUsed.RowNumber()).FirstCell().Address;
-                var lastPossibleAddress = workSheet.LastCellUsed().Address;
-                var range = workSheet.Range(firstPossibleAddress, lastPossibleAddress).AsRange(); //.RangeUsed();
-                                                                                                  // Treat the range as a table (to be able to use the column names)
-                var table = range.AsTable();
-                //Specify what are all the Columns you need to get from Excel
-                var dataList = new List<string[]>
+                if (workSheet.Name == "Activity")
+                {
+
+                    var firstRowUsed = workSheet.FirstRowUsed();
+                    var firstPossibleAddress = workSheet.Row(firstRowUsed.RowNumber()).FirstCell().Address;
+                    var lastPossibleAddress = workSheet.LastCellUsed().Address;
+                    var range = workSheet.Range(firstPossibleAddress, lastPossibleAddress).AsRange(); //.RangeUsed();
+                                                                                                      // Treat the range as a table (to be able to use the column names)
+                    var table = range.AsTable();
+                    //Specify what are all the Columns you need to get from Excel
+                    var dataList = new List<string[]>
                  {
                     table.DataRange.Rows().Select(tableRow =>tableRow.Field("Task").GetString()).ToArray(),
                     table.DataRange.Rows().Select(tableRow => tableRow.Field("BuildingBlock").GetString()).ToArray(),
@@ -1282,119 +1286,125 @@ namespace PROACC2.BL
                     table.DataRange.Rows().Select(tableRow => tableRow.Field("TaskType").GetString()).ToArray(),
                     table.DataRange.Rows().Select(tableRow => tableRow.Field("ParallelName").GetString()).ToArray()
                  };
-                #region Validation
-                //Empty Check
-                for (int k = 0; k < dataList.Count-1; k++)
-                {
-                    if (proceed)
-                    {
-                        var datalist = dataList[k];
-                        proceed = CheckforEmpty_Column(datalist);
-                        if (proceed == false)
-                        {
-                            string ColumnName = "";
-                            if (k == 0)
-                            {
-                                ColumnName = "Task";
-                            }
-                            else if (k == 1)
-                            {
-                                ColumnName = "BuildingBlock";
-                            }
-                            else if (k == 2)
-                            {
-                                ColumnName = "Phase";
-                            }
-                            else if (k == 3)
-                            {
-                                ColumnName = "Role";
-                            }
-                            else if (k == 4)
-                            {
-                                ColumnName = "ApplicationArea";
-
-                            }
-                            else if (k == 5)
-                            {
-                                ColumnName = "TaskType";
-                            }
-                            Errormessage = "Empty Row OR column value Found in <b>"+ ColumnName + "</b>..! Can't proceed ..! ";
-                            break;
-                        }
-                            
-                    }
-                }
-                //Task name
-                if (proceed)
-                {
-                    
-                    foreach (var item in dataList[0])
-                    {
-                        var totalCats = dataList[0].Count(s => s == item.ToString());
-                        if (totalCats > 1)
-                        {
-                            proceed = false;
-                            Errormessage = "Task name duplicate found ..! Can't proceed ..! ";
-                            break;
-                        }
-                    }
-                }
-                //Parallel
-                if (proceed)
-                {
-                    for (int i = 0; i < dataList[5].Length; i++)
+                    #region Validation
+                    //Empty Check
+                    for (int k = 0; k < dataList.Count - 1; k++)
                     {
                         if (proceed)
                         {
-                            //for (int j = 0; j < dataList[6].Length; j++)
+                            var datalist = dataList[k];
+                            proceed = CheckforEmpty_Column(datalist);
+                            if (proceed == false)
                             {
-                                if (dataList[5][i].ToString() == "Parallel" && dataList[6][i].ToString().Trim() == "")
+                                string ColumnName = "";
+                                if (k == 0)
                                 {
-                                    proceed = false;
-                                    Errormessage = "Empty Parallel Name Found ..! Can't proceed ..! ";
-                                    break;
+                                    ColumnName = "Task";
                                 }
+                                else if (k == 1)
+                                {
+                                    ColumnName = "BuildingBlock";
+                                }
+                                else if (k == 2)
+                                {
+                                    ColumnName = "Phase";
+                                }
+                                else if (k == 3)
+                                {
+                                    ColumnName = "Role";
+                                }
+                                else if (k == 4)
+                                {
+                                    ColumnName = "ApplicationArea";
 
+                                }
+                                else if (k == 5)
+                                {
+                                    ColumnName = "TaskType";
+                                }
+                                Errormessage = "Empty Row OR column value Found in <b>" + ColumnName + "</b>..! Can't proceed ..! ";
+                                break;
+                            }
+
+                        }
+                    }
+                    //Task name
+                    if (proceed)
+                    {
+
+                        foreach (var item in dataList[0])
+                        {
+                            var totalCats = dataList[0].Count(s => s == item.ToString());
+                            if (totalCats > 1)
+                            {
+                                proceed = false;
+                                Errormessage = "Task name duplicate found ..! Can't proceed ..! ";
+                                break;
                             }
                         }
-
                     }
-                }
-               
-                #endregion Validation
-                if (proceed)
-                {
-                    var Parallel_Names = dataList[6].ToList().Distinct().ToArray();
-                    Parallel_Names = Parallel_Names.Where(P => P != "").ToArray();
-
-                    var dt = _Base.Sp_GetParallelNames();
-                    var DBParallel_Name = dt.Select(l => l.Parallel_Name).ToList().Distinct().ToArray();
-
-                    Boolean ParallelNames_Duplicate = false;
-
-                    for (int i = 0; i < Parallel_Names.Count(); i++)
+                    //Parallel
+                    if (proceed)
                     {
-                        if(Parallel_Names[i].Length>3)
+                        for (int i = 0; i < dataList[5].Length; i++)
+                        {
+                            if (proceed)
+                            {
+                                //for (int j = 0; j < dataList[6].Length; j++)
+                                {
+                                    if (dataList[5][i].ToString() == "Parallel" && dataList[6][i].ToString().Trim() == "")
+                                    {
+                                        proceed = false;
+                                        Errormessage = "Empty Parallel Name Found ..! Can't proceed ..! ";
+                                        break;
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+
+                    #endregion Validation
+                    if (proceed)
+                    {
+                        var Parallel_Names = dataList[6].ToList().Distinct().ToArray();
+                        Parallel_Names = Parallel_Names.Where(P => P != "").ToArray();
+
+                        var dt = _Base.Sp_GetParallelNames();
+                        var DBParallel_Name = dt.Select(l => l.Parallel_Name).ToList().Distinct().ToArray();
+
+                        Boolean ParallelNames_Duplicate = false;
+
+                        for (int i = 0; i < Parallel_Names.Count(); i++)
+                        {
+                            if (Parallel_Names[i].Length > 3)
+                            {
+                                Status = false;
+                                Errormessage = "Parallel Length <b> Greater than three </b> found ...!";
+                            }
+                            ParallelNames_Duplicate = DBParallel_Name.Contains(Parallel_Names[i].ToString());
+                            if (ParallelNames_Duplicate)
+                                break;
+                        }
+                        if (ParallelNames_Duplicate)
                         {
                             Status = false;
-                            Errormessage = "Parallel Length <b> Greater than three </b> found ...!";
+                            Errormessage = "Duplicate <b> parallel type </b> found ...!";
                         }
-                        ParallelNames_Duplicate = DBParallel_Name.Contains(Parallel_Names[i].ToString());
-                        if (ParallelNames_Duplicate)
-                            break;
+                        else
+                        {
+                            _Base.Sp_InsertParallel(Parallel_Names);
+                            dt = _Base.Sp_GetParallelNames();
+                            DataTable dataTable = ConvertListToDataTable_ActivityMaster(dataList, dt);
+                            Status = _Base.Upload_ActivityMaster(dataTable, NewId, User_Id);
+                        }
                     }
-                    if (ParallelNames_Duplicate)
-                    {
-                        Status = false;
-                        Errormessage = "Duplicate <b> parallel type </b> found ...!";
-                    }
-                    else
-                    {
-                        _Base.Sp_InsertParallel(Parallel_Names);
-                        dt = _Base.Sp_GetParallelNames();
-                        DataTable dataTable = ConvertListToDataTable_ActivityMaster(dataList, dt);
-                        Status = _Base.Upload_ActivityMaster(dataTable, NewId, User_Id);
-                    }
+                }
+                else
+                {
+                    Status = false;
+                    Errormessage = "Check the file with first Sheet Name as <b> IssueDump </b>...!";
                 }
             }
             result = new
@@ -1461,58 +1471,181 @@ namespace PROACC2.BL
 
         #region SAPIssueTrackDump
 
-        public Boolean Process_SAP_Issue_dump(string FilePath, string NewId, Guid Project_Id, Guid User_Id)
+        public object  Process_SAP_Issue_dump(string FilePath, string NewId, Guid Project_Id, Guid User_Id,string TimeZone)
         {
+            object result;
             Boolean Status = false;
+            bool proceed = true;
+            string Errormessage = "";
             LogHelper _log = new LogHelper();
+            result = new
+            {
+                Status,
+                Errormessage
+            };
             try
             {
                 using (XLWorkbook workbook = new XLWorkbook(FilePath))
                 {
                     var workSheet = workbook.Worksheet(1);
-                    var firstRowUsed = workSheet.FirstRowUsed();
-                    var firstPossibleAddress = workSheet.Row(firstRowUsed.RowNumber()).FirstCell().Address;
-                    var lastPossibleAddress = workSheet.LastCellUsed().Address;
-                    var range = workSheet.Range(firstPossibleAddress, lastPossibleAddress).AsRange(); //.RangeUsed();
-                                                                                                      // Treat the range as a table (to be able to use the column names)
-                    var table = range.AsTable();
-                    //Specify what are all the Columns you need to get from Excel
-                    var dataList = new List<string[]>
-                 {
-                    table.DataRange.Rows().Select(tableRow =>tableRow.Field("Issue No").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Status").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Issue Description").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Category").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Priority").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Assignee").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Raised By").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Applicaiton Area").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Open").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Close").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Resolution").GetString()).ToArray(),
-                    table.DataRange.Rows().Select(tableRow => tableRow.Field("Comments").GetString()).ToArray()
-                 };
-                    //Convert List to DataTable
-                    DataTable dataTable = ConvertListToDataTable_SAPIssueTrackDump(dataList);
-                    Status = _Base.Upload_SAPIssueTrackDump(dataTable, NewId, User_Id, Project_Id);
+                    if (workSheet.Name == "IssueDump")
+                    {
+                        var firstRowUsed = workSheet.FirstRowUsed();
+                        var firstPossibleAddress = workSheet.Row(firstRowUsed.RowNumber()).FirstCell().Address;
+                        var lastPossibleAddress = workSheet.LastCellUsed().Address;
+                        var range = workSheet.Range(firstPossibleAddress, lastPossibleAddress).AsRange(); //.RangeUsed();
+                                                                                                          // Treat the range as a table (to be able to use the column names)
+                        var table = range.AsTable();
+                        //Specify what are all the Columns you need to get from Excel
+                        var dataList = new List<string[]>
+                         {
+                            table.DataRange.Rows().Select(tableRow =>tableRow.Field("Issue No").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Status").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Issue Description").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Category").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Priority").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Assignee").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Raised By").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Applicaiton Area").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Open").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Close").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Resolution").GetString()).ToArray(),
+                            table.DataRange.Rows().Select(tableRow => tableRow.Field("Comments").GetString()).ToArray()
+                        };
+                        #region Validation
+                        //Empty Check
+                        for (int k = 0; k < dataList.Count - 1; k++)
+                        {
+                            if (proceed)
+                            {
+                                var datalist = dataList[k];
+                                proceed = CheckforEmpty_Column(datalist);
+                                if (proceed == false)
+                                {
+                                    string ColumnName = "";
+                                    if (k == 0)
+                                    {
+                                        ColumnName = "Issue No";
+                                    }
+                                    else if (k == 1)
+                                    {
+                                        ColumnName = "Status";
+                                    }
+                                    else if (k == 2)
+                                    {
+                                        ColumnName = "Issue Description";
+                                    }
+                                    else if (k == 3)
+                                    {
+                                        ColumnName = "Category";
+                                    }
+                                    else if (k == 1)
+                                    {
+                                        ColumnName = "Priority";
+                                    }
+                                    else if (k == 2)
+                                    {
+                                        ColumnName = "Assignee";
+                                    }
+                                    else if (k == 3)
+                                    {
+                                        ColumnName = "Raised By";
+                                    }
+                                    else if (k == 4)
+                                    {
+                                        ColumnName = "Applicaiton Area";
+
+                                    }
+                                    else if (k == 4)
+                                    {
+                                        ColumnName = "Open";
+
+                                    }
+                                    else if (k == 5)
+                                    {
+                                        ColumnName = "Close";
+                                    }
+                                    else if (k == 5)
+                                    {
+                                        ColumnName = "Resolution";
+                                    }
+                                    Errormessage = "Empty Row OR column value Found in <b>" + ColumnName + "</b>..! Can't proceed ..! ";
+                                    break;
+                                }
+                                if(k==0 & proceed == true)
+                                {
+                                    foreach (var item in datalist)
+                                    {
+                                        if (item.ToString().Trim() != "")
+                                        {
+                                            try
+                                            {
+                                                int issueNo = Convert.ToInt32(item.ToString().Trim());
+                                                
+                                            }
+                                            catch (Exception ex)
+                                            {
+
+                                                Status = false;
+                                                Errormessage = "Invalid Issue No";
+                                                proceed = false;
+                                                break;
+                                            }
+                                            
+                                            
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        #endregion
+                        //Convert List to DataTable
+                        if (proceed)
+                        {
+                            try
+                            {
+                                DataTable dataTable = ConvertListToDataTable_SAPIssueTrackDump(dataList, TimeZone);
+                                Status = _Base.Upload_SAPIssueTrackDump(dataTable, NewId, User_Id, Project_Id);
+                            }
+                            catch (Exception ex)
+                            {
+                                Status = false;
+                                Errormessage = "Invalid Date Kindly Check again Make sure given date formate is MM/dd/yyyy ";
+                                _log.createLog(ex, "");
+                                //throw ex;
+                            }
+                        }
+                        
+                    }
+                    else
+                    {
+                        Status = false;
+                        Errormessage = "Check the file with first Sheet Name must be <b> IssueDump </b>...!";
+                    }
                 }
             }
             catch(Exception ex)
             {
                 _log.createExMsgLog("Process_SAP_Issue_dump Exception =>"+ ex);
                 _log.createExMsgLog("Process_SAP_Issue_dump Exception =>"+ ex.Message);
-
-                
             }
-           
-
-
-            return Status;
+            result = new
+            {
+                Status,
+                Errormessage
+            };
+            return result;
         }
 
-        private static DataTable ConvertListToDataTable_SAPIssueTrackDump(IReadOnlyList<string[]> list)
+        private  DataTable ConvertListToDataTable_SAPIssueTrackDump(IReadOnlyList<string[]> list,string TimeZone)
         {
             LogHelper _log = new LogHelper(); 
+            Base _base = new Base();
             var table = new DataTable("SAPIssueTrackDump");
             var rows = list.Select(array => array.Length).Concat(new[] { 0 }).Max();
 
@@ -1532,6 +1665,10 @@ namespace PROACC2.BL
 
             for (var j = 0; j < rows; j++)
             {
+                try
+                {
+
+               
                 var row = table.NewRow();
                 row["IssueNo"] = list[0][j];                
                 row["IssueName"] = list[2][j];
@@ -1540,19 +1677,77 @@ namespace PROACC2.BL
                 row["Assignee"] = list[5][j];
                 row["RaisedBy"] = list[6][j];
                 row["ApplicaitonArea"] = list[7][j];
-                //row["OpenDt"] = Convert.ToDateTime(list[8][j]);
-                row["OpenDt"] = DateTime.Parse(list[8][j]);
-                _log.createLog("OpenDt =>" + row["OpenDt"]);
-                //row["CloseDt"] = Convert.ToDateTime(list[9][j]);
-                row["CloseDt"] = DateTime.Parse(list[9][j]);
-                _log.createLog("CloseDt =>" + row["CloseDt"]);
-                row["SAPIssueDumpStatus"] = list[1][j];
+                    //DateTime open_Dt = DateTime.Parse(String.Format("{0:MM/dd/yyyy HH:mm:ss tt}", DateTime.Parse(list[8][j])));
+                    //DateTime Close_Dt = DateTime.Parse(String.Format("{0:MM/dd/yyyy HH:mm:ss tt}", DateTime.Parse(list[9][j])));
+                    //row["OpenDt"] = _base.ConvertLocalToUTC(open_Dt, TimeZone);
+                    //_log.createLog("OpenDt =>" + row["OpenDt"]);
+                    //row["CloseDt"] = _base.ConvertLocalToUTC(Close_Dt, TimeZone);
+                    //_log.createLog("CloseDt =>" + row["CloseDt"]);
+                    DateTime open_Dt = DateTime.Parse(String.Format("{0:MM/dd/yyyy HH:mm:ss tt}", DateTime.Parse(list[8][j])));
+                    DateTime Close_Dt = DateTime.Parse(String.Format("{0:MM/dd/yyyy HH:mm:ss tt}", DateTime.Parse(list[9][j])));
+
+                    row["OpenDt"] = open_Dt;
+                    row["CloseDt"] = Close_Dt;
+                    row["SAPIssueDumpStatus"] = list[1][j];
                 row["Resolution"] = list[10][j];
                 row["Comments"] = list[11][j];
                 table.Rows.Add(row);
+                }
+                catch (Exception ex)
+                {
+                    _log.createLog("Error at ConvertListToDataTable_SAPIssueTrackDump" + ex);
+                    //throw;
+                }
             }            
             return table;
         }
+        //private DateTime CheckDate(String DateValue)
+        //{
+        //    LogHelper _log = new LogHelper();
+        //    try
+        //    {
+        //        return DateTime.ParseExact(DateValue, "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _log.createLog(ex, "");
+        //        throw ex;
+        //    }
+        //}
+        //private DateTime GetTIme(string Timezone)
+        //{
+        //    DateTime Dt = DateTime.Now;
+            
+        //    try
+        //    {
+
+        //        var timeZoneIds = TimeZoneInfo.GetSystemTimeZones().Select(t => t.Id);
+
+        //        if(Timezone == "Asia/Calcutta")
+        //        {
+        //            Timezone = "India Standard Time";
+        //        }
+
+        //        var Time = TimeZoneInfo.FindSystemTimeZoneById(Timezone);
+        //        DateTimeOffset UTC = TimeZoneInfo.ConvertTime(Dt, Time);
+        //        DateTime other = DateTime.SpecifyKind(Dt, DateTimeKind.Utc);
+
+
+        //        //DateTime localDate = DateTime.Now.Date;
+        //        //var s = DateTimeOffset.Now();
+        //        //var AUSOffset = new DateTimeOffset(localDate, TimeSpan.Zero);
+
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        throw e;
+        //    }
+
+
+        //    return Dt;
+
+        //}
 
         #endregion
     }

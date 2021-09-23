@@ -70,40 +70,49 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.GetRole)
+            @if (ViewBag.GetRole.Count == 0)
             {
-                <tr id="@item.RoleId" class="tr_Effect">
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.RoleName">@item.RoleName</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Description">@item.Description</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
-                    @*<td>
-                            <span class="card-title">
-                                @if (item.IsActive == true)
-                                {
-
-                                    <input type="checkbox" id="checkBox" name="isActive" value="@item.IsActive" checked class="chkGroup">
-                                }
-                                else
-                                {
-                                    <input type="checkbox" name="isActive" value="@item.IsActive">
-                                }
-                            </span>
-                        </td>*@
-                    @*<td>
-                        <span class="card-title">
-                                <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
-                                    </i>
-                            </span>
-                            </td>*@
-                    <td>
-                        <span class="text-capitalize">
-                            <i class="fa fa-pencil getRoleID" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal" data-target="#EditRoleModal"></i>
-                            @*&nbsp;&nbsp;&nbsp;<i class="fa fa-trash delRole" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.RoleId" />*@
-                        </span>
-                    </td>
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
                 </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.GetRole)
+                {
+                    <tr id="@item.RoleId" class="tr_Effect">
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.RoleName">@item.RoleName</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Description">@item.Description</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
+                        @*<td>
+                        <span class="card-title">
+                            @if (item.IsActive == true)
+                            {
+
+                                <input type="checkbox" id="checkBox" name="isActive" value="@item.IsActive" checked class="chkGroup">
+                            }
+                            else
+                            {
+                                <input type="checkbox" name="isActive" value="@item.IsActive">
+                            }
+                        </span>
+                    </td>*@
+                        @*<td>
+                    <span class="card-title">
+                            <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
+                                </i>
+                        </span>
+                        </td>*@
+                        <td>
+                            <span class="text-capitalize">
+                                <i class="fa fa-pencil getRoleID" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal" data-target="#EditRoleModal"></i>
+                                @*&nbsp;&nbsp;&nbsp;<i class="fa fa-trash delRole" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.RoleId" />*@
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 <div class="holder">

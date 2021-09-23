@@ -1,14 +1,14 @@
 ﻿<style>
     .pro-list-table {
         overflow-y: auto;
-        height: calc(100vh - 258px);
+        max-height: calc(100vh - 260px);
     }
 </style>
 <div class="form-row py-1">
     <div class="col-lg-7">
         <div class="d-flex">
             
-            <div class="projects-dropdown w-40">
+            <div class="projects-dropdown w-40" id="Id_Div_Version">
                 <label for="">Version Name</label>
                 <div class="ibox">
                     <select class="form-control border-0" id="drpListVersion" name="Version_List">
@@ -43,7 +43,7 @@
                     <div class="ibox current-projects mb-0"><span >Current Count:&nbsp;&nbsp;<strong class="badge badge-info  h-100" id="Count">@ViewBag.Activity_Count</strong></span></div>
                 </div>
             </div>
-            <button type="button" class="btn btn-primary pointer" onclick="AddActivity();">Add Activity</button>
+            <button type="button" class="btn btn-primary pointer" onclick="AddActivity();" id="IdAddActivityButtom">Add Activity</button>
         </div>
     </div>
 </div>
@@ -114,34 +114,44 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.Activity)
+            @if (ViewBag.Activity.Count == 0)
             {
-                <tr class="tr_Effect">
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Task">@item.Task</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Buildingblock">@item.Buildingblock</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Phase">@item.Phase</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Role">@item.Role</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.ApplicationArea">@item.ApplicationArea</span></td>
-                    <td style="display:none"><span class="text-capitalize" data-toggle="tooltip" title="@item.Sequence_Num">@item.Sequence_Num</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.EST_hours1">@item.EST_hours1</span></td>
-                    <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Tasktype">@item.Tasktype</span></td>
-                    <td>
-                        @if (item.ParallelType != null)
-                        {
-                            <a class="txtG comment more" value="@item.Parallel_Type">@item.ParallelType</a>
-                        }
-                        else
-                        {
-                            <a class="txtG comment more" value="">--</a>
-                        }
-                    </td>
-                    <td>
-                        <span class="fa fa-pencil btnActivityEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Activity_ID" />
-                        <span class="fa fa-trash btnActivityDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Activity_ID" />
-                    </td>
-                </tr>
+                <tr class="tr_Effect text-center" >
+                    <td colspan="9" ><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
+                    </tr>
             }
-        </tbody>
+            else
+            {
+                    foreach (var item in ViewBag.Activity)
+                    {
+                        <tr class="tr_Effect">
+                            <td><span class="text-capitalize" data-toggle="tooltip" title="@item.Task">@item.Task</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Buildingblock">@item.Buildingblock</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Phase">@item.Phase</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Role">@item.Role</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.ApplicationArea">@item.ApplicationArea</span></td>
+                            <td style="display:none"><span class="text-capitalize" data-toggle="tooltip" title="@item.Sequence_Num">@item.Sequence_Num</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.EST_hours1">@item.EST_hours1</span></td>
+                            <td><span class="text-capitalize comment more" data-toggle="tooltip" title="@item.Tasktype">@item.Tasktype</span></td>
+                            <td>
+                                @if (item.ParallelType != null)
+                                {
+                                    <a class="txtG comment more" value="@item.Parallel_Type">@item.ParallelType</a>
+                                }
+                                else
+                                {
+                                    <a class="txtG comment more" value="">--</a>
+                                }
+                            </td>
+                            <td>
+                                <span class="fa fa-pencil btnActivityEdit" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></span><input type="hidden" value="@item.Activity_ID" />
+                                <span class="fa fa-trash btnActivityDelete" aria-hidden="true" id="" style="cursor:pointer" data-toggle="modal" data-target=""></span><input type="hidden" value="@item.Activity_ID" />
+                            </td>
+                        </tr>
+                    }
+            }
+
+                </tbody>
     </table>
 </div>
 
@@ -355,9 +365,15 @@
 
 <script>
     $(document).ready(function () {
+        var V = '@ViewBag.Activity.Count';
         var VID = '@Session["VersionID"]';
         if (VID != "") {
             $("#drpListVersion").val(VID);
+        }
+        if (V<=0) {
+            HideVersion();
+        } else {
+            ShowVersion();
         }
     });
     $('#txtEstimated').on('keyup', function (e) {
@@ -377,7 +393,16 @@
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
-
+    function ShowVersion() {
+        $('#IdAddActivityButtom').show();
+        $('#btnExportToExcel').show();
+        $('#Id_Div_Version').show();
+    }
+    function HideVersion() {
+        $('#IdAddActivityButtom').hide();
+        $('#btnExportToExcel').hide();
+        $('#Id_Div_Version').hide();
+    }
     function AddActivity() {
         $('#addActivity').modal('show');
 

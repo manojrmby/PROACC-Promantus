@@ -246,34 +246,30 @@ END
 
 IF @Type='GetBulkAllocateOwnerResourceAllocation'
 BEGIN
-Declare @BulkCount int
-DECLARE @PM_LINEID uniqueidentifier
+	Declare @BulkCount int
+	DECLARE @PM_LINEID uniqueidentifier
 
 	SET @VID=(SELECT version_id from instance WHERE Instance_id=@InstanceId )
 	set @BulkCount=(select COUNT(*) from ProjectMonitor where PhaseId=@PhaseId and InstanceID=@InstanceId and RoleId=@RoleId and UserID='00000000-0000-0000-0000-000000000000' AND Version_Id=@VID)
 	
 	if @BulkCount >0
 		BEGIN
-		--PRINT @UserId
-		--PRINT @PhaseId
-		--PRINT @InstanceId
-		--PRINT @RoleId
-		--PRINT @VID
+			Update ProjectMonitor set UserID=@UserId where PhaseId=@PhaseId and InstanceID=@InstanceId and RoleId=@RoleId and UserID='00000000-0000-0000-0000-000000000000' AND Version_Id=@VID
 
-		Update ProjectMonitor set UserID=@UserId where PhaseId=@PhaseId and InstanceID=@InstanceId and RoleId=@RoleId and UserID='00000000-0000-0000-0000-000000000000' AND Version_Id=@VID
+			select TOP 1 @PM_LINEID=P.Id
+			from ProjectMonitor P
+			INNER JOIN ActivityMaster A on A.Activity_ID=P.ActivityID
+			where InstanceID=@InstanceID AND StatusId!=1 AND P.Version_id=@VID ORDER by Sequence_Num
+
+			EXEC SP_Mail @Type=AddFirstMail,@PM_ID=@PM_LINEID,@InstanceID=@InstanceId,@Cre_By=@CreBy
+		
 		END
 	ELSE 
 		BEGIN
-		SELECT CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER) [Guid]
+			SELECT CAST(CAST(0 AS BINARY) AS UNIQUEIDENTIFIER) [Guid]
 		END
-		--print'IN'
-		select TOP 1 @PM_LINEID=P.Id
-		from ProjectMonitor P
-		INNER JOIN ActivityMaster A on A.Activity_ID=P.ActivityID
-		where InstanceID=@InstanceID AND StatusId!=1 AND P.Version_id=@VID ORDER by Sequence_Num
-		print @PM_LINEID
 
-		EXEC SP_Mail @Type=AddFirstMail,@PM_ID=@PM_LINEID,@InstanceID=@InstanceId,@Cre_By=@CreBy
+		
 END
 
 IF @Type='GetProgressMonitorData'

@@ -47,28 +47,37 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in ViewBag.PmDetail)
+            @if (ViewBag.PmDetail.Count == 0)
             {
-                <tr id="@item.PMTaskId" class="tr_Effect">
-
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.PMTaskCategory">@item.PMTaskCategory</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.EST_Hours">@item.EST_Hours</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.PMTaskName">@item.PMTaskName</span></td>
-                    @*<td>
-                        <span class="card-title">
-                                <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
-                                    </i>
-                            </span>
-                            </td>*@
-                    <td>
-                        <span class="text-capitalize">
-                            <i class="fa fa-pencil getPMID" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
-                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delPmTask" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.PMTaskId" />
-                        </span>
-                    </td>
+                <tr class="tr_Effect text-center">
+                    <td colspan="4"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
                 </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.PmDetail)
+                {
+                    <tr id="@item.PMTaskId" class="tr_Effect">
+
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.PMTaskCategory">@item.PMTaskCategory</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.EST_Hours">@item.EST_Hours</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.PMTaskName">@item.PMTaskName</span></td>
+                        @*<td>
+                    <span class="card-title">
+                            <i class="fa fa-ellipsis-h ellipsis-read" aria-hidden="true">
+                                </i>
+                        </span>
+                        </td>*@
+                        <td>
+                            <span class="text-capitalize">
+                                <i class="fa fa-pencil getPMID" aria-hidden="true" id="EditRole" style="cursor:pointer" data-toggle="modal"></i>
+                                &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delPmTask" id="" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item.PMTaskId" />
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 

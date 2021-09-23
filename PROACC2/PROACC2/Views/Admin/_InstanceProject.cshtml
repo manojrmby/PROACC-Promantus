@@ -72,93 +72,102 @@
             </tr>
         </thead>
         <tbody id="ProjectSearch">
-            @foreach (var item in ViewBag.Result)
+            @if (ViewBag.Result.Count == 0)
             {
-                <tr class="accordion-toggle card-header collapsed tr_Effect" data-toggle="collapse" data-target="#@item.ProjectId" id="projSearch" value="@item.ProjectId">
-                    <td><span  class="text-capitalize" data-toggle="tooltip" title="@item.ProjectName">@item.ProjectName</span></td>
-
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.CustomerName">@item.CustomerName</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ProjectManagerName">@item.ProjectManagerName</span></td>
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ScenarioName">@item.ScenarioName</span></td>
-                    <td><span class="badge badge-primary pri-badge-num text-capitalize" data-toggle="tooltip" title="@item.Count">@item.Count</span></td>
-                    @*<td>
-                            <span class="card-title">
-                                <i class="fa fa-ellipsis-h ellipsis-read" id="drpeditdialog" aria-hidden="true" onclick="funcload('@item.ProjectId')">
-                                </i>
-                            </span>
-
-                        </td>
-                        <td>
-                            <div class="divdialog">
-                                <img src="~/assets/img/tooltip-bubble-reverse.png" id="Imgedit" />
-                                <i class="fa fa-pencil getProjectID" aria-hidden="true" id="EditProject" style="cursor:pointer" data-toggle="modal" data-target="#EditProjectModal">&nbsp;&nbsp;EDIT</i>
-                                &nbsp;&nbsp;&nbsp;<i class="fa fa-trash" id="delProj" style="cursor:pointer" aria-hidden="true" onclick="func('@item.ProjectId')">&nbsp;&nbsp;DELETE</i><input type="hidden" value="@item.ProjectId" id="hiddenID" />
-
-                            </div>
-                        </td>*@
-                    <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
-                    <td>
-                        <span class="text-capitalize">
-                            <i class="fa fa-pencil getProjectID pointer" aria-hidden="true" id="EditProject" data-toggle="modal" data-target="#EditProjectModal" onclick="GetProject('@item.ProjectId')"></i>
-                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delProj pointer" id="delProj" aria-hidden="true"></i><input type="hidden" value="@item.ProjectId" />
-                        </span>
-                    </td>
-                </tr>
-                <tr class="accordion-body collapse InstanceBody" id="@item.ProjectId" data-parent="#accordion">
-                    <td colspan="8" style="width:100%;">
-                        <table class="fixed table mb-0" id="InstanceTable">
-                            <tbody>
-                                <tr>
-                                    <td class="p-0">
-                                        <a><b>Description</b></a>
-                                        <p>@item.Description</p>
-                                        <div class="pro-innertable">
-                                            <table class="table">
-                                                <thead class="bg-mediumgray">
-                                                    <tr>
-                                                        <td scope="col">instance</td>
-                                                        <td scope="col">Version</td>
-                                                        <td scope="col">description</td>
-                                                        <td scope="col">created on</td>
-                                                        <td scope="col">created by</td>
-                                                        <td scope="col">actions</td>
-                                                    </tr>
-                                                </thead>
-                                                
-                                              
-                                                <tbody id="Instancesearch">
-                                                    
-                                                    @foreach (var item2 in item.Instance)
-                                                    {
-
-                                                        if (item.ProjectId == item2.Project_ID)
-                                                        {
-                                                    <tr id="@item2.Instance_id" class="tr_Effect">
-                                                        <td><span class="text-capitalize" scope="row" data-toggle="tooltip" title="@item2.InstanceName"><strong>@item2.InstanceName</strong></span></td>
-                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Version_Name">@item2.Version_Name</span></td>
-                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Description">@item2.Description</span></td>
-                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")</span></td>
-                                                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Cre_By">@item2.Cre_By</span></td>
-                                                        <td>
-                                                            <i class="fa fa-pencil" aria-hidden="true" id="Edit" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></i>
-                                                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delIns" id="delIns" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item2.Instance_id" />
-                                                        </td>
-                                                    </tr>
-                                                        }
-                                                    }
-                                                </tbody>
-                                            </table>
-                                            <a href="#" onclick="AddInstance('@item.ProjectId')"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Instance</a>
-                                            &nbsp;&nbsp;<a href="#" style="float:right" onclick="AddClone('@item.ProjectId')" id="CloneInstanceDisable"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;Clone Instance</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                <tr class="tr_Effect text-center">
+                    <td colspan="9"><span class="text-capitalize" data-toggle="tooltip" title="">No records found..! </span></td>
                 </tr>
             }
-        </tbody>
+            else
+            {
+                foreach (var item in ViewBag.Result)
+                {
+                    <tr class="accordion-toggle card-header collapsed tr_Effect" data-toggle="collapse" data-target="#@item.ProjectId" id="projSearch" value="@item.ProjectId">
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ProjectName">@item.ProjectName</span></td>
+
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.CustomerName">@item.CustomerName</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ProjectManagerName">@item.ProjectManagerName</span></td>
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@item.ScenarioName">@item.ScenarioName</span></td>
+                        <td><span class="badge badge-primary pri-badge-num text-capitalize" data-toggle="tooltip" title="@item.Count">@item.Count</span></td>
+                        @*<td>
+                        <span class="card-title">
+                            <i class="fa fa-ellipsis-h ellipsis-read" id="drpeditdialog" aria-hidden="true" onclick="funcload('@item.ProjectId')">
+                            </i>
+                        </span>
+
+                    </td>
+                    <td>
+                        <div class="divdialog">
+                            <img src="~/assets/img/tooltip-bubble-reverse.png" id="Imgedit" />
+                            <i class="fa fa-pencil getProjectID" aria-hidden="true" id="EditProject" style="cursor:pointer" data-toggle="modal" data-target="#EditProjectModal">&nbsp;&nbsp;EDIT</i>
+                            &nbsp;&nbsp;&nbsp;<i class="fa fa-trash" id="delProj" style="cursor:pointer" aria-hidden="true" onclick="func('@item.ProjectId')">&nbsp;&nbsp;DELETE</i><input type="hidden" value="@item.ProjectId" id="hiddenID" />
+
+                        </div>
+                    </td>*@
+                        <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item.CreatedOn).ToString("dd/MM/yyyy")</span></td>
+                        <td>
+                            <span class="text-capitalize">
+                                <i class="fa fa-pencil getProjectID pointer" aria-hidden="true" id="EditProject" data-toggle="modal" data-target="#EditProjectModal" onclick="GetProject('@item.ProjectId')"></i>
+                                &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delProj pointer" id="delProj" aria-hidden="true"></i><input type="hidden" value="@item.ProjectId" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="accordion-body collapse InstanceBody" id="@item.ProjectId" data-parent="#accordion">
+                        <td colspan="8" style="width:100%;">
+                            <table class="fixed table mb-0" id="InstanceTable">
+                                <tbody>
+                                    <tr>
+                                        <td class="p-0">
+                                            <a><b>Description</b></a>
+                                            <p>@item.Description</p>
+                                            <div class="pro-innertable">
+                                                <table class="table">
+                                                    <thead class="bg-mediumgray">
+                                                        <tr>
+                                                            <td scope="col">instance</td>
+                                                            <td scope="col">Version</td>
+                                                            <td scope="col">description</td>
+                                                            <td scope="col">created on</td>
+                                                            <td scope="col">created by</td>
+                                                            <td scope="col">actions</td>
+                                                        </tr>
+                                                    </thead>
+
+
+                                                    <tbody id="Instancesearch">
+
+                                                        @foreach (var item2 in item.Instance)
+                                                        {
+
+                                                            if (item.ProjectId == item2.Project_ID)
+                                                            {
+                                                                <tr id="@item2.Instance_id" class="tr_Effect">
+                                                                    <td><span class="text-capitalize" scope="row" data-toggle="tooltip" title="@item2.InstanceName"><strong>@item2.InstanceName</strong></span></td>
+                                                                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Version_Name">@item2.Version_Name</span></td>
+                                                                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Description">@item2.Description</span></td>
+                                                                    <td><span class="text-capitalize" data-toggle="tooltip" title="@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")">@Convert.ToDateTime(item2.Cre_on).ToString("dd/MM/yyyy")</span></td>
+                                                                    <td><span class="text-capitalize" data-toggle="tooltip" title="@item2.Cre_By">@item2.Cre_By</span></td>
+                                                                    <td>
+                                                                        <i class="fa fa-pencil" aria-hidden="true" id="Edit" style="cursor:pointer" data-toggle="modal" data-target="#EditModal"></i>
+                                                                        &nbsp;&nbsp;&nbsp;<i class="fa fa-trash delIns" id="delIns" style="cursor:pointer" aria-hidden="true"></i><input type="hidden" value="@item2.Instance_id" />
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                                <a href="#" onclick="AddInstance('@item.ProjectId')"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Add Instance</a>
+                                                &nbsp;&nbsp;<a href="#" style="float:right" onclick="AddClone('@item.ProjectId')" id="CloneInstanceDisable"><i class="fa fa-arrow-right" aria-hidden="true"></i>&nbsp;Clone Instance</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
     </table>
 </div>
 

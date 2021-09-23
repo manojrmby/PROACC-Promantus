@@ -504,8 +504,9 @@
     <Content Include="Assets\ckeditor\vendor\promise.js" />
     <Content Include="Assets\css\ErrorStyles.css" />
     <Content Include="Assets\css\intlTelInput.css" />
-    <Content Include="Assets\css\main.css" />
+    <Content Include="Assets\css\main_Old.css" />
     <Content Include="Assets\css\main.min.css" />
+    <Content Include="Assets\css\mainNew.css" />
     <Content Include="Assets\img\admin-avatar.png" />
     <Content Include="Assets\img\AiConsult1.PNG" />
     <Content Include="Assets\img\compass.svg" />
@@ -566,8 +567,11 @@
     <Content Include="Assets\js\intlTelInput.min.js" />
     <Content Include="Assets\js\jquery-1.12.4.min.js" />
     <Content Include="Assets\js\MasterScript.js" />
+    <Content Include="Assets\js\moment-timezone-with-data.js" />
+    <Content Include="Assets\js\moment.min.js" />
     <Content Include="Assets\js\ReadinessReports.js" />
     <Content Include="Assets\js\ReadinessReport_AmChart.js" />
+    <Content Include="Assets\js\scripts\App\Login.js" />
     <Content Include="Assets\js\scripts\calendar-demo.js" />
     <Content Include="Assets\js\scripts\chartjs_demo.js" />
     <Content Include="Assets\js\scripts\charts_flot_demo.js" />
@@ -869,8 +873,8 @@
     <Content Include="Assets\js\summernote\summernote-lite.min.js.map" />
     <Content Include="Assets\js\summernote\summernote.js.map" />
     <Content Include="Assets\js\summernote\summernote.min.js.map" />
-    <Content Include="Assets\Uploadedppt\SAP_Issue_dump_upload_v1.xlsx" />
     <Content Include="Assets\Uploadedppt\ActivityTemplate.xlsx" />
+    <Content Include="Assets\Uploadedppt\SAPIssueDumpTemplate.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

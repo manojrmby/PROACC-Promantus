@@ -60,17 +60,18 @@
                                     {
                                         <span class="fa fa-plus-circle pointer " style="float: right;" onclick="RedirectToOther()"></span>
                                     }
-                                        <label for="">Scenario<span id="asterisk7" style="color:red">*</span></label>
-                                        <select class="form-control drpTextHeight" id="drpScenario2" name="Scenario2" style="width:100%">
-                                            <option value="0">--Select Scenario---</option>
+                                    <label for="">Scenario<span id="asterisk7" style="color:red">*</span></label>
+                                    <select class="form-control drpTextHeight" id="drpScenario2" name="Scenario2" style="width:100%">
+                                        <option value="0">--Select Scenario---</option>
 
-                                            @foreach (var item in ViewBag.Scenario)
-                                            {
-                                                <option value="@item.ScenarioId">@item.ScenarioName</option>
-                                            }
-                                        </select>
-                                        <span id="lblScenerio2" style=" color:red;"></span>
-                                    </div>
+                                        @foreach (var item in ViewBag.Scenario)
+                                        {
+                                            <option value="@item.ScenarioId">@item.ScenarioName</option>
+                                        }
+                                    </select>
+                                    <small id="Buildind_Block_Text" class="form-text text-muted"> </small>
+                                    <span id="lblScenerio2" style=" color:red;"></span>
+                                </div>
                                 <div class="form-group">
                                     <label for="">Description</label>
                                     <textarea class="form-control" id="desc2" name="Descripton2" rows="4" cols="50"></textarea>
@@ -249,5 +250,24 @@
                 });
             }
     });
+        $("#drpScenario2").on("change", function () {
+            var id = $("#drpScenario2").val();
+        if (id > 0) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Scenario_BuildingBlock", "Admin")',
+                data: { id: id },
+                success: function (response) {
+                    $("#Buildind_Block_Text").text(response);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
 
+    });
     </script>

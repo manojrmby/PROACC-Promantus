@@ -312,120 +312,204 @@
 
         $('.Planned_St_date').click(function () {
             $("#Planned_StartDate").focus();
+            $("#Planned_StartDate").click();
         });
         $('.Planned_En_date').click(function () {
             $("#Planned_EndDate").focus();
+            $("#Planned_EndDate").click();
         });
     }
     $('.Actual_St_date').click(function () {
         $("#Actual_StartDate").focus();
     });
 
-    $("#Planned_StartDate").on('click', function () {
-        var a = $("#Planned").attr('class');
-        if (!a.includes('opacity2')) {
-            $("#Planned_StartDate").datepicker({
-                dateFormat: 'dd M yy',
-                changeYear: true,
-                changeMonth: true,
-                yearRange: '-0:+1',
-                onSelect: function (selected) {
-                    //var dt = new Date(selected);
-                    //dt.setDate(dt.getDate() + 1);
-                    $("#Planned_EndDate").datepicker("option", "minDate", selected);
+    $("#Planned_StartDate").datepicker({
+        dateFormat: 'dd M yy',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '-0:+1',
+        onSelect: function (selected) {
+            //var dt = new Date(selected);
+            //dt.setDate(dt.getDate() + 1);
+            $("#Planned_EndDate").datepicker("option", "minDate", selected);
 
-                    var date = new Date(selected);
-                    date.setDate(date.getDate() + 15);
-                    $("#Planned_EndDate").datepicker("option", "maxDate", date);
+            var date = new Date(selected);
+            date.setDate(date.getDate() + 15);
+            $("#Planned_EndDate").datepicker("option", "maxDate", date);
 
-                    $("#Actual_StartDate").val(selected);
-                    $("#Actual_StartDate").datepicker("option", "minDate", selected);
-                    $("#Actual_EndDate").datepicker("option", "minDate", selected);
+            $("#Actual_StartDate").val(selected);
+            $("#Actual_StartDate").datepicker("option", "minDate", selected);
+            $("#Actual_EndDate").datepicker("option", "minDate", selected);
 
-                    var StartDate = $("#Planned_StartDate").val();
-                    var EndDate = $("#Planned_EndDate").val();
-                    var Hrs = $('#EstHours').val().split(':');
-                    DateHours(StartDate, EndDate, Hrs);
-                }
-            });
+            var StartDate = $("#Planned_StartDate").val();
+            var EndDate = $("#Planned_EndDate").val();
+            var Hrs = $('#EstHours').val().split(':');
+            DateHours(StartDate, EndDate, Hrs);
+        }
+    });
+
+    //$("#Planned_StartDate").on('click', function () {
+    //    var a = $("#Planned").attr('class');
+    //    if (!a.includes('opacity2')) {
+    //        $("#Planned_StartDate").datepicker({
+    //            dateFormat: 'dd M yy',
+    //            changeYear: true,
+    //            changeMonth: true,
+    //            yearRange: '-0:+1',
+    //            onSelect: function (selected) {
+    //                //var dt = new Date(selected);
+    //                //dt.setDate(dt.getDate() + 1);
+    //                $("#Planned_EndDate").datepicker("option", "minDate", selected);
+
+    //                var date = new Date(selected);
+    //                date.setDate(date.getDate() + 15);
+    //                $("#Planned_EndDate").datepicker("option", "maxDate", date);
+
+    //                $("#Actual_StartDate").val(selected);
+    //                $("#Actual_StartDate").datepicker("option", "minDate", selected);
+    //                $("#Actual_EndDate").datepicker("option", "minDate", selected);
+
+    //                var StartDate = $("#Planned_StartDate").val();
+    //                var EndDate = $("#Planned_EndDate").val();
+    //                var Hrs = $('#EstHours').val().split(':');
+    //                DateHours(StartDate, EndDate, Hrs);
+    //            }
+    //        });
+    //    }
+    //});
+    $('#Planned_EndDate').datepicker({
+        dateFormat: 'dd M yy',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '-0:+1',
+        beforeShow: customEndDate,
+        onSelect: function (selected) {
+            var dt = new Date(selected);
+            dt.setDate(dt.getDate() - 1);
+            //$("#Planned_StartDate").datepicker("option", "maxDate", dt);
+
+            var StartDate = $("#Planned_StartDate").val();
+            var EndDate = $("#Planned_EndDate").val();
+            var Hrs = $('#EstHours').val().split(':');
+            DateHours(StartDate, EndDate, Hrs);
         }
     });
     
-    $("#Planned_EndDate").on('click', function () {
-         var a = $("#Planned").attr('class');
-        if (!a.includes('opacity2')) {
-            $('#Planned_EndDate').datepicker({
-                dateFormat: 'dd M yy',
-                changeYear: true,
-                changeMonth: true,
-                yearRange: '-0:+1',
-                beforeShow: customEndDate,
-                onSelect: function (selected) {
-                    var dt = new Date(selected);
-                    dt.setDate(dt.getDate() - 1);
-                    //$("#Planned_StartDate").datepicker("option", "maxDate", dt);
+    //$("#Planned_EndDate").on('click', function () {
+    //     var a = $("#Planned").attr('class');
+    //    if (!a.includes('opacity2')) {
+    //        $('#Planned_EndDate').datepicker({
+    //            dateFormat: 'dd M yy',
+    //            changeYear: true,
+    //            changeMonth: true,
+    //            yearRange: '-0:+1',
+    //            beforeShow: customEndDate,
+    //            onSelect: function (selected) {
+    //                var dt = new Date(selected);
+    //                dt.setDate(dt.getDate() - 1);
+    //                //$("#Planned_StartDate").datepicker("option", "maxDate", dt);
 
-                    var StartDate = $("#Planned_StartDate").val();
-                    var EndDate = $("#Planned_EndDate").val();
-                    var Hrs = $('#EstHours').val().split(':');
-                    DateHours(StartDate, EndDate, Hrs);
-                }
-            });
+    //                var StartDate = $("#Planned_StartDate").val();
+    //                var EndDate = $("#Planned_EndDate").val();
+    //                var Hrs = $('#EstHours').val().split(':');
+    //                DateHours(StartDate, EndDate, Hrs);
+    //            }
+    //        });
+    //    }
+    //});    
+    $("#Actual_StartDate").datepicker({
+        dateFormat: 'dd M yy',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '-0:+1',
+
+        beforeShow: customEndDate,
+        onSelect: function (selected) {
+            var dt = new Date(selected);
+            dt.setDate(dt.getDate() + 1);
+            $("#Actual_EndDate").datepicker("option", "minDate", dt);
+
+            $("#Actual_EndDate").datepicker("option", "minDate", selected);
+            var date = new Date(selected);
+            date.setDate(date.getDate() + 15);
+            $("#Actual_EndDate").datepicker("option", "maxDate", date);
+
+            var StartDate = $("#Actual_StartDate").val();
+            var EndDate = $("#Actual_EndDate").val();
+            var Hrs = $('#ActHours').val().split(':');
+            DateActualHours(StartDate, EndDate, Hrs);
         }
-    });    
+    });
 
-    $("#Actual_StartDate").on('click', function () {
+    //$("#Actual_StartDate").on('click', function () {
 
-        var a = $("#Actual").attr('class');
-        if (!a.includes('opacity2')) {
-             $("#Actual_StartDate").datepicker({
-                dateFormat: 'dd M yy',
-                changeYear: true,
-                changeMonth: true,
-                yearRange: '-0:+1',
+    //    var a = $("#Actual").attr('class');
+    //    if (!a.includes('opacity2')) {
+    //         $("#Actual_StartDate").datepicker({
+    //            dateFormat: 'dd M yy',
+    //            changeYear: true,
+    //            changeMonth: true,
+    //            yearRange: '-0:+1',
 
-                beforeShow: customEndDate,
-                onSelect: function (selected) {
-                    var dt = new Date(selected);
-                    dt.setDate(dt.getDate() + 1);
-                    $("#Actual_EndDate").datepicker("option", "minDate", dt);
+    //            beforeShow: customEndDate,
+    //            onSelect: function (selected) {
+    //                var dt = new Date(selected);
+    //                dt.setDate(dt.getDate() + 1);
+    //                $("#Actual_EndDate").datepicker("option", "minDate", dt);
 
-                    $("#Actual_EndDate").datepicker("option", "minDate", selected);
-                    var date = new Date(selected);
-                    date.setDate(date.getDate() + 15);
-                    $("#Actual_EndDate").datepicker("option", "maxDate", date);
+    //                $("#Actual_EndDate").datepicker("option", "minDate", selected);
+    //                var date = new Date(selected);
+    //                date.setDate(date.getDate() + 15);
+    //                $("#Actual_EndDate").datepicker("option", "maxDate", date);
 
-                    var StartDate = $("#Actual_StartDate").val();
-                    var EndDate = $("#Actual_EndDate").val();
-                    var Hrs = $('#ActHours').val().split(':');
-                    DateActualHours(StartDate, EndDate, Hrs);
-                }
-            });
-        } 
+    //                var StartDate = $("#Actual_StartDate").val();
+    //                var EndDate = $("#Actual_EndDate").val();
+    //                var Hrs = $('#ActHours').val().split(':');
+    //                DateActualHours(StartDate, EndDate, Hrs);
+    //            }
+    //        });
+    //    } 
+    //});
+    $('#Actual_EndDate').datepicker({
+        dateFormat: 'dd M yy',
+        changeYear: true,
+        changeMonth: true,
+        yearRange: '-0:+1',
+        beforeShow: customActualDate,
+        onSelect: function (selected) {
+            var dt = new Date(selected);
+            dt.setDate(dt.getDate() - 1);
+            //$("#Actual_StartDate").datepicker("option", "maxDate", dt);
+
+            var StartDate = $("#Actual_StartDate").val();
+            var EndDate = $("#Actual_EndDate").val();
+            var Hrs = $('#ActHours').val().split(':');
+            DateActualHours(StartDate, EndDate, Hrs);
+        }
     });
    
-    $("#Actual_EndDate").on('click', function () {
-        var a = $("#Actual").attr('class');
-        if (!a.includes('opacity2')) {
-            $('#Actual_EndDate').datepicker({
-                dateFormat: 'dd M yy',
-                changeYear: true,
-                changeMonth: true,
-                yearRange: '-0:+1',
-                beforeShow: customActualDate,
-                onSelect: function (selected) {
-                    var dt = new Date(selected);
-                    dt.setDate(dt.getDate() - 1);
-                    //$("#Actual_StartDate").datepicker("option", "maxDate", dt);
+    //$("#Actual_EndDate").on('click', function () {
+    //    var a = $("#Actual").attr('class');
+    //    if (!a.includes('opacity2')) {
+    //        $('#Actual_EndDate').datepicker({
+    //            dateFormat: 'dd M yy',
+    //            changeYear: true,
+    //            changeMonth: true,
+    //            yearRange: '-0:+1',
+    //            beforeShow: customActualDate,
+    //            onSelect: function (selected) {
+    //                var dt = new Date(selected);
+    //                dt.setDate(dt.getDate() - 1);
+    //                //$("#Actual_StartDate").datepicker("option", "maxDate", dt);
 
-                    var StartDate = $("#Actual_StartDate").val();
-                    var EndDate = $("#Actual_EndDate").val();
-                    var Hrs = $('#ActHours').val().split(':');
-                    DateActualHours(StartDate, EndDate, Hrs);
-                }
-            });
-        }
-    });
+    //                var StartDate = $("#Actual_StartDate").val();
+    //                var EndDate = $("#Actual_EndDate").val();
+    //                var Hrs = $('#ActHours').val().split(':');
+    //                DateActualHours(StartDate, EndDate, Hrs);
+    //            }
+    //        });
+    //    }
+    //});
     
 
     function customEndDate()

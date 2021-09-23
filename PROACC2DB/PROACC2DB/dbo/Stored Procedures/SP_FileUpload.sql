@@ -2,6 +2,7 @@
 CREATE PROCEDURE [dbo].[SP_FileUpload]
 @Type varchar(50),
 @FileUploadID uniqueidentifier=null,
+@ProjectId uniqueidentifier=null,
 @InstanceId uniqueidentifier=null,
 @File_Type varchar(50)=null,
 @FileName uniqueidentifier=null,
@@ -29,7 +30,8 @@ CREATE PROCEDURE [dbo].[SP_FileUpload]
 @tblSAPUserList UploadSAPUserList READONLY,
 @tblMaterialityScore UploadMaterialityScore READONLY,
 @tblUploadActivityMaster UploadActivityMaster READONLY,
-@tblHanaDatabaseTables UploadHanaDatabaseTables READONLY
+@tblHanaDatabaseTables UploadHanaDatabaseTables READONLY,
+@tblSAPIssueTrackUpload UploadSAPIssueTrackUpload READONLY
 AS
 BEGIN
 	Declare @OLD_ID int
@@ -612,5 +614,59 @@ FROM    @tblPreConvertion;
 		--	END CATCH		
 
 	
+	END
+	IF @Type='SAPIssueTrackUpload'
+	BEGIN
+	set @FileType=(select Id from FileMaster where [File]='SAPIssueTrackUpload')
+				INSERT INTO FileUploadMaster (Id,InstanceID,File_Type,_FileName,FileType,isActive,Cre_on,Cre_By)
+				values(@FileUploadID,'00000000-0000-0000-0000-000000000000',@File_Type,@FileName,@FileType,1,SWITCHOFFSET(SYSDATETIMEOFFSET(), '+05:30'),@Createdby)
+
+	EXEC SP_IssueDumpUpload @Type=SAPIssueTrackUpload,@Createdby=@Createdby,@ProjectId=@ProjectId,@SAPIssueTrackUpload=@tblSAPIssueTrackUpload
+	
+
+	--DECLARE @SAPDumpIssuetrack_Id uniqueidentifier=NEWID()
+	--DECLARE @R_ID int;
+		
+	--	set @RID =(select max(RunningID) from SAPDumpIssuetrack)
+
+	--		if (@RID is NULL)
+	--		Begin
+	--		set @R_ID=1;
+	--		end
+	--		ELSE
+	--		Begin
+	--		set @R_ID=@RID+1;		
+	--		end
+
+	----set @Project_Id=(select Project_ID from Instance where Instance_id=@ProjectInstance_Id)
+	
+	--MERGE dbo.SAPDumpIssuetrack AS trg
+ --   USING @tblSAPIssueTrackUpload AS src
+ --     ON src.IssueNo = trg.IssueNo and trg.Project_Id =@Project_Id
+	--  WHEN MATCHED THEN
+	--  UPDATE SET SAPIssueDumpStatus_Id=(select Id from SAPIssuetrackStatus where StatusName = src.SAPIssueDumpStatus)
+   
+ --  WHEN NOT MATCHED BY TARGET THEN
+	
+	--insert (Id,RunningID,IssueNo,IssueName,Category_Id,Priority_Id,Assignee,RaisedBy,ApplicationArea_Id,OpenDt,CloseDt,SAPIssueDumpStatus_Id,
+	--Project_Id, Resolution,Comments,Cre_By)
+	--values( NEWID(),@R_ID,src.IssueNo,src.IssueName,
+	--(select Id from SAPIssuetrackCategory where CategoryName = src.Category),
+	--(select Id from SAPIssuetrackpriority where PriorityName = src.[Priority]),
+	--src.Assignee,src.RaisedBy,
+	--(select Id from SAPIssuetrackApplicationarea where ApplicationAreaName = src.ApplicationArea),
+	--CAST(src.OpenDt as date),CAST(src.CloseDt as date),
+	----NULLIF(CONVERT(varchar,CONVERT(datetime, src.OpenDt),101),''),NULLIF(CONVERT(varchar,CONVERT(datetime, src.CloseDt),101),''),
+	--(select Id from SAPIssuetrackStatus where StatusName = src.SAPIssueDumpStatus),
+	--@Project_Id,src.Comments,src.Resolution,@Cre_By);
+	
+
+	--select NEWID(),@R_ID,IssueNo,IssueName,c.Id,p.Id,Assignee,RaisedBy,a.Id,NULLIF(CONVERT(varchar,CONVERT(datetime, OpenDt),101),''),NULLIF(CONVERT(varchar,CONVERT(datetime, CloseDt),101),''),s.Id,@Project_Id,Resolution,@Cre_By
+	--from @tblSAPIssueTrackUpload t 
+	--join SAPIssuetrackCategory c on t.Category = c.CategoryName
+	--join SAPIssuetrackpriority p on t.[Priority]= p.PriorityName
+	--join SAPIssuetrackApplicationarea a on t.ApplicationArea=a.ApplicationAreaName
+	--join SAPIssuetrackStatus s on t.SAPIssueDumpStatus=s.StatusName
+	--PRINT GETDATE()
 	END
 END
